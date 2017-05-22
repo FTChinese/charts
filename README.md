@@ -6,6 +6,9 @@ This is a tool for developers to quickly track real life impact of their work.
 ### cd charts
 ### npm install && bower install
 
+# Preview
+### gulp serve
+
 # Create New Chart Dashboard/Page
 ### cp app-launch.html mychart.html
 

@@ -23,10 +23,8 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">Third Party Tracking Watch</h1>
+  <h1 class="page-title">App Launches</h1>
 </div>
-
-
 
 
 <script src="../bower_components/highcharts/highcharts.js"></script>
@@ -192,47 +190,18 @@ function constructQuerryData(startDate, endDate) {
 }
 
 function drawCharts(gaData) {
-  var keys = [];
+  // MARK: - The base key which should have no gap in data
+  var keys = gaData.reports[0].data.rows.map(function(row){
+    return row.dimensions[0];
+  });
   var chartId;
 
   // MARK: Custom variables for charts
-  var iPhoneLaunches = [];
-  var androidLaunches = [];
-  var iPadLaunches = [];
-  var taps = [];
-  var tapDates = [];
-  var seriesLength = gaData.reports[0].data.rows.length;
-  
+  var iPhoneLaunches = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
+  var androidLaunches = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
+  var iPadLaunches = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
+  var taps = extractDataFromGAAPI(gaData.reports[3].data.rows, keys);
 
-
-  for (var i=0; i<seriesLength; i++) {
-    var iPhoneLaunch = gaData.reports[0].data.rows[i].metrics[0].values[0] || 0;
-    var androidLaunch = gaData.reports[1].data.rows[i].metrics[0].values[0] || 0;
-    var iPadLaunch = gaData.reports[2].data.rows[i].metrics[0].values[0] || 0;
-
-
-
-    var tap = 0;
-    try {
-      tap = gaData.reports[3].data.rows[i].metrics[0].values[0] || 0;
-    } catch (ignore) {
-
-    }
-
-    iPhoneLaunch = parseInt(iPhoneLaunch, 10);
-    iPhoneLaunches.push(iPhoneLaunch);
-
-    androidLaunch = parseInt(androidLaunch, 10);
-    androidLaunches.push(androidLaunch);
-
-    iPadLaunch = parseInt(iPadLaunch, 10);
-    iPadLaunches.push(iPadLaunch);
-
-
-
-    keys.push(gaData.reports[0].data.rows[i].dimensions[0]);
-
-  }
 
 
   chartId = createChart();
@@ -285,14 +254,6 @@ function drawCharts(gaData) {
     });
 
 
-  seriesLength = gaData.reports[3].data.rows.length;
-  for (var j=0; j<seriesLength; j++) {
-    var tap = gaData.reports[3].data.rows[j].metrics[0].values[0] || 0;
-    tap = parseInt(tap, 10);
-    taps.push(tap);
-    tapDates.push(gaData.reports[0].data.rows[j].dimensions[0]);
-  }
-
   chartId = createChart();
   var iPhoneLaunchesChart = new Highcharts.Chart({
       chart: {
@@ -303,7 +264,7 @@ function drawCharts(gaData) {
           text: 'App Launches from Notification Taps'
       },
       xAxis: {
-          categories: tapDates,
+          categories: keys,
           title: {
               enabled: false
           }
