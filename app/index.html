@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>DoubleClick Gap Report</title>
+  <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
+</head>
+<body>
+
+
+
+<p align=right>
+  <!-- The Sign-in button. This will run `queryReports()` on success. -->
+  <div class="g-signin2" data-onsuccess="queryReports"></div>
+</p>
+
+<div class="page-container" id="charts-container">
+  <h1 class="page-title">Third Party Tracking Watch</h1>
+</div>
+
+
+
+<!-- build:js scripts/main.js -->
+<script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/highcharts-more.js"></script>
+<script src="../bower_components/highmaps-beta/modules/map.js"></script>
+<script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<script type="text/javascript" src="scripts/highcharts.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+<!-- endbuild -->
+
+
+<script>
+// MARK: - These are different in every page. 
+
+// Replace with your view ID.
+var VIEW_ID = '10995661';
+var startDate = '2017-04-27';
+// var endDate = '2017-05-16';
+// var startDate = '7daysago';
+var endDate = 'today';
+
+function constructQuerryData(startDate, endDate) {
+  var queryData = [
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                '\\([0-6]+\\)$'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Request'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                '\\([0-6]+\\)$'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'BEGINS_WITH',
+              'expressions': [
+                'Success'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                '\\([0-6]+\\)$'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Fail'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                '\\([0-6]+\\)$'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'BEGINS_WITH',
+              'expressions': [
+                'Success on Retry'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+  ];
+  return queryData;
+}
+
+function drawCharts(gaData) {
+  var keys = [];
+  var successRates = [];
+  var failCounts = [];
+  var failRates = [];
+  var successOnRetryCounts = [];
+  var successOnRetryRates = [];
+  var seriesLength = gaData.reports[0].data.rows.length;
+  var chartId;
+  for (var i=0; i<seriesLength; i++) {
+    var value0 = gaData.reports[0].data.rows[i].metrics[0].values[0] || 0;
+    var value1 = gaData.reports[1].data.rows[i].metrics[0].values[0] || 0;
+    var failCount = gaData.reports[2].data.rows[i].metrics[0].values[0] || 0;
+    var successOnRetryCount = gaData.reports[3].data.rows[i].metrics[0].values[0] || 0;
+    var successRate;
+    var failRate;
+    var successOnRetryRate;
+    failCount = parseInt(failCount) || 0;
+    successOnRetryCount = parseInt(successOnRetryCount) || 0;
+    if (value0>0 && value1>0) {
+      successRate = parseInt(10000 * value1/value0)/100;
+    } else {
+      successRate =0;
+    }
+    if (value0>0 && failCount>0) {
+      failRate = parseInt(10000 * failCount/value0)/100;
+    } else {
+      failRate =0;
+    }
+    if (value0>0 && successOnRetryCount>0) {
+      successOnRetryRate = parseInt(10000 * successOnRetryCount/value0)/100;
+    } else {
+      successOnRetryRate =0;
+    }
+    successRates.push(successRate);
+    failCounts.push(failCount);
+    failRates.push(failRate);
+    successOnRetryCounts.push(successOnRetryCount);
+    successOnRetryRates.push(successOnRetryRate);
+    keys.push(gaData.reports[0].data.rows[i].dimensions[0]);
+  }
+
+
+  chartId = createChart();
+  var successRateChart = new Highcharts.Chart({
+      chart: {
+          type: 'area',
+          renderTo: chartId
+      },
+      title: {
+          text: 'Overall Success Rate'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: 'Percent'
+          },
+          max: 100,
+          min: Math.min.apply(null, successRates)
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
+          shared: true
+      },
+      series: [{
+          name: 'Success Rate',
+          data: successRates
+      }],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      }
+    });
+
+  chartId = createChart();
+  var failCountsChart = new Highcharts.Chart({
+      chart: {
+          type: 'column',
+          renderTo: chartId
+      },
+      title: {
+          text: 'Third Party Impression Request Fails'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: ''
+          },
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+          shared: true
+      },
+      series: [{
+          name: 'Request Failures',
+          data: failCounts
+      }],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      }
+    });
+  
+  chartId = createChart();
+  var failRateChart = new Highcharts.Chart({
+      chart: {
+          type: 'area',
+          renderTo: chartId
+      },
+      title: {
+          text: 'Fail Rate of First Request'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: 'Percent'
+          }
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
+          shared: true
+      },
+      series: [{
+          name: 'Fail Rate',
+          data: failRates
+      }],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      }
+    });
+
+  chartId = createChart();
+  var successOnRetryCountsChart = new Highcharts.Chart({
+      chart: {
+          type: 'column',
+          renderTo: chartId
+      },
+      title: {
+          text: 'Success On Retry'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: ''
+          },
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+          shared: true
+      },
+      series: [{
+          name: 'Success On Retry',
+          data: successOnRetryCounts
+      }],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      }
+    });
+
+  chartId = createChart();
+  var successOnRetryRateChart = new Highcharts.Chart({
+      chart: {
+          type: 'area',
+          renderTo: chartId
+      },
+      title: {
+          text: 'Success On Retry Rate'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: 'Percent'
+          }
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
+          shared: true
+      },
+      series: [{
+          name: 'Success Rate',
+          data: successOnRetryRates
+      }],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      }
+    });
+
+}
+</script>
+
+
+
+
+<!-- Load the JavaScript API client and Sign-in library. -->
+<script src="https://apis.google.com/js/client:platform.js"></script>
+
+</body>
+</html>
