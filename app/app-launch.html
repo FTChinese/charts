@@ -196,7 +196,7 @@ function drawCharts(gaData) {
   });
   var chartId;
 
-  // MARK: Custom variables for charts
+  // MARK: Custom variables for charts: [Int]
   var iPhoneLaunches = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
   var androidLaunches = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
   var iPadLaunches = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
