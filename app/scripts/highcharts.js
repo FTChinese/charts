@@ -109,8 +109,8 @@ function setHighChartsStyle() {
                 slicedOffset:15,
                 shadow:false,
                 showInLegend:true,
-                center: ["50%", "45%"],
-                size: "85%",
+                center: ['50%', '45%'],
+                size: '85%',
                 series: {
                     showCheckbox: true
                 },
