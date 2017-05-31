@@ -17,6 +17,7 @@ function displayResults(response) {
   drawCharts(response.result);
 }
 
+// MARK:Append an div for drawing chart in it.
 function createChart() {
   var chartContainer = document.createElement('div');
   var chartId = 'chart-container-' + gCurrentChartIndex;

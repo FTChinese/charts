@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>App Performance Report</title>
+  <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="styles/main.css">
+
+</head>
+<body>
+
+
+
+<p align=right>
+  <!-- The Sign-in button. This will run `queryReports()` on success. -->
+  <div class="g-signin2" data-onsuccess="queryReportsTwice"></div>
+</p>
+
+<div class="page-container" id="charts-container">
+  <h1 class="page-title">App Performance</h1>
+</div>
+
+
+<script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/highcharts-more.js"></script>
+<script src="../bower_components/highmaps-beta/modules/map.js"></script>
+<script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<script type="text/javascript" src="scripts/highcharts.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+
+
+
+<script>
+// MARK: - These are different in every page. 
+
+// Replace with your view ID.
+var VIEW_ID = '10995661';
+// var startDate = '2017-04-27';
+// var endDate = '2017-05-16';
+var startDate = '14daysago';
+var endDate = 'yesterday';
+var gaData1;
+function constructQuerryData1(startDate, endDate) {
+  var queryData = [
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date',
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Phone App'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Click'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date',
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Phone App'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Click'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'iphone-'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date',
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Phone App'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Click'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'androidapp'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date',
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Phone App'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Click'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'ipad-'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+  ];
+  return queryData;
+}
+function constructQuerryData2(startDate, endDate) {
+  var queryData = [
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'iphone-'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'androidapp'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'ipad-'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+  ];
+  return queryData;
+}
+
+// Query the  API　twice if the reportRequests are more than 5:
+function queryReportsTwice() {
+  gapi.client.request({
+    path: '/v4/reports:batchGet',
+    root: 'https://analyticsreporting.googleapis.com/',
+    method: 'POST',
+    body: {
+      reportRequests: constructQuerryData1(startDate, endDate)
+    }
+  }).then(
+    function(response){
+      gaData1 = response.result;
+      gapi.client.request({
+          path: '/v4/reports:batchGet',
+          root: 'https://analyticsreporting.googleapis.com/',
+          method: 'POST',
+          body: {
+            reportRequests: constructQuerryData2(startDate, endDate)
+          }
+      }).then(displayResults, console.error.bind(console))
+   },
+   console.error.bind(console)
+  );
+
+}
+
+function drawCharts(gaData) {
+  var keys = gaData.reports[0].data.rows.map(function(row){
+    return row.dimensions[0];
+  });
+  var chartId;
+
+  // MARK: Custom variables for charts: [Int]
+  var totalClick = extractDataFromGAAPI(gaData1.reports[0].data.rows, keys);
+  var iphoneClick = extractDataFromGAAPI(gaData1.reports[1].data.rows, keys);
+  var androidClick = extractDataFromGAAPI(gaData1.reports[2].data.rows, keys);
+  var ipadClick = extractDataFromGAAPI(gaData1.reports[3].data.rows, keys);
+  console.log(totalClick);
+  console.log(iphoneClick);
+  console.log(androidClick);
+  console.log(ipadClick);
+
+  var iphoneLaunch = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
+  var androidLaunch = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
+  var ipadLaunch = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
+  var totalLaunch = [];
+  for(let i =0,len = keys.length;i<len;i++) {
+    if(iphoneLaunch[i] && androidLaunch[i] && ipadLaunch[i]) {
+      const totalLauchOneday = iphoneLaunch[i] + androidLaunch[i] + ipadLaunch[i];
+      totalLaunch.push(totalLauchOneday);
+    }
+  }
+
+  var iphoneCLRate = calculateRates(iphoneClick, iphoneLaunch);
+  var androidCLRate = calculateRates(androidClick, androidLaunch);
+  var ipadCLRate = calculateRates(ipadClick, ipadLaunch);
+  var totalCLRate = calculateRates(totalClick,totalLaunch);
+
+  chartId = createChart();
+  var totalRateChart = new Highcharts.Chart({
+    chart: {
+        type: 'line',
+        renderTo: chartId
+    },
+    title: {
+        text: 'Rate of Total Click and Total Launch'
+    },
+    xAxis: {
+        categories: keys,
+        title: {
+            enabled: false
+        }
+    },
+    yAxis: {
+        tickmarkPlacement: 'on'
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+        shared: true
+    },
+    plotOptions: {
+      area: {
+        stacking: 'normal'
+      }
+    },
+    series: [
+      {
+        name: 'totalRate',
+        data: totalCLRate
+      },
+    ],
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: false
+    }
+  });
+
+  chartId = createChart();
+  var iphoneRateChart = new Highcharts.Chart({
+    chart: {
+        type: 'line',
+        renderTo: chartId
+    },
+    title: {
+        text: 'Rate of iPhone Click and iPhone Launch'
+    },
+    xAxis: {
+        categories: keys,
+        title: {
+            enabled: false
+        }
+    },
+    yAxis: {
+        tickmarkPlacement: 'on'
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+        shared: true
+    },
+    plotOptions: {
+      area: {
+        stacking: 'normal'
+      }
+    },
+    series: [
+      {
+        name: 'iphoneRate',
+        data: iphoneCLRate
+      },
+    ],
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: false
+    }
+  });
+
+  chartId = createChart();
+  var androidRateChart = new Highcharts.Chart({
+    chart: {
+        type: 'line',
+        renderTo: chartId
+    },
+    title: {
+        text: 'Rate of Android Click and Android Launch'
+    },
+    xAxis: {
+        categories: keys,
+        title: {
+            enabled: false
+        }
+    },
+    yAxis: {
+        tickmarkPlacement: 'on'
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+        shared: true
+    },
+    plotOptions: {
+      area: {
+        stacking: 'normal'
+      }
+    },
+    series: [
+      {
+        name: 'androidRate',
+        data: androidCLRate
+      },
+    ],
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: false
+    }
+  });
+
+  chartId = createChart();
+  var ipadChart = new Highcharts.Chart({
+    chart: {
+        type: 'line',
+        renderTo: chartId
+    },
+    title: {
+        text: 'Rate of iPad Click and iPad Launch'
+    },
+    xAxis: {
+        categories: keys,
+        title: {
+            enabled: false
+        }
+    },
+    yAxis: {
+        tickmarkPlacement: 'on'
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+        shared: true
+    },
+    plotOptions: {
+      area: {
+        stacking: 'normal'
+      }
+    },
+    series: [
+      {
+        name: 'ipadRate',
+        data: ipadCLRate
+      },
+    ],
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: false
+    }
+  });
+
+}
+</script>
+
+
+
+
+<!-- Load the JavaScript API client and Sign-in library. -->
+<script src="https://apis.google.com/js/client:platform.js"></script>
+
+</body>
+</html>
