@@ -244,6 +244,7 @@ function constructQuerryData1(startDate, endDate) {
   return queryData;
 }
 function constructQuerryData2(startDate, endDate) {
+  /*
   var queryData = [
      {
       'viewId': VIEW_ID,
@@ -406,6 +407,111 @@ function constructQuerryData2(startDate, endDate) {
       ]
     }
   ];
+  */
+  var queryData = [
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'iphone-'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'ipad-'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'androidapp'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+  ]
   return queryData;
 }
 
@@ -442,16 +548,13 @@ function drawCharts(gaData) {
   var chartId;
 
   // MARK: Custom variables for charts: [Int]
-  var totalClick = extractDataFromGAAPI(gaData1.reports[0].data.rows, keys);
+ // var totalClick = extractDataFromGAAPI(gaData1.reports[0].data.rows, keys);
   var iphoneClick = extractDataFromGAAPI(gaData1.reports[1].data.rows, keys);
   var ipadClick = extractDataFromGAAPI(gaData1.reports[2].data.rows, keys);
   var androidClick = extractDataFromGAAPI(gaData1.reports[3].data.rows, keys);
-  console.log(totalClick);
-  console.log(iphoneClick);
-  console.log(ipadClick);
-  console.log(androidClick);
+  var totalClick = [];
 
-
+  /*
   var totalPageview = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
   var iphonePageview = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
   var ipadPageview = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
@@ -460,11 +563,28 @@ function drawCharts(gaData) {
   console.log(iphonePageview);
   console.log(ipadPageview);
   console.log(androidPageview);
-  
-  var totalCPRate = calculateRates(totalClick,totalPageview);
-  var iphoneCPRate = calculateRates(iphoneClick, iphonePageview);
-  var ipadCPRate = calculateRates(ipadClick, ipadPageview);
-  var androidCPRate = calculateRates(androidClick, androidPageview);
+  */
+
+  var iphoneLaunches = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
+  var ipadLaunches = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
+  var androidLaunches = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
+  var totalLaunches=[];
+
+  for(let i=0; i<keys.length;i++) {
+    const totalOneLaunch = iphoneLaunches[i]+ipadLaunches[i]+androidLaunches[i];
+    const totalOneClick = iphoneClick[i]+ipadClick[i]+androidClick[i];
+    totalLaunches.push(totalOneLaunch);
+    totalClick.push(totalOneClick);
+  }
+  console.log(totalClick);
+  console.log(iphoneClick);
+  console.log(ipadClick);
+  console.log(androidClick);
+
+  var totalCPRate = calculateRates(totalClick,totalLaunches);
+  var iphoneCPRate = calculateRates(iphoneClick, iphoneLaunches);
+  var ipadCPRate = calculateRates(ipadClick, ipadLaunches);
+  var androidCPRate = calculateRates(androidClick, androidLaunches);
 
 
   chartId = createChart();
