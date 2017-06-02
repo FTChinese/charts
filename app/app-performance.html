@@ -262,6 +262,21 @@ function constructQuerryData2(startDate, endDate) {
         {
           'name': 'ga:date'
         }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                '/homepage'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
       ]
     },
     {
@@ -291,6 +306,14 @@ function constructQuerryData2(startDate, endDate) {
               'operator': 'REGEXP',
               'expressions': [
                 'iPhone'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                '/homepage'
               ],
               'caseSensitive': true
             }
@@ -327,6 +350,14 @@ function constructQuerryData2(startDate, endDate) {
                 'iPad'
               ],
               'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                '/homepage'
+              ],
+              'caseSensitive': true
             }
           ]
         }
@@ -359,6 +390,14 @@ function constructQuerryData2(startDate, endDate) {
               'operator': 'REGEXP',
               'expressions': [
                 'Android'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                '/homepage'
               ],
               'caseSensitive': true
             }
@@ -417,7 +456,11 @@ function drawCharts(gaData) {
   var iphonePageview = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
   var ipadPageview = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
   var androidPageview = extractDataFromGAAPI(gaData.reports[3].data.rows, keys);
-
+  console.log(totalPageview);
+  console.log(iphonePageview);
+  console.log(ipadPageview);
+  console.log(androidPageview);
+  
   var totalCPRate = calculateRates(totalClick,totalPageview);
   var iphoneCPRate = calculateRates(iphoneClick, iphonePageview);
   var ipadCPRate = calculateRates(ipadClick, ipadPageview);
