@@ -129,10 +129,10 @@ function constructQuerryData1(startDate, endDate) {
               'caseSensitive': true
             },
             {
-              'dimensionName': 'ga:pagePath',
+              'dimensionName': 'ga:mobileDeviceInfo',
               'operator': 'REGEXP',
               'expressions': [
-                'iphone-'
+                'iPhone'
               ],
               'caseSensitive': true
             }
@@ -179,10 +179,10 @@ function constructQuerryData1(startDate, endDate) {
               'caseSensitive': true
             },
             {
-              'dimensionName': 'ga:pagePath',
+              'dimensionName': 'ga:mobileDeviceInfo',
               'operator': 'REGEXP',
               'expressions': [
-                'androidapp'
+                'iPad'
               ],
               'caseSensitive': true
             }
@@ -229,10 +229,10 @@ function constructQuerryData1(startDate, endDate) {
               'caseSensitive': true
             },
             {
-              'dimensionName': 'ga:pagePath',
+              'dimensionName': 'ga:operatingSystem',
               'operator': 'REGEXP',
               'expressions': [
-                'ipad-'
+                'Android'
               ],
               'caseSensitive': true
             }
@@ -245,6 +245,25 @@ function constructQuerryData1(startDate, endDate) {
 }
 function constructQuerryData2(startDate, endDate) {
   var queryData = [
+     {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ]
+    },
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -268,10 +287,10 @@ function constructQuerryData2(startDate, endDate) {
           'operator': 'AND',
           'filters': [
             {
-              'dimensionName': 'ga:pagePath',
+              'dimensionName': 'ga:mobileDeviceInfo',
               'operator': 'REGEXP',
               'expressions': [
-                'iphone-'
+                'iPhone'
               ],
               'caseSensitive': true
             }
@@ -302,10 +321,10 @@ function constructQuerryData2(startDate, endDate) {
           'operator': 'AND',
           'filters': [
             {
-              'dimensionName': 'ga:pagePath',
+              'dimensionName': 'ga:mobileDeviceInfo',
               'operator': 'REGEXP',
               'expressions': [
-                'androidapp'
+                'iPad'
               ],
               'caseSensitive': true
             }
@@ -336,10 +355,10 @@ function constructQuerryData2(startDate, endDate) {
           'operator': 'AND',
           'filters': [
             {
-              'dimensionName': 'ga:pagePath',
+              'dimensionName': 'ga:operatingSystem',
               'operator': 'REGEXP',
               'expressions': [
-                'ipad-'
+                'Android'
               ],
               'caseSensitive': true
             }
@@ -386,28 +405,24 @@ function drawCharts(gaData) {
   // MARK: Custom variables for charts: [Int]
   var totalClick = extractDataFromGAAPI(gaData1.reports[0].data.rows, keys);
   var iphoneClick = extractDataFromGAAPI(gaData1.reports[1].data.rows, keys);
-  var androidClick = extractDataFromGAAPI(gaData1.reports[2].data.rows, keys);
-  var ipadClick = extractDataFromGAAPI(gaData1.reports[3].data.rows, keys);
+  var ipadClick = extractDataFromGAAPI(gaData1.reports[2].data.rows, keys);
+  var androidClick = extractDataFromGAAPI(gaData1.reports[3].data.rows, keys);
   console.log(totalClick);
   console.log(iphoneClick);
-  console.log(androidClick);
   console.log(ipadClick);
+  console.log(androidClick);
 
-  var iphoneLaunch = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
-  var androidLaunch = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
-  var ipadLaunch = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
-  var totalLaunch = [];
-  for(let i =0,len = keys.length;i<len;i++) {
-    if(iphoneLaunch[i] && androidLaunch[i] && ipadLaunch[i]) {
-      const totalLauchOneday = iphoneLaunch[i] + androidLaunch[i] + ipadLaunch[i];
-      totalLaunch.push(totalLauchOneday);
-    }
-  }
 
-  var iphoneCLRate = calculateRates(iphoneClick, iphoneLaunch);
-  var androidCLRate = calculateRates(androidClick, androidLaunch);
-  var ipadCLRate = calculateRates(ipadClick, ipadLaunch);
-  var totalCLRate = calculateRates(totalClick,totalLaunch);
+  var totalPageview = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
+  var iphonePageview = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
+  var ipadPageview = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
+  var androidPageview = extractDataFromGAAPI(gaData.reports[3].data.rows, keys);
+
+  var totalCPRate = calculateRates(totalClick,totalPageview);
+  var iphoneCPRate = calculateRates(iphoneClick, iphonePageview);
+  var ipadCPRate = calculateRates(ipadClick, ipadPageview);
+  var androidCPRate = calculateRates(androidClick, androidPageview);
+
 
   chartId = createChart();
   var totalRateChart = new Highcharts.Chart({
@@ -416,7 +431,7 @@ function drawCharts(gaData) {
         renderTo: chartId
     },
     title: {
-        text: 'Rate of Total Click and Total Launch'
+        text: 'Rate of Total Click and Total Pageview'
     },
     xAxis: {
         categories: keys,
@@ -439,7 +454,7 @@ function drawCharts(gaData) {
     series: [
       {
         name: 'totalRate',
-        data: totalCLRate
+        data: totalCPRate
       },
     ],
     credits: {
@@ -457,7 +472,7 @@ function drawCharts(gaData) {
         renderTo: chartId
     },
     title: {
-        text: 'Rate of iPhone Click and iPhone Launch'
+        text: 'Rate of iPhone Click and iPhone Pageview'
     },
     xAxis: {
         categories: keys,
@@ -480,48 +495,7 @@ function drawCharts(gaData) {
     series: [
       {
         name: 'iphoneRate',
-        data: iphoneCLRate
-      },
-    ],
-    credits: {
-      enabled: false
-    },
-    legend: {
-      enabled: false
-    }
-  });
-
-  chartId = createChart();
-  var androidRateChart = new Highcharts.Chart({
-    chart: {
-        type: 'line',
-        renderTo: chartId
-    },
-    title: {
-        text: 'Rate of Android Click and Android Launch'
-    },
-    xAxis: {
-        categories: keys,
-        title: {
-            enabled: false
-        }
-    },
-    yAxis: {
-        tickmarkPlacement: 'on'
-    },
-    tooltip: {
-        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-        shared: true
-    },
-    plotOptions: {
-      area: {
-        stacking: 'normal'
-      }
-    },
-    series: [
-      {
-        name: 'androidRate',
-        data: androidCLRate
+        data: iphoneCPRate
       },
     ],
     credits: {
@@ -539,7 +513,7 @@ function drawCharts(gaData) {
         renderTo: chartId
     },
     title: {
-        text: 'Rate of iPad Click and iPad Launch'
+        text: 'Rate of iPad Click and iPad Pageview'
     },
     xAxis: {
         categories: keys,
@@ -562,7 +536,7 @@ function drawCharts(gaData) {
     series: [
       {
         name: 'ipadRate',
-        data: ipadCLRate
+        data: ipadCPRate
       },
     ],
     credits: {
@@ -573,6 +547,46 @@ function drawCharts(gaData) {
     }
   });
 
+  chartId = createChart();
+  var androidRateChart = new Highcharts.Chart({
+    chart: {
+        type: 'line',
+        renderTo: chartId
+    },
+    title: {
+        text: 'Rate of Android Click and Android Pageview'
+    },
+    xAxis: {
+        categories: keys,
+        title: {
+            enabled: false
+        }
+    },
+    yAxis: {
+        tickmarkPlacement: 'on'
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+        shared: true
+    },
+    plotOptions: {
+      area: {
+        stacking: 'normal'
+      }
+    },
+    series: [
+      {
+        name: 'androidRate',
+        data: androidCPRate
+      },
+    ],
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: false
+    }
+  });
 }
 </script>
 
