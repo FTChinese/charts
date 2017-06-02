@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>DoubleClick Gap Report</title>
+  <title>Ad Impressions</title>
   <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
   <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -21,7 +21,7 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">Third Party Tracking Watch</h1>
+  <h1 class="page-title">Ad Impressions</h1>
 </div>
 
 
@@ -40,7 +40,7 @@
 
 // Replace with your view ID.
 var VIEW_ID = '10995661';
-var startDate = '2017-04-27';
+var startDate = '14daysago';
 // var endDate = '2017-05-16';
 // var startDate = '7daysago';
 var endDate = 'today';
@@ -57,6 +57,56 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:contentGroup1',
+              'operator': 'EXACT',
+              'expressions': [
+                'Home Page'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:deviceCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Desktop'
+              ],
+              'caseSensitive': false
+            },
+            {
+              'dimensionName': 'ga:hostname',
+              'operator': 'REGEXP',
+              'expressions': [
+                'ftchinese'
+              ],
+              'caseSensitive': false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
           'expression': 'ga:totalEvents'
         }
       ],
@@ -71,9 +121,9 @@ function constructQuerryData(startDate, endDate) {
           'filters': [
             {
               'dimensionName': 'ga:eventCategory',
-              'operator': 'REGEXP',
+              'operator': 'EXACT',
               'expressions': [
-                '\\([0-6]+\\)$'
+                'Ad Impression'
               ],
               'caseSensitive': true
             },
@@ -81,49 +131,15 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'Request'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:totalEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'REGEXP',
-              'expressions': [
-                '\\([0-6]+\\)$'
+                '1000'
               ],
               'caseSensitive': true
             },
             {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'BEGINS_WITH',
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
               'expressions': [
-                'Success'
+                '0001'
               ],
               'caseSensitive': true
             }
@@ -155,9 +171,9 @@ function constructQuerryData(startDate, endDate) {
           'filters': [
             {
               'dimensionName': 'ga:eventCategory',
-              'operator': 'REGEXP',
+              'operator': 'EXACT',
               'expressions': [
-                '\\([0-6]+\\)$'
+                'Ad Impression'
               ],
               'caseSensitive': true
             },
@@ -165,7 +181,15 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'Fail'
+                '1000'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
+              'expressions': [
+                '0003'
               ],
               'caseSensitive': true
             }
@@ -199,15 +223,23 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'REGEXP',
               'expressions': [
-                '\\([0-6]+\\)$'
+                '^Ad Impression'
               ],
               'caseSensitive': true
             },
             {
               'dimensionName': 'ga:eventAction',
-              'operator': 'BEGINS_WITH',
+              'operator': 'EXACT',
               'expressions': [
-                'Success on Retry'
+                '1000'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
+              'expressions': [
+                '0014'
               ],
               'caseSensitive': true
             }
@@ -223,72 +255,41 @@ function drawCharts(gaDataSource) {
   var chartId;
   var gaData = gaDataSource;
 
+
   // MARK: - The base key which should have no gap in data
   var keys = gaData.reports[0].data.rows.map(function(row){
     return row.dimensions[0];
   });
 
+    
+
+  // MARK: Filter out dates when data collection experienced problems
+  keys = keys.filter(function(item){
+    if (['20170527','20170528','20170529','20170530','20170531'].indexOf(item) < 0) {
+      return item;
+    }
+  });
+
 
   // MARK: Get Google Analytics Dimensions
-  var requestCounts = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
-  var successCounts = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
-  var failCounts = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
-  var successOnRetryCounts = extractDataFromGAAPI(gaData.reports[3].data.rows, keys);
+  var deskTopHomePageView = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
+  var ad10000001 = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
+  var ad10000003 = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
+  var ad10000014 = extractDataFromGAAPI(gaData.reports[3].data.rows, keys);
 
-  // MARK: Calculate Percentages that are ueful for charts
-  var successRates = calculateRates(successCounts, requestCounts);
-  var failRates = calculateRates(failCounts, requestCounts);
-  var successOnRetryRates = calculateRates(successOnRetryCounts, requestCounts);
-
-
-  chartId = createChart();
-  var successRateChart = new Highcharts.Chart({
-      chart: {
-          type: 'area',
-          renderTo: chartId
-      },
-      title: {
-          text: 'Overall Success Rate'
-      },
-      xAxis: {
-          categories: keys,
-          tickmarkPlacement: 'on',
-          title: {
-              enabled: false
-          }
-      },
-      yAxis: {
-          title: {
-              text: 'Percent'
-          },
-          max: 100,
-          min: Math.min.apply(null, successRates)
-      },
-      tooltip: {
-          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
-          shared: true
-      },
-      series: [{
-          name: 'Success Rate',
-          data: successRates
-      }],
-      credits: {
-        enabled: false
-      },
-      legend: {
-        enabled: false
-      }
-    });
+  var conversion10000001 = calculateRates(ad10000001, deskTopHomePageView);
+  var conversion10000003 = calculateRates(ad10000003, deskTopHomePageView);
+  var conversion10000014 = calculateRates(ad10000014, deskTopHomePageView);
 
 
   chartId = createChart();
-  var failCountsChart = new Highcharts.Chart({
+  var adImpressionChart = new Highcharts.Chart({
       chart: {
           type: 'column',
           renderTo: chartId
       },
       title: {
-          text: 'Third Party Impression Request Fails'
+          text: 'Ad Impressions'
       },
       xAxis: {
           categories: keys,
@@ -297,35 +298,45 @@ function drawCharts(gaDataSource) {
               enabled: false
           }
       },
-      yAxis: {
-          title: {
-              text: ''
-          },
-      },
       tooltip: {
-          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>',
           shared: true
       },
-      series: [{
-          name: 'Request Failures',
-          data: failCounts
-      }],
+      series: [
+        {
+            name: 'PC Home Page Top Banner: 10000001',
+            data: ad10000001
+        },
+        {
+            name: 'PC Home Page Top MPU: 10000003',
+            data: ad10000003
+        },
+        {
+            name: 'PC Home Page Roadblock: 10000014',
+            data: ad10000014
+        },
+        {
+            name: 'DeskTop Home Page PV',
+            data: deskTopHomePageView
+        }
+
+      ],
       credits: {
         enabled: false
       },
       legend: {
-        enabled: false
+        enabled: true
       }
     });
-  
+
   chartId = createChart();
-  var failRateChart = new Highcharts.Chart({
+  var conversionRateChart = new Highcharts.Chart({
       chart: {
           type: 'area',
           renderTo: chartId
       },
       title: {
-          text: 'Fail Rate of First Request'
+          text: 'Home Page Inventory Conversion Rates'
       },
       xAxis: {
           categories: keys,
@@ -343,89 +354,25 @@ function drawCharts(gaDataSource) {
           pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
           shared: true
       },
-      series: [{
-          name: 'Fail Rate',
-          data: failRates
-      }],
-      credits: {
-        enabled: false
+      series: [
+      {
+          name: 'Top Banner 10000001',
+          data: conversion10000001
       },
-      legend: {
-        enabled: false
+      {
+          name: 'MPU 10000003',
+          data: conversion10000003
+      },
+      {
+          name: 'Roadblock 10000014',
+          data: conversion10000014
       }
-    });
-
-  chartId = createChart();
-  var successOnRetryCountsChart = new Highcharts.Chart({
-      chart: {
-          type: 'column',
-          renderTo: chartId
-      },
-      title: {
-          text: 'Success On Retry'
-      },
-      xAxis: {
-          categories: keys,
-          tickmarkPlacement: 'on',
-          title: {
-              enabled: false
-          }
-      },
-      yAxis: {
-          title: {
-              text: ''
-          },
-      },
-      tooltip: {
-          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-          shared: true
-      },
-      series: [{
-          name: 'Success On Retry',
-          data: successOnRetryCounts
-      }],
+      ],
       credits: {
         enabled: false
       },
       legend: {
-        enabled: false
-      }
-    });
-
-  chartId = createChart();
-  var successOnRetryRateChart = new Highcharts.Chart({
-      chart: {
-          type: 'area',
-          renderTo: chartId
-      },
-      title: {
-          text: 'Success On Retry Rate'
-      },
-      xAxis: {
-          categories: keys,
-          tickmarkPlacement: 'on',
-          title: {
-              enabled: false
-          }
-      },
-      yAxis: {
-          title: {
-              text: 'Percent'
-          }
-      },
-      tooltip: {
-          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
-          shared: true
-      },
-      series: [{
-          name: 'Success Rate',
-          data: successOnRetryRates
-      }],
-      credits: {
-        enabled: false
-      },
-      legend: {
-        enabled: false
+        enabled: true
       }
     });
 
