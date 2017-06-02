@@ -66,3 +66,12 @@ function calculateRates(part, total) {
   }
   return rates;
 }
+
+function calculateRatesConvert(percentageData) {
+  /**
+   * @dest:Convert an Array of percentage data to normal data.
+   * @param percentageData: Type Array [number], whose item is x meaning x%,Eg: [120,130] means 120%,130%
+   * @return: Type Array.The result of dividing the param by 100.
+   */
+  return percentageData.map( x => x/100);
+}

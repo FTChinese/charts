@@ -48,6 +48,7 @@ var endDate = 'yesterday';
 var gaData1;
 function constructQuerryData1(startDate, endDate) {
   var queryData = [
+    /*
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -90,6 +91,7 @@ function constructQuerryData1(startDate, endDate) {
         }
       ]
     },
+    */
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -548,22 +550,10 @@ function drawCharts(gaData) {
   var chartId;
 
   // MARK: Custom variables for charts: [Int]
- // var totalClick = extractDataFromGAAPI(gaData1.reports[0].data.rows, keys);
-  var iphoneClick = extractDataFromGAAPI(gaData1.reports[1].data.rows, keys);
-  var ipadClick = extractDataFromGAAPI(gaData1.reports[2].data.rows, keys);
-  var androidClick = extractDataFromGAAPI(gaData1.reports[3].data.rows, keys);
+  var iphoneClick = extractDataFromGAAPI(gaData1.reports[0].data.rows, keys);
+  var ipadClick = extractDataFromGAAPI(gaData1.reports[1].data.rows, keys);
+  var androidClick = extractDataFromGAAPI(gaData1.reports[2].data.rows, keys);
   var totalClick = [];
-
-  /*
-  var totalPageview = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
-  var iphonePageview = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
-  var ipadPageview = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
-  var androidPageview = extractDataFromGAAPI(gaData.reports[3].data.rows, keys);
-  console.log(totalPageview);
-  console.log(iphonePageview);
-  console.log(ipadPageview);
-  console.log(androidPageview);
-  */
 
   var iphoneLaunches = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
   var ipadLaunches = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
@@ -576,25 +566,20 @@ function drawCharts(gaData) {
     totalLaunches.push(totalOneLaunch);
     totalClick.push(totalOneClick);
   }
-  console.log(totalClick);
-  console.log(iphoneClick);
-  console.log(ipadClick);
-  console.log(androidClick);
 
-  var totalCPRate = calculateRates(totalClick,totalLaunches);
-  var iphoneCPRate = calculateRates(iphoneClick, iphoneLaunches);
-  var ipadCPRate = calculateRates(ipadClick, ipadLaunches);
-  var androidCPRate = calculateRates(androidClick, androidLaunches);
-
+  var totalCPRate = calculateRatesConvert(calculateRates(totalClick,totalLaunches));
+  var iphoneCPRate = calculateRatesConvert(calculateRates(iphoneClick, iphoneLaunches));
+  var ipadCPRate = calculateRatesConvert(calculateRates(ipadClick, ipadLaunches));
+  var androidCPRate = calculateRatesConvert(calculateRates(androidClick, androidLaunches));
 
   chartId = createChart();
   var totalRateChart = new Highcharts.Chart({
     chart: {
-        type: 'line',
+        type: 'area',
         renderTo: chartId
     },
     title: {
-        text: 'Rate of Total Click and Total Pageview'
+        text: 'Rate of Click and Launch of HomePage'
     },
     xAxis: {
         categories: keys,
@@ -619,105 +604,35 @@ function drawCharts(gaData) {
         name: 'totalRate',
         data: totalCPRate
       },
-    ],
-    credits: {
-      enabled: false
-    },
-    legend: {
-      enabled: false
-    }
-  });
-
-  chartId = createChart();
-  var iphoneRateChart = new Highcharts.Chart({
-    chart: {
-        type: 'line',
-        renderTo: chartId
-    },
-    title: {
-        text: 'Rate of iPhone Click and iPhone Pageview'
-    },
-    xAxis: {
-        categories: keys,
-        title: {
-            enabled: false
-        }
-    },
-    yAxis: {
-        tickmarkPlacement: 'on'
-    },
-    tooltip: {
-        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-        shared: true
-    },
-    plotOptions: {
-      area: {
-        stacking: 'normal'
-      }
-    },
-    series: [
       {
         name: 'iphoneRate',
         data: iphoneCPRate
       },
-    ],
-    credits: {
-      enabled: false
-    },
-    legend: {
-      enabled: false
-    }
-  });
-
-  chartId = createChart();
-  var ipadChart = new Highcharts.Chart({
-    chart: {
-        type: 'line',
-        renderTo: chartId
-    },
-    title: {
-        text: 'Rate of iPad Click and iPad Pageview'
-    },
-    xAxis: {
-        categories: keys,
-        title: {
-            enabled: false
-        }
-    },
-    yAxis: {
-        tickmarkPlacement: 'on'
-    },
-    tooltip: {
-        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-        shared: true
-    },
-    plotOptions: {
-      area: {
-        stacking: 'normal'
-      }
-    },
-    series: [
       {
         name: 'ipadRate',
         data: ipadCPRate
       },
+      {
+        name: 'androidRate',
+        data: androidCPRate
+      }
     ],
     credits: {
       enabled: false
     },
     legend: {
-      enabled: false
+      enabled: true
     }
   });
 
   chartId = createChart();
-  var androidRateChart = new Highcharts.Chart({
+  var totalRateChart = new Highcharts.Chart({
     chart: {
-        type: 'line',
+        type: 'column',
         renderTo: chartId
     },
     title: {
-        text: 'Rate of Android Click and Android Pageview'
+        text: 'The Total Data of Clicks and Launches of Homepage'
     },
     xAxis: {
         categories: keys,
@@ -739,17 +654,84 @@ function drawCharts(gaData) {
     },
     series: [
       {
-        name: 'androidRate',
-        data: androidCPRate
+        name: 'totalClick',
+        data: totalClick
       },
+      {
+        name: 'totalLaunches',
+        data: totalLaunches
+      }
     ],
     credits: {
       enabled: false
     },
     legend: {
-      enabled: false
+      enabled: true
     }
   });
+
+  chartId = createChart();
+  var totalRateChart = new Highcharts.Chart({
+    chart: {
+        type: 'column',
+        renderTo: chartId
+    },
+    title: {
+        text: 'The Data of Clicks and Launches of Homepage'
+    },
+    xAxis: {
+        categories: keys,
+        title: {
+            enabled: false
+        }
+    },
+    yAxis: {
+        tickmarkPlacement: 'on'
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+        shared: true
+    },
+    plotOptions: {
+      area: {
+        stacking: 'normal'
+      }
+    },
+    series: [
+      {
+        name: 'iphoneClick',
+        data: iphoneClick
+      },
+      {
+        name: 'ipadClick',
+        data: ipadClick
+      },
+      {
+        name: 'androidClick',
+        data: androidClick
+      },
+      {
+        name: 'iphoneLaunches',
+        data: iphoneLaunches
+      },
+      {
+        name: 'ipadLaunches',
+        data: ipadLaunches
+      },
+      {
+        name: 'androidLaunches',
+        data: androidLaunches
+      }
+
+    ],
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: true
+    }
+  });
+
 }
 </script>
 
