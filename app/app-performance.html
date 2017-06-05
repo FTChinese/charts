@@ -575,11 +575,11 @@ function drawCharts(gaData) {
   chartId = createChart();
   var totalRateChart = new Highcharts.Chart({
     chart: {
-        type: 'area',
+        type: 'column',
         renderTo: chartId
     },
     title: {
-        text: 'Rate of Click and Launch of HomePage'
+        text: 'Home Page Clicks Per Session'
     },
     xAxis: {
         categories: keys,
@@ -601,19 +601,19 @@ function drawCharts(gaData) {
     },
     series: [
       {
-        name: 'totalRate',
+        name: 'Overall',
         data: totalCPRate
       },
       {
-        name: 'iphoneRate',
+        name: 'iPhone',
         data: iphoneCPRate
       },
       {
-        name: 'ipadRate',
+        name: 'iPad',
         data: ipadCPRate
       },
       {
-        name: 'androidRate',
+        name: 'Android',
         data: androidCPRate
       }
     ],
@@ -632,7 +632,7 @@ function drawCharts(gaData) {
         renderTo: chartId
     },
     title: {
-        text: 'The Total Data of Clicks and Launches of Homepage'
+        text: 'Total Clicks and Launches'
     },
     xAxis: {
         categories: keys,
@@ -654,11 +654,11 @@ function drawCharts(gaData) {
     },
     series: [
       {
-        name: 'totalClick',
+        name: 'Clicks',
         data: totalClick
       },
       {
-        name: 'totalLaunches',
+        name: 'Launches',
         data: totalLaunches
       }
     ],
@@ -677,7 +677,7 @@ function drawCharts(gaData) {
         renderTo: chartId
     },
     title: {
-        text: 'The Data of Clicks and Launches of Homepage'
+        text: 'Click and Luanches by Products'
     },
     xAxis: {
         categories: keys,
@@ -699,30 +699,29 @@ function drawCharts(gaData) {
     },
     series: [
       {
-        name: 'iphoneClick',
+        name: 'iPhone Click',
         data: iphoneClick
       },
       {
-        name: 'ipadClick',
+        name: 'iPad Click',
         data: ipadClick
       },
       {
-        name: 'androidClick',
+        name: 'Android Click',
         data: androidClick
       },
       {
-        name: 'iphoneLaunches',
+        name: 'iPhone Launches',
         data: iphoneLaunches
       },
       {
-        name: 'ipadLaunches',
+        name: 'iPad Launches',
         data: ipadLaunches
       },
       {
-        name: 'androidLaunches',
+        name: 'Android Launches',
         data: androidLaunches
       }
-
     ],
     credits: {
       enabled: false
