@@ -157,7 +157,7 @@ function drawCharts(gaData) {
     }
     outputData.push(outputDatum);
   }
-  console.log(outputData);
+  console.log(JSON.stringify(outputData));
 
   chartId = createChart();
   var clickChart = new Highcharts.Chart({
