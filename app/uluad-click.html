@@ -9,7 +9,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <link rel="stylesheet" href="styles/main.css">
+
 </head>
 <body>
 
@@ -21,9 +23,8 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">Story Recommend Performance</h1>
+  <h1 class="page-title">App Launches</h1>
 </div>
-
 
 
 <script src="../bower_components/highcharts/highcharts.js"></script>
@@ -40,7 +41,7 @@
 
 // Replace with your view ID.
 var VIEW_ID = '10995661';
-//var startDate = '2017-04-27';
+// var startDate = '2017-04-27';
 // var endDate = '2017-05-16';
 var startDate = '7daysago';
 var endDate = 'yesterday';
@@ -73,7 +74,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Story Recommend'
+                'uluAd'
               ],
               'caseSensitive': true
             },
@@ -81,7 +82,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'Seen-002'
+                'Success'
               ],
               'caseSensitive': true
             }
@@ -115,7 +116,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Story Recommend'
+                'uluAd'
               ],
               'caseSensitive': true
             },
@@ -123,7 +124,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'Click-002from_recommends'
+                'Fail'
               ],
               'caseSensitive': true
             }
@@ -131,119 +132,70 @@ function constructQuerryData(startDate, endDate) {
         }
       ]
     }
+
   ];
   return queryData;
 }
 
-
-
-
-function drawCharts(gaDataSource) {
-  var chartId;
-  var gaData = gaDataSource;
-
+function drawCharts(gaData) {
   // MARK: - The base key which should have no gap in data
   var keys = gaData.reports[0].data.rows.map(function(row){
     return row.dimensions[0];
   });
+  var chartId;
 
   // MARK: Get Google Analytics Dimensions
-  var seenCounts = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
-  var clickCounts = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
-
-
-  // MARK: Calculate Percentages that are ueful for charts
-  var clickRates = calculateRates(clickCounts, seenCounts);
+  var successRecord = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
+  var failRecord = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
   
-
-  // MARK:Get The data
   const outputData = [];
   for(let i=0,len=keys.length;i<len;i++) {
     const outputDatum = {
       date:keys[i],
-      seenCounts:seenCounts[i],
-      clickCounts:clickCounts[i],
-      clickRate:clickRates[i]
+      seenCounts:successRecord[i],
+      clickCounts:failRecord[i]
     }
     outputData.push(outputDatum);
   }
   console.log(outputData);
 
-  // MARK:Draw
   chartId = createChart();
-  var clickRatesChart = new Highcharts.Chart({
-      chart: {
-          type: 'area',
-          renderTo: chartId
-      },
-      title: {
-          text: 'Click Rates'
-      },
-      xAxis: {
-          categories: keys,
-          tickmarkPlacement: 'on',
-          title: {
-              enabled: false
-          }
-      },
-      yAxis: {
-          title: {
-              text: 'Percent'
-          },
-          //max: 100,
-          //min: Math.min.apply(null, successRates)
-      },
-      tooltip: {
-          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
-          shared: true
-      },
-      series: [{
-          name: 'Success Rate',
-          data: clickRates
-      }],
-      credits: {
-        enabled: false
-      },
-      legend: {
-        enabled: false
-      }
-    });
-
-  chartId = createChart();
-  var seenCountChart = new Highcharts.Chart({
+  var clickChart = new Highcharts.Chart({
       chart: {
           type: 'column',
           renderTo: chartId
       },
       title: {
-          text: 'Seen and Click Counts'
+          text: 'UluAdClick'
       },
       xAxis: {
           categories: keys,
-          tickmarkPlacement: 'on',
           title: {
               enabled: false
           }
       },
       yAxis: {
-          // title: {
-          //     text: 'Percent'
-          // },
-          //max: 100,
-          //min: Math.min.apply(null, successRates)
+          tickmarkPlacement: 'on'
       },
       tooltip: {
-          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.0f}</b><br/>',
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
           shared: true
       },
-      series: [{
-          name: 'Seen',
-          data: seenCounts
-      }, 
-      {
-          name: 'Click',
-          data: clickCounts
-      }
+      plotOptions: {
+        area: {
+          stacking: 'normal'
+        }
+      },
+      series: [
+        {
+          name: 'Success',
+          data: successRecord
+        },
+        {
+          name: 'android',
+          data: failRecord
+        }
+      
       ],
       credits: {
         enabled: false
@@ -252,8 +204,6 @@ function drawCharts(gaDataSource) {
         enabled: true
       }
     });
-  
-
 }
 </script>
 
