@@ -152,8 +152,8 @@ function drawCharts(gaData) {
   for(let i=0,len=keys.length;i<len;i++) {
     const outputDatum = {
       date:keys[i],
-      seenCounts:successRecord[i],
-      clickCounts:failRecord[i]
+      seccessRecord:successRecord[i],
+      failRecord:failRecord[i]
     }
     outputData.push(outputDatum);
   }
