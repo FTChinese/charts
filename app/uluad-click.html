@@ -23,7 +23,7 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">App Launches</h1>
+  <h1 class="page-title">Uluad Click</h1>
 </div>
 
 
@@ -43,8 +43,8 @@
 var VIEW_ID = '10995661';
 // var startDate = '2017-04-27';
 // var endDate = '2017-05-16';
-var startDate = '7daysago';
-var endDate = 'yesterday';
+var startDate = '2017-06-21';
+var endDate = '2017-06-21';
 
 function constructQuerryData(startDate, endDate) {
   var queryData = [
@@ -131,6 +131,98 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'uluAd'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Request'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Story Recommend'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Click-002'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
+              'expressions': [
+                'uluAd'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
 
   ];
@@ -147,13 +239,17 @@ function drawCharts(gaData) {
   // MARK: Get Google Analytics Dimensions
   var successRecord = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
   var failRecord = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
+  //var requestRecord = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
+  var clickRecord = extractDataFromGAAPI(gaData.reports[3].data.rows, keys);
   
   const outputData = [];
   for(let i=0,len=keys.length;i<len;i++) {
     const outputDatum = {
       date:keys[i],
       seccessRecord:successRecord[i],
-      failRecord:failRecord[i]
+      failRecord:failRecord[i],
+      //requestRecord: requestRecord[i],
+      clickRecord: clickRecord[i]
     }
     outputData.push(outputDatum);
   }
@@ -192,8 +288,18 @@ function drawCharts(gaData) {
           data: successRecord
         },
         {
-          name: 'android',
+          name: 'Fail',
           data: failRecord
+        },
+        /*
+        {
+          name:'Request',
+          data: requestRecord
+        },
+        */
+        {
+          name:'Click',
+          data: clickRecord
         }
       
       ],
