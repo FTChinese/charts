@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Story Pageviews</title>
+  <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="styles/main.css">
+
+</head>
+<body>
+
+
+
+<p align=right>
+  <!-- The Sign-in button. This will run `queryReports()` on success. -->
+  <div class="g-signin2" data-onsuccess="queryReports"></div>
+</p>
+
+<div class="page-container" id="charts-container">
+  <h1 class="page-title">Story Pageviews</h1>
+</div>
+
+
+<script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/highcharts-more.js"></script>
+<script src="../bower_components/highmaps-beta/modules/map.js"></script>
+<script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<script type="text/javascript" src="scripts/highcharts.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+
+
+
+<script>
+// MARK: - These are different in every page. 
+
+// Replace with your view ID.
+var VIEW_ID = '10995661';
+// var startDate = '2017-04-27';
+// var endDate = '2017-05-16';
+var startDate = '7daysago';
+var endDate = 'today';
+
+function constructQuerryData(startDate, endDate) {
+  var queryData = [
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                '/story/'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:hostname',
+              'operator': 'EXACT',
+              'expressions': [
+                'www.ftchinese.com'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+
+  ];
+  return queryData;
+}
+
+function drawCharts(gaData) {
+  // MARK: - The base key which should have no gap in data
+  var keys = gaData.reports[0].data.rows.map(function(row){
+    return row.dimensions[0];
+  });
+  var chartId;
+
+  // MARK: Custom variables for charts: [Int]
+  var storyPageviews = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
+ 
+
+
+  chartId = createChart();
+  var iPhoneLaunchesChart = new Highcharts.Chart({
+      chart: {
+          type: 'line',
+          renderTo: chartId
+      },
+      title: {
+          text: 'Story Pageviews'
+      },
+      xAxis: {
+          categories: keys,
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          tickmarkPlacement: 'on'
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+          shared: true
+      },
+      plotOptions: {
+        area: {
+          stacking: 'normal'
+        }
+      },
+      series: [
+        {
+          name: 'storypagevies',
+          data: storyPageviews
+        }
+      ],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: true
+      }
+    });
+
+}
+</script>
+
+
+
+
+<!-- Load the JavaScript API client and Sign-in library. -->
+<script src="https://apis.google.com/js/client:platform.js"></script>
+
+</body>
+</html>

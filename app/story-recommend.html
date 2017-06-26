@@ -176,7 +176,9 @@ function drawCharts(gaDataSource) {
   for(let i=0,len=keys.length;i<len;i++) {
     const outputDatum = {
       date:keys[i],
-      seenCounts:seenCounts[i]
+      seenCounts:seenCounts[i],
+      clickCounts:clickCounts[i],
+      clickRates:clickRates[i]
     }
     outputData.push(outputDatum);
   }
