@@ -4,7 +4,8 @@
   "dependencies": {
     "chartist": "^0.11.0",
     "highcharts": "hightcharts#^5.0.11",
-    "highmaps-beta": "highmaps#^1.0.1"
+    "highmaps-beta": "highmaps#^1.0.1",
+    "o-forms": "^4.0.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
