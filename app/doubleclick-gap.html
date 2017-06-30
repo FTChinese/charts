@@ -23,12 +23,13 @@
 <div class="page-container">
  <h1 class="page-title">Third Party Tracking Watch</h1>
   
-  <p>The default data are about the ad whose id is '605326'. If you focus on one other ad, please write its id here and manually click the 'Signed in' button.</p>
+  <p>The default data are about the total data of all ads. </p>
+  <p>If you focus on one other ad, please write its id here, then hit the "Enter" key</p>
 
   <div class="o-forms">
     <label for="o-forms-standard" class="o-forms__label">Adid</label>
     <small class="o-forms__additional-info">The id of the ad you care about</small>
-    <input type="text" id="adid" placeholder="605326" class="o-forms__text" required=""></input>
+    <input type="text" id="adid" placeholder="" class="o-forms__text" required="" ></input>
   </div>
 
   <div  id="charts-container">
@@ -57,7 +58,12 @@ var startDate = '2017-04-27';
 // var endDate = '2017-05-16';
 // var startDate = '7daysago';
 var endDate = 'today';
-
+document.getElementById('adid').onkeyup = function(e) {
+  var code = e.keyCode;
+  if(code === 13) {
+    queryReportsWithAdid();
+  }
+}
 function queryReportsWithAdid() {
   document.getElementById('charts-container').innerHTML = '';
   gapi.client.request({
@@ -70,9 +76,12 @@ function queryReportsWithAdid() {
   }).then(displayResults, console.error.bind(console));
 }
 function constructQuerryData(startDate, endDate) {
-  var adId = document.getElementById('adid').value || '605326';
-  console.log(adId);
-  var adIdExp = '\\('+adId+'\\)$';
+  var adIdExp= '\\([0-9]+\\)$';
+  var adId = document.getElementById('adid').value;
+  if(adId !== '') {
+    adIdExp = '\\('+adId+'\\)$';
+  }
+  
   var queryData = [
     {
       'viewId': VIEW_ID,
