@@ -45,10 +45,11 @@ var VIEW_ID = '10995661';
 // var endDate = '2017-05-16';
 var startDate = '2017-06-21';
 var endDate = '2017-06-21';
-
+//var startDate = '2017-07-03';
+//var endDate = '2017-07-14';
 function constructQuerryData(startDate, endDate) {
   var queryData = [
-    {
+    {//监控广告点击后客户记录成功
       'viewId': VIEW_ID,
       'dateRanges': [
         {
@@ -80,7 +81,7 @@ function constructQuerryData(startDate, endDate) {
             },
             {
               'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
+              'operator': 'REGEXP',
               'expressions': [
                 'Success'
               ],
@@ -90,7 +91,7 @@ function constructQuerryData(startDate, endDate) {
         }
       ]
     },
-    {
+    {//监控广告点击后客户记录失败
       'viewId': VIEW_ID,
       'dateRanges': [
         {
@@ -132,7 +133,8 @@ function constructQuerryData(startDate, endDate) {
         }
       ]
     },
-    {
+    /*
+    {//监控广告点击（by 请求发出）
       'viewId': VIEW_ID,
       'dateRanges': [
         {
@@ -174,7 +176,8 @@ function constructQuerryData(startDate, endDate) {
         }
       ]
     },
-    {
+    */
+    {//监控广告点击（by 直接监控click)
       'viewId': VIEW_ID,
       'dateRanges': [
         {
@@ -223,6 +226,90 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },
+    {//监控ulu的广告曝光
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Story Recommend With Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Seen-002'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ] 
+    },
+    {//监控ulu的广告数据投放
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Story Recommend With Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Got Data'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ] 
     }
 
   ];
@@ -237,10 +324,14 @@ function drawCharts(gaData) {
   var chartId;
 
   // MARK: Get Google Analytics Dimensions
-  var successRecord = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
-  var failRecord = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
+  var successRecord = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);//成功总数
+  var failRecord = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);//第一次失败次数
   //var requestRecord = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
-  var clickRecord = extractDataFromGAAPI(gaData.reports[3].data.rows, keys);
+  var clickRecord = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
+
+  var inviewRecord = extractDataFromGAAPI(gaData.reports[3].data.rows, keys);
+
+  var gotDataRecord = extractDataFromGAAPI(gaData.reports[4].data.rows, keys);
   
   const outputData = [];
   for(let i=0,len=keys.length;i<len;i++) {
@@ -249,7 +340,9 @@ function drawCharts(gaData) {
       seccessRecord:successRecord[i],
       failRecord:failRecord[i],
       //requestRecord: requestRecord[i],
-      clickRecord: clickRecord[i]
+      clickRecord: clickRecord[i],
+      inviewRecord: inviewRecord[i],
+      gotDataRecord: gotDataRecord[i]
     }
     outputData.push(outputDatum);
   }
@@ -300,6 +393,14 @@ function drawCharts(gaData) {
         {
           name:'Click',
           data: clickRecord
+        },
+        {
+          name:'Inview',
+          data: inviewRecord
+        },
+        {
+          name: 'Got data',
+          data: gotDataRecord
         }
       
       ],
