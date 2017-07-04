@@ -76,14 +76,21 @@ function queryReportsWithAdid() {
   }).then(displayResults, console.error.bind(console));
 }
 function constructQuerryData(startDate, endDate) {
-  var adIdExp= '\\([0-9]+\\)$';
-  var adId = document.getElementById('adid').value;
-  if(adId !== '') {
-    adIdExp = '\\('+adId+'\\)$';
+  let adIdExp = '\\([0-9]+\\)$';
+  const adIdByUrl = window.location.search.replace(/.*adid=([0-9]+)/,"$1");
+  console.log(adIdByUrl);
+  if(adIdByUrl) {
+     adIdExp = '\\('+adIdByUrl+'\\)$';
+  } 
+   
+  //var adIdExp= '\\([0-9]+\\)$';
+  const adIdByManual = document.getElementById('adid').value;
+  if(adIdByManual !== '') {
+    adIdExp = '\\('+adIdByManual+'\\)$';
   }
   
   var queryData = [
-    {
+    { // record Request
       'viewId': VIEW_ID,
       'dateRanges': [
         {
@@ -126,7 +133,7 @@ function constructQuerryData(startDate, endDate) {
         }
       ]
     },
-    {
+    { // record Success (include retry times)
       'viewId': VIEW_ID,
       'dateRanges': [
         {
@@ -168,7 +175,7 @@ function constructQuerryData(startDate, endDate) {
         }
       ]
     },
-    {
+    { // record Fail
       'viewId': VIEW_ID,
       'dateRanges': [
         {
@@ -210,7 +217,7 @@ function constructQuerryData(startDate, endDate) {
         }
       ]
     },
-    {
+    { // recored Success on Retry
       'viewId': VIEW_ID,
       'dateRanges': [
         {

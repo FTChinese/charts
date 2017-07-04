@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>DoubleClick Gap Report</title>
+  <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+
+
+<p align=right>
+  <!-- The Sign-in button. This will run `queryReports()` on success. -->
+  <div class="g-signin2" data-onsuccess="queryReportsWithAdid"></div>
+</p>
+
+<div class="page-container">
+ <h1 class="page-title">Third Party Tracking Watch</h1>
+  
+ <p>The top 30 request ads</p>
+
+  <div  id="charts-container">
+  </div>
+</div>
+
+
+
+
+
+<script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/highcharts-more.js"></script>
+<script src="../bower_components/highmaps-beta/modules/map.js"></script>
+<script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<script type="text/javascript" src="scripts/highcharts.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+
+
+
+<script>
+// MARK: - These are different in every page. 
+
+// Replace with your view ID.
+var VIEW_ID = '10995661';
+var startDate = '2017-04-27';
+// var endDate = '2017-05-16';
+// var startDate = '7daysago';
+var endDate = 'today';
+
+function queryReportsWithAdid() {
+  document.getElementById('charts-container').innerHTML = '';
+  gapi.client.request({
+    path: '/v4/reports:batchGet',
+    root: 'https://analyticsreporting.googleapis.com/',
+    method: 'POST',
+    body: {
+      reportRequests: constructQuerryData(startDate, endDate)
+    }
+  }).then(displayResults, console.error.bind(console));
+}
+function constructQuerryData(startDate, endDate) {
+  var adIdExp= '\\([0-9]+\\)$';
+  
+  
+  var queryData = [
+    { // record Request
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:eventCategory'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                //'\\(605326\\)$'
+                adIdExp
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Request'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    { // record Success (include retry times)
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:eventCategory'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                adIdExp
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'BEGINS_WITH',
+              'expressions': [
+                'Success'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    { // record Fail
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:eventCategory'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                adIdExp
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Fail'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    { // recored Success on Retry
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:eventCategory'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                adIdExp
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'BEGINS_WITH',
+              'expressions': [
+                'Success on Retry'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+  ];
+  return queryData;
+}
+
+
+
+function drawCharts(gaDataSource) { 
+  var chartId;
+  var gaData = gaDataSource;
+
+  console.log(JSON.stringify(gaData)); 
+  // MARK: - The base key which should have no gap in data
+  var keys = gaData.reports[0].data.rows.map(function(row){
+    return row.dimensions[0];
+  });
+
+
+  // MARK: Get Google Analytics Dimensions
+  var request = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
+  
+  
+
+  const keyAndRequestArray = [];
+  for(let i=0,len=keys.length;i<len;i++) {
+    const keyAndRequest = {
+      ad:keys[i],
+      request:request[i]
+    }
+    keyAndRequestArray.push(keyAndRequest);
+  }
+  const top30Records = keyAndRequestArray.sort(function(a,b) {
+    if(a.request > b.request) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }).slice(0,30);
+  console.log(`top30Records${JSON.stringify(top30Records)}`);
+
+  const ads = [];
+  const requestCounts = [];
+  for(const item of top30Records) {
+    const ad = item.ad;
+    const request = item.request;
+    ads.push(ad);
+    requestCounts.push(request);
+  }
+
+  var successCounts = extractDataFromGAAPI(gaData.reports[1].data.rows, ads);
+  var failCounts = extractDataFromGAAPI(gaData.reports[2].data.rows, ads);
+  var successOnRetryCounts = extractDataFromGAAPI(gaData.reports[3].data.rows, ads);
+
+  // MARK: Calculate Percentages that are ueful for charts
+  var successRates = calculateRates(successCounts, requestCounts);
+  var failRates = calculateRates(failCounts, requestCounts);
+  var successOnRetryRates = calculateRates(successOnRetryCounts, requestCounts);
+  
+  const outputData = [];
+  for(let i=0, len = ads.length;i<len;i++) {
+     const outputDatum = {
+        ad:ads[i],
+        request:requestCounts[i],
+        success:successCounts[i],
+        fail:failCounts[i],
+        successOnRetry:successOnRetryCounts[i],
+        successRate:successRates[i],
+        failRate:failRates[i],
+        successOnRetryRate:successOnRetryRates[i]
+      }
+      outputData.push(outputDatum);
+  }
+  console.log(outputData);
+  chartId = createTable(outputData);
+ 
+
+
+  
+}
+
+// MARK:Append an div for drawing table in it.
+function createTable(data) {
+  const chartContainer = document.createElement('div');
+  const chartId = 'chart-container-' + gCurrentChartIndex;
+  chartContainer.id = chartId;
+  chartContainer.className = 'chart-container';
+  gCurrentChartIndex += 1;
+  const tableContainer = document.createElement('table');
+  
+  
+  const heads = ['Ad','Request','Success','Fail','SuccessOnRetry','SuccessRate','FailRate','successOnRetryRate'];
+  let ths = '';
+  for(const item of heads) {
+    ths+=`<th>${item}</th>`
+  }
+  const tableTr0 = `<tr>${ths}</tr>`;
+  tableContainer.innerHTML = tableTr0;
+  /* data[i]
+  {
+    ad:ads[i],
+    request:requestCounts[i],
+    success:successCounts[i],
+    fail:failCounts[i],
+    successOnRetry:successOnRetryCounts[i],
+    successRate:successRates[i],
+    failRate:failRates[i],
+    successOnRetryRate:successOnRetryRates[i]
+  }
+  */
+  for(const item of data) {
+    const adid = item.ad.replace(/.*\(([0-9]+)\)/,"$1");//该方法并不改变调用它的字符串本身，而只是返回一个新的替换后的字符串
+    console.log(adid);
+    const tdsOfTr = `<td><a href="./doubleclick-gap.html?adid=${adid}">${item.ad}</a></td><td>${item.request}</td><td>${item.success}</td><td>${item.fail}</td><td>${item.successOnRetry}</td><td>${item.successRate}</td><td>${item.failRate}</td><td>${item.successOnRetryRate}</td>`;
+    const tableTr = document.createElement('tr');
+    tableTr.innerHTML = tdsOfTr;
+    tableContainer.appendChild(tableTr);
+  }
+
+  chartContainer.appendChild(tableContainer);
+  document.getElementById('charts-container').appendChild(chartContainer);
+  return chartId;
+}
+</script>
+
+
+
+
+<!-- Load the JavaScript API client and Sign-in library. -->
+<script src="https://apis.google.com/js/client:platform.js"></script>
+
+</body>
+</html>

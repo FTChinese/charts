@@ -28,6 +28,19 @@ function createChart() {
   return chartId;
 }
 
+// MARK:Append an div for drawing table in it.
+function createTable() {
+  var chartContainer = document.createElement('div');
+  var chartId = 'chart-container-' + gCurrentChartIndex;
+  chartContainer.id = chartId;
+  chartContainer.className = 'chart-container';
+  gCurrentChartIndex += 1;
+  var tableContainer = document.createElement('table');
+  chartContainer.appendChild(tableContainer);
+  document.getElementById('charts-container').appendChild(chartContainer);
+  return chartId;
+}
+
 // MARK: Extract data from Google Analytics API
 function extractDataFromGAAPI(dataSource, baseKeys) {
   var resultData = {};
