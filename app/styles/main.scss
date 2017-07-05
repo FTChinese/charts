@@ -125,4 +125,14 @@ div {
 
 td{
   text-align: right;
+  padding:10px;
+  &.good {
+    color:oColorsGetPaletteColor('jade');
+  }
+  &.warn {
+    color:oColorsGetPaletteColor('lemon');
+  }
+  &.error {
+    color:oColorsGetPaletteColor('crimson');
+  }
 }

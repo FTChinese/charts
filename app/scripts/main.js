@@ -73,7 +73,7 @@ function calculateRates(part, total) {
       } catch (ignore) {
         rate = 0; 
       }
-      rate = parseInt(rate * 10000, 10)/100;
+      rate = parseInt(rate * 1000, 10)/10;//保留1位小数
       rates.push(rate);
     }
   }
