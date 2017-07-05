@@ -47,9 +47,9 @@
 
 // Replace with your view ID.
 var VIEW_ID = '10995661';
-var startDate = '2017-04-27';
+//var startDate = '2017-04-27';
 // var endDate = '2017-05-16';
-// var startDate = '7daysago';
+var  startDate = '30daysago';
 var endDate = 'today';
 
 function queryReportsWithAdid() {
@@ -247,7 +247,6 @@ function drawCharts(gaDataSource) {
   var chartId;
   var gaData = gaDataSource;
 
-  console.log(JSON.stringify(gaData)); 
   // MARK: - The base key which should have no gap in data
   var keys = gaData.reports[0].data.rows.map(function(row){
     return row.dimensions[0];
@@ -256,9 +255,6 @@ function drawCharts(gaDataSource) {
 
   // MARK: Get Google Analytics Dimensions
   var request = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
-  
-  
-
   const keyAndRequestArray = [];
   for(let i=0,len=keys.length;i<len;i++) {
     const keyAndRequest = {
@@ -274,7 +270,6 @@ function drawCharts(gaDataSource) {
       return 1;
     }
   }).slice(0,30);
-  console.log(`top30Records${JSON.stringify(top30Records)}`);
 
   const ads = [];
   const requestCounts = [];
@@ -308,12 +303,7 @@ function drawCharts(gaDataSource) {
       }
       outputData.push(outputDatum);
   }
-  console.log(outputData);
   chartId = createTable(outputData);
- 
-
-
-  
 }
 
 // MARK:Append an div for drawing table in it.
@@ -324,6 +314,10 @@ function createTable(data) {
   chartContainer.className = 'chart-container';
   gCurrentChartIndex += 1;
   const tableContainer = document.createElement('table');
+  const tableThead = document.createElement('thead');
+  const tableTbody = document.createElement('tbody');
+
+  tableContainer.className = 'o-table o-table--row-stripes';
   
   
   const heads = ['Ad','Request','Success','Fail','SuccessOnRetry','SuccessRate','FailRate','successOnRetryRate'];
@@ -331,29 +325,18 @@ function createTable(data) {
   for(const item of heads) {
     ths+=`<th>${item}</th>`
   }
-  const tableTr0 = `<tr>${ths}</tr>`;
-  tableContainer.innerHTML = tableTr0;
-  /* data[i]
-  {
-    ad:ads[i],
-    request:requestCounts[i],
-    success:successCounts[i],
-    fail:failCounts[i],
-    successOnRetry:successOnRetryCounts[i],
-    successRate:successRates[i],
-    failRate:failRates[i],
-    successOnRetryRate:successOnRetryRates[i]
-  }
-  */
+  tableThead.innerHTML = ths;
+  tableContainer.appendChild(tableThead);
+
   for(const item of data) {
     const adid = item.ad.replace(/.*\(([0-9]+)\)/,"$1");//该方法并不改变调用它的字符串本身，而只是返回一个新的替换后的字符串
     console.log(adid);
     const tdsOfTr = `<td><a href="./doubleclick-gap.html?adid=${adid}">${item.ad}</a></td><td>${item.request}</td><td>${item.success}</td><td>${item.fail}</td><td>${item.successOnRetry}</td><td>${item.successRate}</td><td>${item.failRate}</td><td>${item.successOnRetryRate}</td>`;
     const tableTr = document.createElement('tr');
     tableTr.innerHTML = tdsOfTr;
-    tableContainer.appendChild(tableTr);
+    tableTbody.appendChild(tableTr);
   }
-
+  tableContainer.appendChild(tableTbody);
   chartContainer.appendChild(tableContainer);
   document.getElementById('charts-container').appendChild(chartContainer);
   return chartId;

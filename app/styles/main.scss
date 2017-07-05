@@ -6,8 +6,13 @@
 @import "bower_components/o-fonts/main.scss";
 @import "bower_components/o-typography/main.scss";
 @import "bower_components/o-forms/main.scss";
+@import "bower_components/o-table/main.scss";
 // endbower
+
 @include oForms;
+//@include oTableBase;
+//@include oTableVerticalLines;
+@include oTableRowStripes;
 
 $defaultPink: #FFF1E0;
 $borderColor: #cec6b9;
@@ -116,4 +121,8 @@ div {
 
 .abcRioButton {
   float:right;
+}
+
+td{
+  text-align: right;
 }

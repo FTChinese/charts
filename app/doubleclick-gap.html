@@ -54,9 +54,9 @@
 
 // Replace with your view ID.
 var VIEW_ID = '10995661';
-var startDate = '2017-04-27';
+//var startDate = '2017-04-27';
 // var endDate = '2017-05-16';
-// var startDate = '7daysago';
+var startDate = '30daysago';
 var endDate = 'today';
 document.getElementById('adid').onkeyup = function(e) {
   var code = e.keyCode;
@@ -83,7 +83,6 @@ function constructQuerryData(startDate, endDate) {
      adIdExp = '\\('+adIdByUrl+'\\)$';
   } 
    
-  //var adIdExp= '\\([0-9]+\\)$';
   const adIdByManual = document.getElementById('adid').value;
   if(adIdByManual !== '') {
     adIdExp = '\\('+adIdByManual+'\\)$';
