@@ -23,9 +23,53 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">App Launches</h1>
+  <h1 class="page-title">移动端开机全屏原生及非原生广告轮播及投放事宜</h1>
 </div>
 
+<div class="page-container" id="ad-guidelines">
+  <b>如何投放开机广告？</b>
+  <div class="page-description">为保证投放效果，所有的开机广告都<b>必须首先</b>投放在原生端。原生端每日的库存上限大约为iPhone应用4万，安卓应用3.5万。如果数据有变化，可以参考上图。如果客户提供的广告是图片形式，而且短时间内需要达到原生应用的库存上限，可以投放弹出广告。</div>
+  <b>如果我需要每天投放超过20万开机广告？</b>
+  <div class="page-description">我们可以把弹出广告投放到页面中，这样用户在用手机（比如微信中）浏览器打开任何一个页面，都会有一个弹出广告。这种方式对用户的体验伤害非常大，要慎用。每次要这样做的时候，请向Tracy申请打开网页端弹出广告的权限，并注明起始日期，由技术部门统一设置。</div>
+  <b>需要在哪些地方操作？</b>
+  <div class="page-description">iPhone原生的广告需要在<a href="https://backyard.ftchinese.com/pagemaker/page-maker.html?page=applaunchschedule" target=_blank>CMS系统中操作</a>，安卓原生应用的开机广告和弹出广告需要在传漾系统中操作。</div>
+  <b>如果广告素材只投放到原生端，会出现什么情况？</b>
+  <div class="page-description">如果客户每天需要的量不大，而且投放的期间比较长，建议仅投放到原生端，这样投放的效果和用户体验都是最好的。如果客户需要的量比较大，比如占到了库存上限的50%以上，素材提交又比较晚，导致来不及build up，这样头几天量会不够。这种情况下，把图片广告投放到弹出广告的位置，可以充分利用所有的开机广告的库存。</div>
+  <b>如果广告素材只投放到弹出广告，会出现什么情况？</b>
+  <div class="page-description"><b>一定不要出现这种做。</b>在iPhone App上，应用会先检查有没有原生的广告素材，如果没有，启动之后会去找弹出广告。所以这种情况播放量不会少，但是用户体验很差。在安卓App上，由于传漾的SDK并不通知App是否真正播放了开机广告，弹出广告在新版本的安卓App上根本不会播出。但是旧版本的安卓App会查找弹出广告来播放。</div>
+  <b>开机广告可以轮播吗？</b>
+  <div class="page-description">iPhone与Android客户端可实现开机全屏广告轮播的方式，即原生广告与非原生广告并行，Android端全部操作可在传漾系统完成，iPhone端轮播需要借助传漾系统非原生广告的辅助（具体辅助方式见下文）
+原生广告iPhone端最多约3.5万个cpm, Android端最多约4.5万个cpm;非原生广告iPhone端与Android端最多约5.5万个cpm；   （原生与非原生全屏广告iPhone与Android移动端合计约19万个com售卖量）</div>
+
+<div class="page-description">
+同时并存的开机广告在Imp总量不超过4万的情况下，由系统随机抓取，被抓取比重受该广告所对应的权重影响，权重越高，被曝光的概率越大；</div>
+轮播广告Imp 总量超过4万的情况下，有如下处理方式：
+
+<div class="page-description">例子：a客户40个cpm，b客户不足40个cpm</div>
+
+<div class="page-description">a客户原生+权重分配， b客户非原生页面全屏广告</div>
+<div class="page-description">（原理：优先投放包量或量大的客户，量少客户利用移动端web页面投放非原生广告）</div>
+
+<div class="page-description">在传漾系统中填写好a客户的创意及基本信息等资料（为计数及保存CMS需要的filename, click, impression等链接信息用）再到CMS系统中填入filename, click, impression等信息并选择较大权重，submit保存设置；</div>
+<div class="page-description">在传漾系统中设置b客户的非原生页面（弹窗）全屏广告—选择Opening AD广告位，自定义移动端非App创意，设置曝光量排期，定向(如果客户有需求)等；
+(注：非原生广告的输机模板已建成，无需再使用IT Team的代码)</div>
+
+<div class="page-description">原生&非原生广告利弊分析</div>
+<div class="page-description">原生全屏：劣势是更新时间长，量少，需要统筹三地并提前排期且不宜改动；</div>
+<div class="page-description">非原生页面全屏：加载慢，好处是可以设置具体的量，也可以补投；</div>
+  
+<div class="page-description">权重讲解</div>
+<div class="page-description">IT team 在CMS系统layout板块新增了Weight选项，内容从1到5，权级依次递增，Ad operation team根据客户的Imp量在同时段排期中的比重选择权重系数，比如肖邦和爱彼
+分别为15cpm和40cpm，则可设置1与5的权重；</div>
+
+<div class="page-description">Question*： Campaign的量过大设置权重之后仍然不够跑如何处理？</div>
+<div class="page-description">Option(1): 同一Campaign设置两次，并配以较高的权重;</div>
+<div class="page-description">       (2): IT Team加大权级，将权重提升至20或更大；</div>
+
+<div class="page-description">物料及客户端更新事宜</div>
+<div class="page-description">“程序端下发的指令将在用户第二次启动时生效”“用户第二次启动存在时间长度的不确定性”，以上因素导致物料及订单的全面更新(覆盖所有用户)产生至少7至8天的更新时间，客户若更换监测代码（监测代码？）则会导致曝光量直接减少，因此不建议中途换物料或者取消订单，若要更换，需提前至少两周；</div>
+
+</div>
 
 <script src="../bower_components/highcharts/highcharts.js"></script>
 <script src="../bower_components/highcharts/highcharts-more.js"></script>
@@ -211,7 +255,7 @@ function drawCharts(gaData) {
           renderTo: chartId
       },
       title: {
-          text: 'App Launches'
+          text: 'FTC应用每日开机次数'
       },
       xAxis: {
           categories: keys,
@@ -261,7 +305,7 @@ function drawCharts(gaData) {
           renderTo: chartId
       },
       title: {
-          text: 'App Launches from Notification Taps'
+          text: '每日点击通知推送打开iPhone应用次数'
       },
       xAxis: {
           categories: keys,
