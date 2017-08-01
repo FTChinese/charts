@@ -321,15 +321,15 @@ function drawCharts(gaData) {
       },
       series: [
         {
-          name: 'iPhone',
+          name: 'iPhone (日均'+averageOfArray(iPhoneLaunches)+')',
           data: iPhoneLaunches
         },
         {
-          name: 'android',
+          name: 'android (日均'+averageOfArray(androidLaunches)+')',
           data: androidLaunches
         },
         {
-          name: 'iPad',
+          name: 'iPad (日均'+averageOfArray(iPadLaunches)+')',
           data: iPadLaunches
         }
       ],

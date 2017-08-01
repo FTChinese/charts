@@ -88,3 +88,18 @@ function calculateRatesConvert(percentageData) {
    */
   return percentageData.map( x => x/100);
 }
+
+function averageOfArray(arrayObject) {
+  var sum = 0;
+  var avg = 0;
+  try {
+  for( var i = 0; i < arrayObject.length; i++ ){
+      sum += parseInt(arrayObject[i], 10); //don't forget to add the base
+  }
+  avg = sum/arrayObject.length;
+  avg = Math.round(avg);
+  } catch (ignore) {
+
+  }
+  return avg;
+}
