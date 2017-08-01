@@ -21,7 +21,7 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">Ad Impressions</h1>
+  <h1 class="page-title">Ad Impressions: Mobile</h1>
 </div>
 
 
@@ -214,10 +214,62 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                '202[23]'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0121'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
 }
+
+//20220121
 
 function averageOfArray(arrayObject) {
   var sum = 0;
@@ -259,6 +311,7 @@ function drawCharts(gaDataSource) {
   var androidLaunch = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
   var mobileBanner = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
   var mobileMPU = extractDataFromGAAPI(gaData.reports[3].data.rows, keys);
+  var paidPost = extractDataFromGAAPI(gaData.reports[4].data.rows, keys);
 
 
 
@@ -285,11 +338,11 @@ function drawCharts(gaDataSource) {
       },
       series: [
         {
-            name: 'iPhone Launch('+averageOfArray(iPhoneLaunch)+')',
+            name: 'iPhone (日均'+averageOfArray(iPhoneLaunch)+')',
             data: iPhoneLaunch
         },
         {
-            name: 'Android Launch('+averageOfArray(androidLaunch)+')',
+            name: 'Android (日均'+averageOfArray(androidLaunch)+')',
             data: androidLaunch
         }
       ],
@@ -308,7 +361,7 @@ function drawCharts(gaDataSource) {
           renderTo: chartId
       },
       title: {
-          text: '广告Banner和MPUIMpression'
+          text: '广告Banner和MPU库存'
       },
       xAxis: {
           categories: keys,
@@ -323,12 +376,16 @@ function drawCharts(gaDataSource) {
       },
       series: [
         {
-            name: 'Banner('+averageOfArray(mobileBanner)+')',
+            name: 'Banner (日均'+averageOfArray(mobileBanner)+')',
             data: mobileBanner
         },
         {
-            name: 'MPU('+averageOfArray(mobileMPU)+')',
+            name: 'MPU (日均'+averageOfArray(mobileMPU)+')',
             data: mobileMPU
+        },
+        {
+            name: '信息流 (日均'+averageOfArray(paidPost)+')',
+            data: paidPost
         }
       ],
       credits: {
