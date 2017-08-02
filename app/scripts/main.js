@@ -103,3 +103,47 @@ function averageOfArray(arrayObject) {
   }
   return avg;
 }
+
+// MARK:Append an div for drawing table in it.
+function createTable(data) {
+  const chartContainer = document.createElement('div');
+  const chartId = 'chart-container-' + gCurrentChartIndex;
+  chartContainer.id = chartId;
+  chartContainer.className = 'chart-container';
+  gCurrentChartIndex += 1;
+  const tableContainer = document.createElement('table');
+  const tableThead = document.createElement('thead');
+  const tableTbody = document.createElement('tbody');
+
+  tableContainer.className = 'o-table o-table--row-stripes';
+  
+  
+  const heads = ['Ad','SuccessRate','FailRate','successOnRetryRate','Request','Success','Fail','SuccessOnRetry'];
+  let ths = '';
+  for(const item of heads) {
+    ths+=`<th>${item}</th>`
+  }
+  tableThead.innerHTML = ths;
+  tableContainer.appendChild(tableThead);
+
+  for(const item of data) {
+    const adid = item.ad.replace(/.*\(([0-9]+)\)/,"$1");//该方法并不改变调用它的字符串本身，而只是返回一个新的替换后的字符串
+    const successRate = item.successRate;
+    let styleForSign = '';
+    if(successRate >= 95 && successRate <= 120) {
+      styleForSign = 'good';
+    } else if(successRate >= 80 && successRate <95) {
+      styleForSign = 'warn';
+    } else {
+      styleForSign = 'error';
+    }
+    const tdsOfTr = `<td><a href="./doubleclick-gap.html?adid=${adid}">${item.ad}</a></td><td class ="${styleForSign}">${item.successRate}%</td><td>${item.failRate}%</td><td>${item.successOnRetryRate}%</td><td>${item.request}</td><td>${item.success}</td><td>${item.fail}</td><td>${item.successOnRetry}</td>`;
+    const tableTr = document.createElement('tr');
+    tableTr.innerHTML = tdsOfTr;
+    tableTbody.appendChild(tableTr);
+  }
+  tableContainer.appendChild(tableTbody);
+  chartContainer.appendChild(tableContainer);
+  document.getElementById('charts-container').appendChild(chartContainer);
+  return chartId;
+}
