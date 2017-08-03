@@ -2,6 +2,52 @@
 
 var gCurrentChartIndex = 0;
 // Query the API and print the results to the page.
+
+
+var gaDataReports = [];
+
+
+function queryReportsAll() {
+
+  function requestBatch(index, reportRequests) {
+    var startIndex = index * reportBatchLimit;
+    var endIndex = (index + 1) * reportBatchLimit -1;
+    endIndex = Math.min(endIndex, reportRequestLength - 1);
+    var currentReportRequest = reportRequests.slice(startIndex, endIndex + 1);
+    gapi.client.request({
+      path: '/v4/reports:batchGet',
+      root: 'https://analyticsreporting.googleapis.com/',
+      method: 'POST',
+      body: {
+        reportRequests: currentReportRequest
+      }
+    }).then(
+      function(response) {
+        var reports = response.result.reports;
+        for (var i=0; i<reports.length; i++) {
+          gaDataReports.push(reports[i]);
+        }
+        if (endIndex === reportRequestLength -1) {
+          //displayResults(response);
+          drawChartsAll();
+        } else {
+          requestBatch(index+1, reportRequests)
+        }
+      }
+    );
+  }
+
+  const reportBatchLimit = 5;
+  var reportRequests = constructQuerryData(startDate, endDate);
+  var reportRequestLength = reportRequests.length;
+  var reportRequestBatchLength = Math.ceil(reportRequestLength/reportBatchLimit);
+  var currentBatchIndex = 0;
+  gaDataReports = [];
+  requestBatch(currentBatchIndex, reportRequests);
+
+}
+
+
 function queryReports() {
   gapi.client.request({
     path: '/v4/reports:batchGet',
@@ -80,6 +126,18 @@ function calculateRates(part, total) {
   return rates;
 }
 
+// MARK: Calculate percentage between two sets of data
+function calculateOverallRates(part, total) {
+  var partSum = part.reduce((a, b) => a + b, 0);
+  var totalSum = total.reduce((a, b) => a + b, 0); 
+  var rate = 0;
+  if (partSum >= 0 && totalSum > 0) {
+    rate = partSum / totalSum;
+    rate = parseInt(rate * 1000, 10)/10;
+  }
+  return rate;
+}
+
 function calculateRatesConvert(percentageData) {
   /**
    * @dest:Convert an Array of percentage data to normal data.
@@ -127,7 +185,7 @@ function createTable(data) {
   tableContainer.appendChild(tableThead);
 
   for(const item of data) {
-    const adid = item.ad.replace(/.*\(([0-9]+)\)/,"$1");//该方法并不改变调用它的字符串本身，而只是返回一个新的替换后的字符串
+    const adid = item.ad.replace(/.*\(([0-9]+)\)/,'$1');//该方法并不改变调用它的字符串本身，而只是返回一个新的替换后的字符串
     const successRate = item.successRate;
     let styleForSign = '';
     if(successRate >= 95 && successRate <= 120) {
