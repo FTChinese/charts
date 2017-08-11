@@ -1118,6 +1118,206 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },
+    {// MARK: 22 iPad Home MPU
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0003'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2021'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 23 iPad Home MPU House Ad
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0003'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2021'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 24 iPad Story MPU
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0005'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2021'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 25 iPad Story MPU House Ad
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0005'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2021'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -1176,6 +1376,10 @@ function drawChartsAll() {
   var houseAdandroidHomeMPU = extractDataFromGAAPI(gaDataReports[19].data.rows, keys);
   var adandroidStoryMPU = extractDataFromGAAPI(gaDataReports[20].data.rows, keys);
   var houseAdandroidStoryMPU = extractDataFromGAAPI(gaDataReports[21].data.rows, keys);
+  var adiPadHomeMPU = extractDataFromGAAPI(gaDataReports[22].data.rows, keys);
+  var houseAdiPadHomeMPU = extractDataFromGAAPI(gaDataReports[23].data.rows, keys);
+  var adiPadStoryMPU = extractDataFromGAAPI(gaDataReports[24].data.rows, keys);
+  var houseAdiPadStoryMPU = extractDataFromGAAPI(gaDataReports[25].data.rows, keys);
 
   var rateAd10000001 = sellThroughRate(housead10000001, ad10000001);
   var rateAd10000003 = sellThroughRate(housead10000003, ad10000003);
@@ -1187,6 +1391,8 @@ function drawChartsAll() {
   var rateandroidBanner = sellThroughRate(houseAdandroidBanner, adandroidBanner);
   var rateandroidHomeMPU = sellThroughRate(houseAdandroidHomeMPU, adandroidHomeMPU);
   var rateandroidStoryMPU = sellThroughRate(houseAdandroidStoryMPU, adandroidStoryMPU);
+  var rateiPadHomeMPU = sellThroughRate(houseAdiPadHomeMPU, adiPadHomeMPU);
+  var rateiPadStoryMPU = sellThroughRate(houseAdiPadStoryMPU, adiPadStoryMPU);
   var rateAll = sellThroughRate(houseAd, ad);
 
   chartId = createChart();
@@ -1336,7 +1542,7 @@ function drawChartsAll() {
           renderTo: chartId
       },
       title: {
-          text: 'android Hot Units'
+          text: 'Android Hot Units'
       },
       xAxis: {
           categories: keys,
@@ -1376,6 +1582,48 @@ function drawChartsAll() {
       }
     });
 
+  chartId = createChart();
+  var iPadRateChart = new Highcharts.Chart({
+      chart: {
+          type: 'column',
+          renderTo: chartId
+      },
+      title: {
+          text: 'iPad Hot Units'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: 'Percent'
+          }
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
+          shared: true
+      },
+      series: [
+        {
+            name: 'iPad Home MPU 1 (Average: ' + rateiPadHomeMPU.average + '%)',
+            data: rateiPadHomeMPU.rates
+        },
+        {
+            name: 'iPad Story MPU 1 (Average: ' + rateiPadStoryMPU.average + '%)',
+            data: rateiPadStoryMPU.rates
+        }
+      ],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: true
+      }
+    });
 
 
   chartId = createChart();

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Weekly Report</title>
+  <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+
+
+<p align=right>
+  <!-- The Sign-in button. This will run `queryReports()` on success. -->
+  <div class="g-signin2" data-onsuccess="queryReportsAll"></div>
+</p>
+
+<div class="page-container" id="charts-container">
+  <h1 class="page-title">Weekly Report</h1>
+</div>
+
+
+
+<script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/highcharts-more.js"></script>
+<script src="../bower_components/highmaps-beta/modules/map.js"></script>
+<script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<script type="text/javascript" src="scripts/highcharts.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+
+
+
+<script>
+// MARK: - These are different in every page. 
+
+// Replace with your view ID.
+var VIEW_ID = '10995661';
+// var startDate = '14daysago';
+//var startDate = '2017-08-02';
+ var startDate = '14daysago';
+var endDate = 'yesterday';
+
+function constructQuerryData(startDate, endDate) {
+  var queryData = [
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:users'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'iphone-'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'androidapp'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'ipad-'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Tap Notification'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:users'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:deviceCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                'mobile|tablet'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:users'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:deviceCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                'desktop'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:deviceCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                'mobile|tablet'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:deviceCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                'desktop'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:deviceCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                'mobile|tablet'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:deviceCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                'desktop'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:users'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:hour'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:deviceCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                'mobile|tablet'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// 14
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:users'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:hour'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:deviceCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'desktop'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// 15
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:goal15Completions'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ]
+    },
+    {// 16
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:goal14Completions'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ]
+    }
+  ];
+  return queryData;
+}
+
+function drawChartsAll() {
+
+  var chartId;
+  // MARK: - The base key which should have no gap in data
+  var keys = gaDataReports[0].data.rows.map(function(row){
+    return row.dimensions[0];
+  });
+
+
+  // MARK: Filter out dates when data collection experienced problems
+  keys = keys.filter(function(item){
+    if (['20170527','20170528','20170529','20170530','20170531'].indexOf(item) < 0) {
+      return item;
+    }
+  });
+
+  drawChartByKey({
+    title: 'Users',
+    type: 'area',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 0,
+        name: 'Unique Users'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
+    title: 'Users By Device',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 7,
+        name: 'Mobile and Tablet'
+      },
+      {
+        index: 8,
+        name: 'Desktop'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    title: 'Page Views',
+    type: 'area',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 1,
+        name: 'Page Views'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    title: 'Pageviews By Device',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 9,
+        name: 'Mobile and Tablet'
+      },
+      {
+        index: 10,
+        name: 'Desktop'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    title: 'Ad Impressions',
+    type: 'area',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 2,
+        name: 'Ad Impressions'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    title: 'Ad Impressions By Device',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 11,
+        name: 'Mobile and Tablet'
+      },
+      {
+        index: 12,
+        name: 'Desktop'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    title: 'App Launches',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 3,
+        name: 'iPhone'
+      },
+      {
+        index: 4,
+        name: 'Android'
+      },
+      {
+        index: 5,
+        name: 'iPad'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    title: 'Push Notification',
+    type: 'area',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 6,
+        name: 'Taps'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
+    title: 'Users By Hour',
+    type: 'column',
+    percentage: false,
+    multiplier: 1/14,
+    keys: gaDataReports[13].data.rows.map(function(row){
+        return row.dimensions[0];
+      }),
+    data: [
+      {
+        index: 13,
+        name: 'Mobile and Tablet'
+      },
+      {
+        index: 14,
+        name: 'Desktop'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
+    title: 'New Registration',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 15,
+        name: 'From Web Site'
+      },
+      {
+        index: 16,
+        name: 'From Apps'
+      }
+    ]
+  });
+
+}
+</script>
+
+
+
+
+<!-- Load the JavaScript API client and Sign-in library. -->
+<script src="https://apis.google.com/js/client:platform.js"></script>
+
+</body>
+</html>

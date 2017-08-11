@@ -205,3 +205,52 @@ function createTable(data) {
   document.getElementById('charts-container').appendChild(chartContainer);
   return chartId;
 }
+
+// MARK: A quick way to draw just one chart with just enought information
+function drawChartByKey(obj) {
+  var percentageSign = (obj.percentage === true) ? '%': '';
+  var keys = obj.keys;
+  var multiplier = obj.multiplier || 1;
+  var series = obj.data.map(function(x) {
+    var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
+    dataArray = dataArray.map(x => x * multiplier);
+    return {
+      name: x.name + ' (Average: ' + averageOfArray(dataArray) + percentageSign + ')',
+      data: dataArray
+    };
+  });
+  var chartId = createChart();
+  var chart = new Highcharts.Chart({
+      chart: {
+          type: obj.type,
+          renderTo: chartId,
+          spacingBottom: 20
+      },
+      title: {
+          text: obj.title
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: 'Percent'
+          }
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}' + percentageSign + '</b><br/>',
+          shared: true
+      },
+      series: series,
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: true
+      }
+    });
+}
