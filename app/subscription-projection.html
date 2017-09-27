@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>DoubleClick Gap Report</title>
+  <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+
+
+<p align=right>
+  <!-- The Sign-in button. This will run `queryReports()` on success. -->
+  <div class="g-signin2" data-onsuccess="queryReports"></div>
+</p>
+
+<div class="page-container" id="charts-container">
+  <h1 class="page-title">Subscription Business On FTC's iPhone App</h1>
+</div>
+
+<div class="page-container" id="ad-guidelines">
+  <div class="page-description">There are about <span id="user-base"></span> monthly users for the FTC's iPhone App. Here's a projection on what will happen if we start to sell annual subscription for the prices as shown in the charts: </div>
+  <div id="chart-revenue"></div>
+  <div class="page-description">Now let's look at the downside. Since we don't have any extra content for subscriber, the only thing we can offer in the subscription package is Not Show Ad. Since advertisement in our app is very intrusive, there's actually strong demand for ad blocking. </div>
+  <div id="chart-inventory-loss"></div>
+  <b>Assumptions: </b>
+  <div class="page-description">1. We don't take any existing content or service out. Thus we won't be lossing any users because of the introduction of subscription model. </div>
+  <div class="page-description">2. We don't spend any extra money to promote the app. So that our user base stays the same. </div>
+  <b>Calculation Basis: </b>
+
+
+
+
+
+
+
+<table class="o-table o-table--row-stripes">
+  <thead><tr><th>Item</th><th>Number</th></thead>
+  <tbody>
+    <tr><td>iPhone App Monthly User Base</td><td id="iPhone-monthly-user"></td></tr>
+    <tr><td>iPhone App Monthly Ad Impressions</td><td id="iPhone-monthly-inventory"></td></tr>
+    <tr><td>iPhoe App and Web Page Monthly Ad Impressions</td><td id="iPhone-all-monthly-user"></td></tr>
+    <tr><td>FTC Mobile Monthly Ad Impressions</td><td id="mobile-monthly-user"></td></tr>
+    <tr><td>FTC Mobile and PC Monthly Ad Impressions</td><td id="all-monthly-user"></td></tr>
+  </tbody>
+</table>
+
+
+
+
+
+  <h1 class="page-title">Most Likely Scenario: </h1>
+  <div class="page-description">Based on past experience, conversion rate is most likely to be in the range of 1%-3%. Let's zoom in to take closer look. </div>
+  <div id="chart-revenue-likely"></div>
+  <div id="chart-inventory-loss-likely"></div>
+  <h1 class="page-title">Conclusions: </h1>
+  <div class="page-description">1. The impact of the subscription model, as an in-app purchase, is very limited. Ad inventory loss because of the proposed subscription model is unlikely to be higher than 4% to our iPhone ad inventory. The impact to the site as whole is negligible. </div>
+  <div class="page-description">2. The revenue outlook is highly dependent on the pricing and our offering. However, even the worst scenario (1% conversion for 199 per year) gets us nearly half million RMB a year. </div>
+  <div class="page-description">3. As long as we don't take existing content and service away from our app, Ad model and subscription model can coexist. </div>
+  <b>Further Thoughts: </b>
+  <div class="page-description">1. iOS app is only 50% of mobile user. If this strategy works, we can do the same with Android app. On Android app, there's no 30% revenue share for the platform. We can keep almost all revenue. </div>
+  <div class="page-description">2. By not offering any new content, our operation cost for putting the subscription model out is virtually zero. </div>
+  <div class="page-description">3. By selling subscription on app store, Apple might be more willing to promote our product, as they will take a 30% cut. This might be a potential revenue booster. </div>
+  <div class="page-description">4. I'd suggest that we offer three tiers of subscriptions: Standard, Premium and Diamond (to be debated). This is a proven method to maximize revenue, used by many other companies such as Apple and the Economist. </div>
+</div>
+
+<script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/highcharts-more.js"></script>
+<script src="../bower_components/highmaps-beta/modules/map.js"></script>
+<script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<script type="text/javascript" src="scripts/highcharts.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+
+
+
+<script>
+// MARK: - These are different in every page. 
+
+// Replace with your view ID.
+var VIEW_ID = '10995661';
+// var startDate = '2017-04-27';
+// var endDate = '2017-05-16';
+var startDate = '30daysago';
+var endDate = 'today';
+
+function constructQuerryData(startDate, endDate) {
+  var queryData = [];
+  return queryData;
+}
+
+function drawCharts(gaData) {
+  return;
+}
+
+function calculateRevenue(obj) {
+  var revenue = userBase * obj.conversion * revenueShare * obj.price / 100;
+  return revenue;
+}
+
+function calculateLoss(obj) {
+  var loss = obj.conversion * products[0].traffic / products[obj.productIndex].traffic;
+  return loss;
+}
+
+var userBase = 358066;
+var revenueShare = 0.7;
+var products = [
+  {name: 'iPhone app', traffic: 7423178},
+  {name: 'iPhone app and web', traffic: 10047033},
+  {name: 'Mobile', traffic: 21509398},
+  {name: 'All devices', traffic: 33156387}
+];
+
+
+
+
+
+function drawProjectionCharts(obj) {
+
+
+  // MARK: - The base key which should have no gap in data
+  var conversionRates = [];
+  var chartId;
+
+  // MARK: Custom variables for charts: [Int]
+  var prices = [199, 299, 999, 1999];
+  var dataSeries = [];
+  
+
+  for (var i=1; i<=obj.conversionUpLimit; i++) {
+    conversionRates.push(i);
+  }
+
+  for (var j=0; j<prices.length; j++) {
+    var revenues = [];
+    for (var k=0; k<conversionRates.length; k++) {
+      var revenue = calculateRevenue({
+        price: prices[j],
+        conversion: conversionRates[k]
+      });
+      revenues.push(revenue);
+    }
+    dataSeries.push(
+    {
+      name: prices[j],
+      data: revenues
+    }
+    );
+  }
+
+  chartId = document.getElementById(obj.revenueChart);
+  var revenueChart = new Highcharts.Chart({
+    chart: {
+        type: 'column',
+        renderTo: chartId
+    },
+    title: {
+        text: 'Revenue Projection'
+    },
+    xAxis: {
+        categories: conversionRates,
+        title: {
+          text: 'Conversion Rates (%)'
+        }
+    },
+    yAxis: {
+        tickmarkPlacement: 'on',
+        title: {
+          text: 'REVENUE (RMB)'
+        }
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:,.0f}</b><br/>',
+        shared: true,
+
+    },
+    plotOptions: {
+      area: {
+        stacking: 'normal'
+      }
+    },
+    series: dataSeries,
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: true,
+      title: {
+        text: 'Price'
+      }
+    }
+  });
+
+
+  dataSeries = [];
+  for (var l=0; l<products.length; l++) {
+    var losses = [];
+    for (var m=0; m<conversionRates.length; m++) {
+      var loss = calculateLoss({
+        productIndex: l,
+        conversion: conversionRates[m]
+      });
+      losses.push(loss);
+    }
+    dataSeries.push(
+      {
+        name: products[l].name,
+        data: losses
+      }
+    );
+  }
+
+  chartId = document.getElementById(obj.costChart);
+  var inventoryChart = new Highcharts.Chart({
+    chart: {
+        type: 'column',
+        renderTo: chartId
+    },
+    title: {
+        text: 'Inventory Loss'
+    },
+    xAxis: {
+        categories: conversionRates,
+        title: {
+          text: 'Conversion Rates (%)'
+        }
+    },
+    yAxis: {
+        tickmarkPlacement: 'on',
+        title: {
+          text: 'Inventory Loss (%)'
+        }
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:,.0f}</b><br/>',
+        shared: true,
+
+    },
+    plotOptions: {
+      area: {
+        stacking: 'normal'
+      }
+    },
+    series: dataSeries,
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: true,
+      title: {
+        text: 'FTC Products'
+      }
+    }
+  });
+
+
+
+}
+
+document.getElementById('user-base').innerHTML = userBase.toLocaleString('en', {useGrouping:true});
+document.getElementById('iPhone-monthly-user').innerHTML = userBase.toLocaleString('en', {useGrouping:true});
+document.getElementById('iPhone-monthly-inventory').innerHTML = products[0].traffic.toLocaleString('en', {useGrouping:true});
+document.getElementById('iPhone-all-monthly-user').innerHTML = products[1].traffic.toLocaleString('en', {useGrouping:true});
+document.getElementById('mobile-monthly-user').innerHTML = products[2].traffic.toLocaleString('en', {useGrouping:true});
+document.getElementById('all-monthly-user').innerHTML = products[3].traffic.toLocaleString('en', {useGrouping:true});
+drawProjectionCharts({
+  conversionUpLimit: 10,
+  revenueChart: 'chart-revenue',
+  costChart: 'chart-inventory-loss'
+});
+drawProjectionCharts({
+  conversionUpLimit: 3,
+  revenueChart: 'chart-revenue-likely',
+  costChart: 'chart-inventory-loss-likely'
+});
+
+</script>
+
+
+
+
+<!-- Load the JavaScript API client and Sign-in library. -->
+<script src="https://apis.google.com/js/client:platform.js"></script>
+
+</body>
+</html>
