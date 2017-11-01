@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>DoubleClick Gap Report</title>
+  <title>Subscription Model Calculator</title>
   <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
   <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -12,8 +12,6 @@
   <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
-
-
 
 <p align=right>
   <!-- The Sign-in button. This will run `queryReports()` on success. -->
@@ -27,7 +25,7 @@
 <div class="page-container" id="ad-guidelines">
   <div class="page-description">There are about <span id="user-base"></span> monthly users for the FTC's iPhone App. Here's a projection on what will happen if we start to sell annual subscription for the prices as shown in the charts: </div>
   <div id="chart-revenue"></div>
-  <div class="page-description">Now let's look at the downside. Since we don't have any extra content for subscriber, the only thing we can offer in the subscription package is Not Show Ad. Since advertisement in our app is very intrusive, there's actually strong demand for ad blocking. </div>
+  <div class="page-description">Now let's look at the downside. Since we don't have any extra content for subscriber, the only thing we can offer in the subscription package is Blocking Ads. Since advertisement in our app is very intrusive, there's actually strong demand for ad blocking. </div>
   <div id="chart-inventory-loss"></div>
   <b>Assumptions: </b>
   <div class="page-description">1. We don't take any existing content or service out. Thus we won't be lossing any users because of the introduction of subscription model. </div>
@@ -35,24 +33,16 @@
   <b>Calculation Basis: </b>
 
 
-
-
-
-
-
-<table class="o-table o-table--row-stripes">
-  <thead><tr><th>Item</th><th>Number</th></thead>
-  <tbody>
-    <tr><td>iPhone App Monthly User Base</td><td id="iPhone-monthly-user"></td></tr>
-    <tr><td>iPhone App Monthly Ad Impressions</td><td id="iPhone-monthly-inventory"></td></tr>
-    <tr><td>iPhoe App and Web Page Monthly Ad Impressions</td><td id="iPhone-all-monthly-user"></td></tr>
-    <tr><td>FTC Mobile Monthly Ad Impressions</td><td id="mobile-monthly-user"></td></tr>
-    <tr><td>FTC Mobile and PC Monthly Ad Impressions</td><td id="all-monthly-user"></td></tr>
-  </tbody>
-</table>
-
-
-
+  <table class="o-table o-table--row-stripes">
+    <thead><tr><th>Metric</th><th>Value</th></thead>
+    <tbody>
+      <tr><td>iPhone App Monthly User Base</td><td id="iPhone-monthly-user"></td></tr>
+      <tr><td>iPhone App Monthly Ad Impressions</td><td id="iPhone-monthly-inventory"></td></tr>
+      <tr><td>iPhone App and Web Page Monthly Ad Impressions</td><td id="iPhone-all-monthly-user"></td></tr>
+      <tr><td>FTC Mobile Monthly Ad Impressions</td><td id="mobile-monthly-user"></td></tr>
+      <tr><td>FTC Mobile and PC Monthly Ad Impressions</td><td id="all-monthly-user"></td></tr>
+    </tbody>
+  </table>
 
 
   <h1 class="page-title">Most Likely Scenario: </h1>
@@ -60,7 +50,7 @@
   <div id="chart-revenue-likely"></div>
   <div id="chart-inventory-loss-likely"></div>
   <h1 class="page-title">Conclusions: </h1>
-  <div class="page-description">1. The impact of the subscription model, as an in-app purchase, is very limited. Ad inventory loss because of the proposed subscription model is unlikely to be higher than 4% to our iPhone ad inventory. The impact to the site as whole is negligible. </div>
+  <div class="page-description">1. The downside of the subscription model, as an in-app purchase, is very limited. Ad inventory loss because of the proposed subscription model is unlikely to be higher than 4% to our iPhone ad inventory. The impact to the site as whole is negligible. </div>
   <div class="page-description">2. The revenue outlook is highly dependent on the pricing and our offering. However, even the worst scenario (1% conversion for 199 per year) gets us nearly half million RMB a year. </div>
   <div class="page-description">3. As long as we don't take existing content and service away from our app, Ad model and subscription model can coexist. </div>
   <b>Further Thoughts: </b>
@@ -68,6 +58,7 @@
   <div class="page-description">2. By not offering any new content, our operation cost for putting the subscription model out is virtually zero. </div>
   <div class="page-description">3. By selling subscription on app store, Apple might be more willing to promote our product, as they will take a 30% cut. This might be a potential revenue booster. </div>
   <div class="page-description">4. I'd suggest that we offer three tiers of subscriptions: Standard, Premium and Diamond (to be debated). This is a proven method to maximize revenue, used by many other companies such as Apple and the Economist. </div>
+  <div class="page-description">5. When in doubt, we can always experiment. Any new idea can go through A/B test. Successful technology companies do thousands of tests at any given time. We can set up an FTC Lab to experiment for new ideas. </div>
 </div>
 
 <script src="../bower_components/highcharts/highcharts.js"></script>
@@ -108,6 +99,7 @@ function calculateLoss(obj) {
   return loss;
 }
 
+//var userBase = 30000;
 var userBase = 358066;
 var revenueShare = 0.7;
 var products = [

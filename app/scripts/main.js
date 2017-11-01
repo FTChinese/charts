@@ -90,6 +90,9 @@ function createTable() {
 // MARK: Extract data from Google Analytics API
 function extractDataFromGAAPI(dataSource, baseKeys) {
   var resultData = {};
+  if (dataSource === undefined) {
+    return null;
+  }
   dataSource.forEach(
     function(row) {
       var dimension = row.dimensions[0];

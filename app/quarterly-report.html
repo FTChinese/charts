@@ -21,7 +21,7 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">Weekly Report</h1>
+  <h1 class="page-title">Quarterly Report</h1>
 </div>
 
 
@@ -42,7 +42,7 @@
 var VIEW_ID = '10995661';
 // var startDate = '14daysago';
 //var startDate = '2017-08-02';
- var startDate = '14daysago';
+ var startDate = '2017-03-01';
 var endDate = 'yesterday';
 
 function constructQuerryData(startDate, endDate) {
@@ -580,90 +580,6 @@ function constructQuerryData(startDate, endDate) {
           'name': 'ga:date'
         }
       ]
-    },// 17 iPhone Server Errors
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:totalEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                'CatchError'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                'HTML Validation Fail'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 18 iPhone Server Errors
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:totalEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                'CatchError'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                'HTML Data Conversion Fail'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
     }
   ];
   return queryData;
@@ -845,23 +761,6 @@ function drawChartsAll() {
       {
         index: 16,
         name: 'From Apps'
-      }
-    ]
-  });
-
-  drawChartByKey({
-    title: 'iOS App Server-Side Errors',
-    type: 'column',
-    percentage: false,
-    keys: keys,
-    data: [
-      {
-        index: 16,
-        name: 'HTML Validation Fail'
-      },
-      {
-        index: 17,
-        name: 'HTML Data Conversion Fail'
       }
     ]
   });
