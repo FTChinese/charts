@@ -613,51 +613,9 @@ function constructQuerryData(startDate, endDate) {
             },
             {
               'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
+              'operator': 'REGEXP',
               'expressions': [
-                'HTML Validation Fail'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 18 iPhone Server Errors
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:totalEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                'CatchError'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                'HTML Data Conversion Fail'
+                'HTML Validation Fail|HTML Data Conversion Fail'
               ],
               'caseSensitive': true
             }
@@ -856,12 +814,8 @@ function drawChartsAll() {
     keys: keys,
     data: [
       {
-        index: 16,
-        name: 'HTML Validation Fail'
-      },
-      {
         index: 17,
-        name: 'HTML Data Conversion Fail'
+        name: 'HTML Validation Fail'
       }
     ]
   });
