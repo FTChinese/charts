@@ -22,7 +22,17 @@
   <h1 class="page-title">Subscription Business On FTC's iPhone App</h1>
 </div>
 
+
+
 <div class="page-container" id="ad-guidelines">
+
+  <h1 class="page-title">How do we get there? </h1>
+  <div class="page-description">How many subscribers do we need to have in order to reach the revenue goals of <b id="revenue-goal" class="heighlight"></b> RMB? Here's a simple visualization:  </div>
+  <div id="chart-conversion"></div>
+  <div id="chart-pricing"></div>
+  <div id="chart-pricing-revenue"></div>
+
+
   <div class="page-description">There are about <span id="user-base"></span> monthly users for the FTC's iPhone App. Here's a projection on what will happen if we start to sell annual subscription for the prices as shown in the charts: </div>
   <div id="chart-revenue"></div>
   <div class="page-description">Now let's look at the downside. Since we don't have any extra content for subscriber, the only thing we can offer in the subscription package is Blocking Ads. Since advertisement in our app is very intrusive, there's actually strong demand for ad blocking. </div>
@@ -49,6 +59,9 @@
   <div class="page-description">Based on past experience, conversion rate is most likely to be in the range of 1%-3%. Let's zoom in to take closer look. </div>
   <div id="chart-revenue-likely"></div>
   <div id="chart-inventory-loss-likely"></div>
+
+
+
   <h1 class="page-title">Conclusions: </h1>
   <div class="page-description">1. The downside of the subscription model, as an in-app purchase, is very limited. Ad inventory loss because of the proposed subscription model is unlikely to be higher than 4% to our iPhone ad inventory. The impact to the site as whole is negligible. </div>
   <div class="page-description">2. The revenue outlook is highly dependent on the pricing and our offering. However, even the worst scenario (1% conversion for 199 per year) gets us nearly half million RMB a year. </div>
@@ -94,6 +107,12 @@ function calculateRevenue(obj) {
   return revenue;
 }
 
+function calculateConversion(revenue, price) {
+  var conversion = revenue / (revenueShare * price)
+  //var revenue = userBase * obj.conversion * revenueShare * obj.price / 100;
+  return conversion;
+}
+
 function calculateLoss(obj) {
   var loss = obj.conversion * products[0].traffic / products[obj.productIndex].traffic;
   return loss;
@@ -102,6 +121,7 @@ function calculateLoss(obj) {
 //var userBase = 30000;
 var userBase = 358066;
 var revenueShare = 0.7;
+var revenueGoal = 9000000;
 var products = [
   {name: 'iPhone app', traffic: 7423178},
   {name: 'iPhone app and web', traffic: 10047033},
@@ -121,7 +141,7 @@ function drawProjectionCharts(obj) {
   var chartId;
 
   // MARK: Custom variables for charts: [Int]
-  var prices = [199, 299, 999, 1999];
+  var prices = [199, 299, 399, 499, 999, 1999];
   var dataSeries = [];
   
 
@@ -208,6 +228,7 @@ function drawProjectionCharts(obj) {
     );
   }
 
+
   chartId = document.getElementById(obj.costChart);
   var inventoryChart = new Highcharts.Chart({
     chart: {
@@ -250,10 +271,244 @@ function drawProjectionCharts(obj) {
       }
     }
   });
+}
 
+
+
+function drawConversionCharts(obj) {
+
+
+  // MARK: - The base key which should have no gap in data
+  var chartId;
+
+  // MARK: Custom variables for charts: [Int]
+  var prices = [];
+  var dataSeries = [];
+
+  document.getElementById('revenue-goal').innerHTML = revenueGoal;
+  
+  for (var i=99; i<=2000; i+=50) {
+    prices.push(i);
+    var conversion = calculateConversion(revenueGoal, i);
+    dataSeries.push([i, conversion]);
+  }
+
+  // console.log (prices);
+
+  // for (var j=0; j<prices.length; j++) {
+  //   dataSeries.push(
+  //     [
+  //       prices[j], calculateConversion(revenueGoal, prices[j])
+  //       //data: calculateConversion(revenueGoal, prices[j])
+  //     ]
+  //   );
+  // }
+  // console.log (dataSeries);
+
+  chartId = obj.chart;
+  var revenueChart = new Highcharts.Chart({
+    chart: {
+        type: 'area',
+        renderTo: chartId
+    },
+    title: {
+        text: 'If There is One Price'
+    },
+    xAxis: {
+        categories: prices,
+        title: {
+          text: 'Price (RMB)'
+        },
+        startOnTick: true,
+        endOnTick: true
+    },
+    yAxis: {
+        tickmarkPlacement: 'on',
+        title: {
+          text: 'Subscribers'
+        }
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:,.0f}</b><br/>',
+        shared: true,
+
+    },
+    plotOptions: {
+      area: {
+        stacking: 'normal'
+      }
+    },
+    series: [
+      {
+        data: dataSeries,
+        name: 'Subscribers'
+      }
+
+    ],
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: true,
+      title: {
+        text: 'Subscribers'
+      }
+    },
+    annotations: [{
+        labelOptions: {
+            backgroundColor: 'rgba(255,255,255,0.5)',
+            verticalAlign: 'top',
+            y: 15
+        },
+        labels: [{
+            point: {
+                xAxis: 0,
+                yAxis: 0,
+                x: 199,
+                y: 64609
+            },
+            text: 'Arbois'
+        }]
+    }]
+  });
 
 
 }
+
+
+
+function drawPricingCharts(obj) {
+  // MARK: - The base key which should have no gap in data
+  var chartId;
+
+  var price1 = obj.price1;
+  var price2 = obj.price2;
+  var subscriber1Max = (revenueGoal / revenueShare) / price1;
+
+  // MARK: Custom variables for charts: [Int]
+  var dataSeries1 = [];
+  var dataSeries2 = [];
+  var dataSeries3 = [];
+  var dataSeries4 = [];
+  for (var i=0; i<=subscriber1Max; i+=5000) {
+    var subscriber2 = (revenueGoal/revenueShare - i*price1)/price2;
+    dataSeries1.push(i);
+    dataSeries2.push(subscriber2);
+    dataSeries3.push(i*price1*revenueShare);
+    dataSeries4.push(subscriber2*price2*revenueShare);
+  }
+  var dataSeries = [
+    {
+      name: price1,
+      data: dataSeries1
+    },
+    {
+      name: price2,
+      data: dataSeries2
+    }
+  ];
+  var dataSeriesRevenue = [
+    {
+      name: price1,
+      data: dataSeries3
+    },
+    {
+      name: price2,
+      data: dataSeries4
+    }
+  ];
+
+  chartId = obj.chart1;
+  var revenueChart = new Highcharts.Chart({
+    chart: {
+        type: 'column',
+        renderTo: chartId
+    },
+    title: {
+        text: 'If there are Two Prices'
+    },
+    xAxis: {
+        title: {
+          text: ''
+        }
+    },
+    yAxis: {
+        tickmarkPlacement: 'on',
+        title: {
+          text: 'Subscribers'
+        }
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:,.0f}</b><br/>',
+        shared: true
+    },
+    plotOptions: {
+      area: {
+        stacking: 'normal'
+      },
+      column: {
+        stacking: 'normal'
+      }
+    },
+    series: dataSeries,
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: true,
+      title: {
+        text: 'Subscribers'
+      }
+    }
+  });
+
+  chartId = obj.chart2;
+  var revenueChart = new Highcharts.Chart({
+    chart: {
+        type: 'column',
+        renderTo: chartId
+    },
+    title: {
+        text: 'Two-Prices Scenarios By Revenue'
+    },
+    xAxis: {
+        title: {
+          text: ''
+        }
+    },
+    yAxis: {
+        tickmarkPlacement: 'on',
+        title: {
+          text: 'RMB'
+        }
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:,.0f}</b><br/>',
+        shared: true
+    },
+    plotOptions: {
+      area: {
+        stacking: 'normal'
+      },
+      column: {
+        stacking: 'normal'
+      }
+    },
+    series: dataSeriesRevenue,
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: true,
+      title: {
+        text: 'Subscribers'
+      }
+    }
+  });
+
+
+}
+
 
 document.getElementById('user-base').innerHTML = userBase.toLocaleString('en', {useGrouping:true});
 document.getElementById('iPhone-monthly-user').innerHTML = userBase.toLocaleString('en', {useGrouping:true});
@@ -261,15 +516,28 @@ document.getElementById('iPhone-monthly-inventory').innerHTML = products[0].traf
 document.getElementById('iPhone-all-monthly-user').innerHTML = products[1].traffic.toLocaleString('en', {useGrouping:true});
 document.getElementById('mobile-monthly-user').innerHTML = products[2].traffic.toLocaleString('en', {useGrouping:true});
 document.getElementById('all-monthly-user').innerHTML = products[3].traffic.toLocaleString('en', {useGrouping:true});
+
 drawProjectionCharts({
   conversionUpLimit: 10,
   revenueChart: 'chart-revenue',
   costChart: 'chart-inventory-loss'
 });
+
 drawProjectionCharts({
   conversionUpLimit: 3,
   revenueChart: 'chart-revenue-likely',
   costChart: 'chart-inventory-loss-likely'
+});
+
+drawConversionCharts({
+  chart: 'chart-conversion',
+});
+
+drawPricingCharts({
+  price1: 199,
+  price2: 1999,
+  chart1: 'chart-pricing',
+  chart2: 'chart-pricing-revenue'
 });
 
 </script>
