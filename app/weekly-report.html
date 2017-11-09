@@ -129,7 +129,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:pageviews'
+          'expression': 'ga:totalEvents'
         }
       ],
       'dimensions': [
@@ -142,10 +142,18 @@ function constructQuerryData(startDate, endDate) {
           'operator': 'AND',
           'filters': [
             {
-              'dimensionName': 'ga:pagePath',
-              'operator': 'REGEXP',
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
               'expressions': [
-                'iphone-'
+                'iPhone App Launch'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Success'
               ],
               'caseSensitive': true
             }
