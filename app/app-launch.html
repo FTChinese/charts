@@ -9,9 +9,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <link rel="stylesheet" href="styles/main.css">
-
 </head>
 <body>
 
@@ -23,9 +21,99 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">App Launches</h1>
+  <h1 class="page-title">移动端开机全屏原生及非原生广告轮播及投放事宜</h1>
 </div>
 
+<div class="page-container" id="ad-guidelines">
+  <b>如何投放开机广告？</b>
+  <div class="page-description">为保证投放效果，所有的开机广告都<b>必须首先</b>投放在原生端。原生端每日的库存上限大约为iPhone应用4万，安卓应用3.5万。如果数据有变化，可以参考上图。如果客户提供的广告是图片形式，而且短时间内需要达到原生应用的库存上限，可以投放弹出广告。</div>
+  <b>原生开机广告和弹出广告有什么区别？</b>
+  <div class="page-description">开机广告应该在应用打开之后立即播放，所以必须是从设备的缓存里面直接调用，而不能像网页广告一样先加载再播放。如果一个应用在打开的时候先去加载开机广告，应用会出现白屏，无法通过应用商店的审核。而弹出广告是在应用加载内容资源的同时加载，加载完成后弹出。弹出广告弹出的时候，用户可能正在看内容，所以会对用户形成打扰。</div>
+  <b>如果我需要每天投放超过20万开机广告？</b>
+  <div class="page-description">我们可以把弹出广告投放到页面中，这样用户在用手机（比如微信中）浏览器打开任何一个页面，都会有一个弹出广告。这种方式对用户的体验伤害非常大，要慎用。每次要这样做的时候，请向Tracy申请打开网页端弹出广告的权限，并注明起始和截止日期，由技术部门统一设置。House Ad请不要设置弹出广告。</div>
+  <b>如果我需要每天投放超过20万开机视频广告？</b>
+  <div class="page-description">由于视频文件比较大，所以能够成功下载的用户会远远少于图片广告。在短时间需要大量Impression的情况下，我们可以用弹出的方式来投放视频广告。弹出的视频是不允许直接播放的，需要用户点击播放才可以。如果用户不采取行动，弹出的视频广告会在5秒后关闭。如果用户点击播放广告，弹出的视频会在广告播放结束之后自动关闭。</div>
+  <b>需要在哪些地方操作？</b>
+  <div class="page-description">iPhone原生的广告需要在<a href="https://backyard.ftchinese.com/pagemaker/page-maker.html?page=applaunchschedule" target=_blank>CMS系统中操作</a>，安卓原生应用的开机广告和弹出广告需要在传漾系统中操作。</div>
+  <b>如果广告素材只投放到原生端，会出现什么情况？</b>
+  <div class="page-description">如果客户每天需要的量不大，而且投放的期间比较长，建议仅投放到原生端，这样投放的效果和用户体验都是最好的。如果客户需要的量比较大，比如占到了库存上限的50%以上，素材提交又比较晚，导致来不及build up，这样头几天量会不够。这种情况下，把图片广告投放到弹出广告的位置，可以充分利用所有的开机广告的库存。</div>
+  <b>如果广告素材只投放到弹出广告，会出现什么情况？</b>
+  <div class="page-description"><b>一定不要出现这种做。</b>在iPhone App上，应用会先检查有没有原生的广告素材，如果没有，启动之后会去找弹出广告。所以这种情况播放量不会少，但是用户体验很差。在安卓App上，由于传漾的SDK并不通知App是否真正播放了开机广告，弹出广告在新版本的安卓App上根本不会播出。但是旧版本的安卓App会查找弹出广告来播放。</div>
+
+  <b>为什么某一天在传漾和谷歌上有1万个开机广告impression，但是客户那里一个都没有？</b>
+  <div class="page-description">造成这个的最可能原因是排期改变。比如：你今天在开机广告的排期上设置了三天后投放某个广告，今天使用App的用户就会记录到这个排期的变化，把相关的素材后台下载到设备中。第二天早上，你撤销了这个安排，并更新了排期。但是有些用户当天没有访问我们的排期，所以他设备上的排期没有改变。到第三天的时候，这批用户启动App，就会显示出之前缓存的广告创意。由于客户已经撤销了广告投放，所以我们的投放发出去的impression也不会被记录。</div>
+
+  <b>原生广告数量如何能被有效利用? </b>
+  <div class="question-description">
+  <div class="page-description">根据ROLEX的投放情况，在客户上线前一天提交物料，原生广告的量（原生广告的数量（以下所说 80K= iPhone native ad( 40K) + Android native ad (35K)+iPad(5K)）在短时间能被充分利用的可能性较低:</div>
+  <div class="page-description">客户：劳力士Rolex</div>
+  <div class="page-description">campaign时间：4天（7/20-23）</div>
+  <div class="page-description">提交物料格式：jpg</div>
+  <div class="page-description">提交物料时间：上线前一天，7月19日</div>
+  <div class="page-description">传漾投放方式：使用非原生开机点位设置（根据“非原生的量（200,000 “web-based” launch screen ad inventory per day）”，该设置预估能播足）</div>
+  <div class="page-description">数据状况：第一天7月20日，Android端出现异常—非原生广告播放量仅有4K（7月21日一早报告）。</div>
+  <div class="page-description">解决方式：7月21日5点多根据产品部要求在传漾系统中添加原生广告设置</div>
+  <div class="page-description">解决方案数据状况：按照要求设置了原生广告后该广告位并未产生有效流量（Android每天平均6K，最少1K最多8K， iPhone基本为0）。下图数据供参考（App为原生，Mobile Openging 为非原生），详请见附件。</div>
+  </div>
+  <div class="page-description">图片广告想要充分利用所有的原生应用流量，只需要把广告同时投放到原生端和弹出端。视频广告想要尽可能多地利用原生应用流量，一是尽可能早地提交素材，二是可以在Campaign上线之前把素材给到技术部门，直接打包到App的Bundle中。</div>
+
+
+  <b>描述</b>
+  <div class="question-description">
+  <div class="page-description">传漾数VS google analytic 移动端开机原生数据对比（此部分数据对比依照执行的移动端开机客户数据和OLIVER提供的GOOGLE的数据进行）</div>
+  <div class="page-description">通过以下数据对比，可以看出google的数据和传漾的数据存在20-30%的Gap，google的数据高于传漾</div>
+  <div class="page-description">同时需要对比的是：PC端一直以来的数据都是显示出传漾的播放数据多于google数据，GAP也在20%以上。</div>
+  <div class="page-description">（由于传漾数据只在有开机全屏客户时有数据统计因此我们选取了6月份有客户数据的时间与google进行对比。</div>
+  </div>
+
+  <b>iPhone/Android两端每天的原生/非原生应该各有多少库存？</b>
+  <div class="page-description">原生端每日的库存上限大约为iPhone应用4万，安卓应用3.5万。如果数据有变化，可以参考上图。</div>
+  <b>库存数据未来以哪个数据为参考: 传漾还是google？</b>
+  <div class="question-description">
+  <div class="page-description">此次手机端开机数据根据Oli提供的Google数据是多于传漾而以往的PC端目前数据统计google 的数要少于传漾。
+  </div>
+  </div>
+  <div class="page-description">应该以谷歌为准。我提供的谷歌数据是实际开机次数，每次开机如果能找到缓存的广告素材，才会向传漾发送请求。谷歌的数据一定会比传漾的多，主要是因为总有一些用户在开机的时候没有找到缓存的素材。当然，这部分用户会看到弹出广告。（弹出广告的数不记在这里面）</div>
+   
+  <b>视频和Jpg格式的素材分别需要提前多久上传可以生效？如果客户的素材没有提前只是在上线前给到，如何处理更为适合。播放数据是否会受到影响？是否需要提前做相应的准备？如何做？</b>
+  <div class="page-description">图片形式的素材由于可以通过弹出广告形式来走量，所以只要Campaign开始前提交就可以完全利用到所有的原生应用开机。视频的广告最好提前2周提前，由于视频只能在用户使用Wi-Fi的时候在后台加载，所以视频开机广告的量有一个build up的过程。具体数据可以到谷歌分析里面查看4-6月份的几次投放。</div>
+
+  <b>非视频开机如需在系统中同时设置原生和非原生广告，是否说明原生广告素材要求提前两周交仅对视频开机有要求，购买非视频的广告可以不要求两周的物料时间？</b>
+  <div class="page-description">可以。</div>
+
+  <b>开机广告可以轮播吗？</b>
+  <div class="page-description"><b>推荐使用轮播.</b>这样可以充分利用流量，为用户带来好的体验。iPhone与Android客户端可实现开机全屏广告轮播的方式，即原生广告与非原生广告并行，Android端全部操作可在传漾系统完成，iPhone端轮播需要借助传漾系统非原生广告的辅助（具体辅助方式见下文）
+原生广告iPhone端最多约3.5万个cpm, Android端最多约4.5万个cpm;非原生广告iPhone端与Android端最多约5.5万个cpm；   （原生与非原生全屏广告iPhone与Android移动端合计约19万个com售卖量）</div>
+
+  <div class="page-description">
+  同时并存的开机广告在Imp总量不超过4万的情况下，由系统随机抓取，被抓取比重受该广告所对应的权重影响，权重越高，被曝光的概率越大；</div>
+  轮播广告Imp 总量超过4万的情况下，有如下处理方式：
+
+  <div class="page-description">例子：a客户40个cpm，b客户不足40个cpm</div>
+
+  <div class="page-description">a客户原生+权重分配， b客户非原生页面全屏广告</div>
+  <div class="page-description">（原理：优先投放包量或量大的客户，量少客户利用移动端web页面投放非原生广告）</div>
+
+  <div class="page-description">在传漾系统中填写好a客户的创意及基本信息等资料（为计数及保存CMS需要的filename, click, impression等链接信息用）再到CMS系统中填入filename, click, impression等信息并选择较大权重，submit保存设置；</div>
+  <div class="page-description">在传漾系统中设置b客户的非原生页面（弹窗）全屏广告—选择Opening AD广告位，自定义移动端非App创意，设置曝光量排期，定向(如果客户有需求)等；
+  (注：非原生广告的输机模板已建成，无需再使用IT Team的代码)</div>
+
+  <div class="page-description">原生&非原生广告利弊分析</div>
+  <div class="page-description">原生全屏：劣势是更新时间长，量少，需要统筹三地并提前排期且不宜改动；</div>
+  <div class="page-description">非原生页面全屏：加载慢，好处是可以设置具体的量，也可以补投；</div>
+    
+  <div class="page-description">权重讲解</div>
+  <div class="page-description">IT team 在CMS系统layout板块新增了Weight选项，内容从1到5，权级依次递增，Ad operation team根据客户的Imp量在同时段排期中的比重选择权重系数，比如肖邦和爱彼
+  分别为15cpm和40cpm，则可设置1与5的权重；</div>
+
+  <div class="page-description">Question*： Campaign的量过大设置权重之后仍然不够跑如何处理？</div>
+  <div class="page-description">Option(1): 同一Campaign设置两次，并配以较高的权重;</div>
+  <div class="page-description">       (2): IT Team加大权级，将权重提升至20或更大；</div>
+
+  <div class="page-description">物料及客户端更新事宜</div>
+  <div class="page-description">“程序端下发的指令将在用户第二次启动时生效”“用户第二次启动存在时间长度的不确定性”，以上因素导致物料及订单的全面更新(覆盖所有用户)产生至少7至8天的更新时间，客户若更换监测代码（监测代码？）则会导致曝光量直接减少，因此不建议中途换物料或者取消订单，若要更换，需提前至少两周；</div>
+
+</div>
 
 <script src="../bower_components/highcharts/highcharts.js"></script>
 <script src="../bower_components/highcharts/highcharts-more.js"></script>
@@ -211,7 +299,7 @@ function drawCharts(gaData) {
           renderTo: chartId
       },
       title: {
-          text: 'App Launches'
+          text: 'FTC应用每日开机次数'
       },
       xAxis: {
           categories: keys,
@@ -233,15 +321,15 @@ function drawCharts(gaData) {
       },
       series: [
         {
-          name: 'iPhone',
+          name: 'iPhone (日均'+averageOfArray(iPhoneLaunches)+')',
           data: iPhoneLaunches
         },
         {
-          name: 'android',
+          name: 'android (日均'+averageOfArray(androidLaunches)+')',
           data: androidLaunches
         },
         {
-          name: 'iPad',
+          name: 'iPad (日均'+averageOfArray(iPadLaunches)+')',
           data: iPadLaunches
         }
       ],
@@ -261,7 +349,7 @@ function drawCharts(gaData) {
           renderTo: chartId
       },
       title: {
-          text: 'App Launches from Notification Taps'
+          text: '每日点击通知推送打开iPhone应用次数'
       },
       xAxis: {
           categories: keys,

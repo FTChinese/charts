@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Ad Impressions</title>
+  <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+
+
+<p align=right>
+  <!-- The Sign-in button. This will run `queryReports()` on success. -->
+  <div class="g-signin2" data-onsuccess="queryReportsAll"></div>
+</p>
+
+<div class="page-container" id="charts-container">
+  <h1 class="page-title">Ad Impression Sell Through Rate</h1>
+</div>
+
+
+
+<script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/highcharts-more.js"></script>
+<script src="../bower_components/highmaps-beta/modules/map.js"></script>
+<script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<script type="text/javascript" src="scripts/highcharts.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+
+
+
+<script>
+// MARK: - These are different in every page. 
+
+// Replace with your view ID.
+var VIEW_ID = '10995661';
+// var startDate = '14daysago';
+var startDate = '2017-08-02';
+// var startDate = '7daysago';
+var endDate = 'today';
+
+function constructQuerryData(startDate, endDate) {
+  var queryData = [
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '1000'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
+              'expressions': [
+                '0001'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '1000'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
+              'expressions': [
+                '0001'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '1000'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
+              'expressions': [
+                '0003'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '1000'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
+              'expressions': [
+                '0003'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 4 adROSTopBanner
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0001|0010'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'not': true,
+              'operator': 'REGEXP',
+              'expressions': [
+                '1000|2022|2023|2021'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 5 adROSTopBanner
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0001|0010'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'not': true,
+              'operator': 'REGEXP',
+              'expressions': [
+                '1000|2022|2023|2021'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 6 adROSMPU
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0003|0012'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'not': true,
+              'operator': 'REGEXP',
+              'expressions': [
+                '1000|2022|2023|2021'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 7 adROSMPU
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0003|0012'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'not': true,
+              'operator': 'REGEXP',
+              'expressions': [
+                '1000|2022|2023|2021'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 8 all ad
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 9 all house ad
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 10 iPhone Top Banner
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
+              'expressions': [
+                '0101'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2022'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 11 iPhone Top Banner House Ad
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0101'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2022'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 12 iPhone Home MPU
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0003'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2022'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 11 iPhone Home MPU House Ad
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0003'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2022'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 14 iPhone Story MPU
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0004'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2022'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 15 iPhone Story MPU House Ad
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0004'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2022'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 16 android Top Banner
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
+              'expressions': [
+                '0101'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2023'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 17 android Top Banner House Ad
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0101'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2023'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 18 android Home MPU
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0003'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2023'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 19 android Home MPU House Ad
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0003'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2023'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 20 android Story MPU
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0004'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2023'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 21 android Story MPU House Ad
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0004'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2023'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 22 iPad Home MPU
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0003'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2021'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 23 iPad Home MPU House Ad
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0003'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2021'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 24 iPad Story MPU
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0005'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2021'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {// MARK: 25 iPad Story MPU House Ad
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Ad Impression: House Ad'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '0005'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                '2021'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+  ];
+  return queryData;
+}
+
+function drawChartsAll() {
+  function sellThroughRate(housead, ad) {
+    var houseAdRate = calculateRates(housead, ad);
+    var sellThroughRate = houseAdRate.map( x => 100 - x );
+    var overAllRate = Math.round(10*(100 - calculateOverallRates(housead, ad)), 10)/10;
+    var rateObject = {
+      rates: sellThroughRate,
+      average: overAllRate, 
+      house: housead,
+      ad: ad
+    };
+    //console.log (rateObject);
+    return rateObject;
+  }
+  var chartId;
+
+  // MARK: - The base key which should have no gap in data
+  var keys = gaDataReports[0].data.rows.map(function(row){
+    return row.dimensions[0];
+  });
+
+
+  // MARK: Filter out dates when data collection experienced problems
+  keys = keys.filter(function(item){
+    if (['20170527','20170528','20170529','20170530','20170531'].indexOf(item) < 0) {
+      return item;
+    }
+  });
+
+
+  // MARK: Get Google Analytics Dimensions
+  var ad10000001 = extractDataFromGAAPI(gaDataReports[0].data.rows, keys);
+  var housead10000001 = extractDataFromGAAPI(gaDataReports[1].data.rows, keys);
+  var ad10000003 = extractDataFromGAAPI(gaDataReports[2].data.rows, keys);
+  var housead10000003 = extractDataFromGAAPI(gaDataReports[3].data.rows, keys);
+  var adROSTopBanner = extractDataFromGAAPI(gaDataReports[4].data.rows, keys);
+  var houseAdROSTopBanner = extractDataFromGAAPI(gaDataReports[5].data.rows, keys);
+  var adROSMPU = extractDataFromGAAPI(gaDataReports[6].data.rows, keys);
+  var houseAdROSMPU = extractDataFromGAAPI(gaDataReports[7].data.rows, keys);
+  var ad = extractDataFromGAAPI(gaDataReports[8].data.rows, keys);
+  var houseAd = extractDataFromGAAPI(gaDataReports[9].data.rows, keys);
+  var adiPhoneBanner = extractDataFromGAAPI(gaDataReports[10].data.rows, keys);
+  var houseAdiPhoneBanner = extractDataFromGAAPI(gaDataReports[11].data.rows, keys);
+  var adiPhoneHomeMPU = extractDataFromGAAPI(gaDataReports[12].data.rows, keys);
+  var houseAdiPhoneHomeMPU = extractDataFromGAAPI(gaDataReports[13].data.rows, keys);
+  var adiPhoneStoryMPU = extractDataFromGAAPI(gaDataReports[14].data.rows, keys);
+  var houseAdiPhoneStoryMPU = extractDataFromGAAPI(gaDataReports[15].data.rows, keys);
+  var adandroidBanner = extractDataFromGAAPI(gaDataReports[16].data.rows, keys);
+  var houseAdandroidBanner = extractDataFromGAAPI(gaDataReports[17].data.rows, keys);
+  var adandroidHomeMPU = extractDataFromGAAPI(gaDataReports[18].data.rows, keys);
+  var houseAdandroidHomeMPU = extractDataFromGAAPI(gaDataReports[19].data.rows, keys);
+  var adandroidStoryMPU = extractDataFromGAAPI(gaDataReports[20].data.rows, keys);
+  var houseAdandroidStoryMPU = extractDataFromGAAPI(gaDataReports[21].data.rows, keys);
+  var adiPadHomeMPU = extractDataFromGAAPI(gaDataReports[22].data.rows, keys);
+  var houseAdiPadHomeMPU = extractDataFromGAAPI(gaDataReports[23].data.rows, keys);
+  var adiPadStoryMPU = extractDataFromGAAPI(gaDataReports[24].data.rows, keys);
+  var houseAdiPadStoryMPU = extractDataFromGAAPI(gaDataReports[25].data.rows, keys);
+
+  var rateAd10000001 = sellThroughRate(housead10000001, ad10000001);
+  var rateAd10000003 = sellThroughRate(housead10000003, ad10000003);
+  var rateRosBanner = sellThroughRate(houseAdROSTopBanner, adROSTopBanner);
+  var rateRosMPU = sellThroughRate(houseAdROSMPU, adROSMPU);
+  var rateiPhoneBanner = sellThroughRate(houseAdiPhoneBanner, adiPhoneBanner);
+  var rateiPhoneHomeMPU = sellThroughRate(houseAdiPhoneHomeMPU, adiPhoneHomeMPU);
+  var rateiPhoneStoryMPU = sellThroughRate(houseAdiPhoneStoryMPU, adiPhoneStoryMPU);
+  var rateandroidBanner = sellThroughRate(houseAdandroidBanner, adandroidBanner);
+  var rateandroidHomeMPU = sellThroughRate(houseAdandroidHomeMPU, adandroidHomeMPU);
+  var rateandroidStoryMPU = sellThroughRate(houseAdandroidStoryMPU, adandroidStoryMPU);
+  var rateiPadHomeMPU = sellThroughRate(houseAdiPadHomeMPU, adiPadHomeMPU);
+  var rateiPadStoryMPU = sellThroughRate(houseAdiPadStoryMPU, adiPadStoryMPU);
+  var rateAll = sellThroughRate(houseAd, ad);
+
+  chartId = createChart();
+  var allAdChart = new Highcharts.Chart({
+      chart: {
+          type: 'column',
+          renderTo: chartId
+      },
+      title: {
+          text: 'Overall Advertising Sell Through Rate'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: 'Percent'
+          }
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
+          shared: true
+      },
+      series: [
+        {
+            name: 'All Ad Units (Average: ' + rateAll.average + '%)',
+            data: rateAll.rates
+        }
+      ],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: true
+      }
+    });
+
+
+  chartId = createChart();
+  var PCRateChart = new Highcharts.Chart({
+      chart: {
+          type: 'column',
+          renderTo: chartId
+      },
+      title: {
+          text: 'PC Hot Units'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: 'Percent'
+          }
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
+          shared: true
+      },
+      series: [
+        {
+            name: 'Home Top Banner (Average: ' + rateAd10000001.average + '%)',
+            data: rateAd10000001.rates
+        },
+        {
+            name: 'Home MPU 1 (Average: ' + rateAd10000003.average + '%)',
+            data: rateAd10000003.rates
+        },
+        {
+            name: 'ROS Banner (Average: ' + rateRosBanner.average + '%)',
+            data: rateRosBanner.rates
+        },
+        {
+            name: 'ROS MPU (Average: ' + rateRosMPU.average + '%)',
+            data: rateRosMPU.rates
+        }
+      ],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: true
+      }
+  });
+
+
+  chartId = createChart();
+  var iPhoneRateChart = new Highcharts.Chart({
+      chart: {
+          type: 'column',
+          renderTo: chartId
+      },
+      title: {
+          text: 'iPhone Hot Units'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: 'Percent'
+          }
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
+          shared: true
+      },
+      series: [
+        {
+            name: 'iPhone Top Banner (Average: ' + rateiPhoneBanner.average + '%)',
+            data: rateiPhoneBanner.rates
+        },
+        {
+            name: 'iPhone Home MPU 1 (Average: ' + rateiPhoneHomeMPU.average + '%)',
+            data: rateiPhoneHomeMPU.rates
+        },
+        {
+            name: 'iPhone Story MPU 1 (Average: ' + rateiPhoneStoryMPU.average + '%)',
+            data: rateiPhoneStoryMPU.rates
+        }
+      ],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: true
+      }
+    });
+
+
+  chartId = createChart();
+  var androidRateChart = new Highcharts.Chart({
+      chart: {
+          type: 'column',
+          renderTo: chartId
+      },
+      title: {
+          text: 'Android Hot Units'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: 'Percent'
+          }
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
+          shared: true
+      },
+      series: [
+        {
+            name: 'android Top Banner (Average: ' + rateandroidBanner.average + '%)',
+            data: rateandroidBanner.rates
+        },
+        {
+            name: 'android Home MPU 1 (Average: ' + rateandroidHomeMPU.average + '%)',
+            data: rateandroidHomeMPU.rates
+        },
+        {
+            name: 'android Story MPU 1 (Average: ' + rateandroidStoryMPU.average + '%)',
+            data: rateandroidStoryMPU.rates
+        }
+      ],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: true
+      }
+    });
+
+  chartId = createChart();
+  var iPadRateChart = new Highcharts.Chart({
+      chart: {
+          type: 'column',
+          renderTo: chartId
+      },
+      title: {
+          text: 'iPad Hot Units'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: 'Percent'
+          }
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
+          shared: true
+      },
+      series: [
+        {
+            name: 'iPad Home MPU 1 (Average: ' + rateiPadHomeMPU.average + '%)',
+            data: rateiPadHomeMPU.rates
+        },
+        {
+            name: 'iPad Story MPU 1 (Average: ' + rateiPadStoryMPU.average + '%)',
+            data: rateiPadStoryMPU.rates
+        }
+      ],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: true
+      }
+    });
+
+
+  chartId = createChart();
+  var conversionRateChart = new Highcharts.Chart({
+      chart: {
+          type: 'area',
+          renderTo: chartId
+      },
+      title: {
+          text: '测试'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: 'Percent'
+          }
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+          shared: true
+      },
+      series: [
+      {
+          name: 'ROS MPU (Average: ' + '' + ')',
+          data: adROSMPU
+      },
+      {
+          name: 'House Ad ROS MPU (Average: ' + '' + ')',
+          data: houseAdROSMPU
+      }
+      ],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: true
+      }
+    });
+
+}
+</script>
+
+
+
+
+<!-- Load the JavaScript API client and Sign-in library. -->
+<script src="https://apis.google.com/js/client:platform.js"></script>
+
+</body>
+</html>
