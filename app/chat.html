@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chat Xiao bing</title>
+  <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+
+
+<p align=right>
+  <!-- The Sign-in button. This will run `queryReports()` on success. -->
+  <div class="g-signin2" data-onsuccess="queryReports"></div>
+</p>
+
+<div class="page-container" id="charts-container">
+  <h1 class="page-title">Chat Xiaobing</h1>
+</div>
+
+
+
+<script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/highcharts-more.js"></script>
+<script src="../bower_components/highmaps-beta/modules/map.js"></script>
+<script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<script type="text/javascript" src="scripts/highcharts.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+
+
+
+<script>
+// MARK: - These are different in every page. 
+
+// Replace with your view ID.
+var VIEW_ID = '108134561';
+//var startDate = '2017-04-27';
+// var endDate = '2017-05-16';
+
+var startDate = '2017-11-09';
+var endDate = '2017-11-12';
+
+function constructQuerryData(startDate, endDate) {
+  var queryData = [
+  {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:screenviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:screenName',
+              'operator': 'EXACT',
+              'expressions': [
+                'Chat/Xiaobing'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Chat/Xiaobing'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Open story'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+    
+  ];
+  return queryData;
+}
+
+
+
+
+function drawCharts(gaDataSource) {
+  var chartId;
+  var gaData = gaDataSource;
+
+  // MARK: - The base key which should have no gap in data
+  var keys = gaData.reports[0].data.rows.map(function(row){
+    return row.dimensions[0];
+  });
+
+  // MARK: Get Google Analytics Dimensions
+  var enterCounts = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
+  var openStoryCounts = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
+
+
+  // MARK: Calculate Percentages that are ueful for charts
+  var openStoryRates = calculateRates(openStoryCounts, enterCounts);
+  
+
+
+
+  // MARK:Get The data
+  const outputData = [];
+  for(let i=0,len=keys.length;i<len;i++) {
+    const outputDatum = {
+      date:keys[i],
+      enterCounts:enterCounts[i],
+      openStoryCounts:openStoryCounts[i],
+      openStoryRates:`${openStoryRates[i]}%`
+    }
+    outputData.push(outputDatum);
+  }
+  console.log(JSON.stringify(outputData));
+
+
+  // MARK:Draw
+  chartId = createChart();
+  var clickRatesChart = new Highcharts.Chart({
+      chart: {
+          type: 'column',
+          renderTo: chartId
+      },
+      title: {
+          text: 'Enter Counts'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          title: {
+              text: 'Value'
+          },
+          //max: 100,
+          //min: Math.min.apply(null, successRates)
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+          shared: true
+      },
+      series: [{
+        name: 'enterCounts',
+        data: enterCounts
+      },{
+        name: 'Open Story',
+        data: openStoryCounts
+      }],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      }
+    });
+
+  chartId = createChart();
+  var seenCountChart = new Highcharts.Chart({
+      chart: {
+          type: 'column',
+          renderTo: chartId
+      },
+      title: {
+          text: 'Open Story Rate'
+      },
+      xAxis: {
+          categories: keys,
+          tickmarkPlacement: 'on',
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+         title: {
+             text: 'Percent'
+         }
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.0f}</b><br/>',
+          shared: true
+      },
+      series: [{
+          name: 'Rate',
+          data: openStoryRates
+      }
+      ],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: true
+      }
+    });
+}
+
+
+</script>
+
+
+
+
+<!-- Load the JavaScript API client and Sign-in library. -->
+<script src="https://apis.google.com/js/client:platform.js"></script>
+
+</body>
+</html>
