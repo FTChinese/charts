@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>DoubleClick Gap Report</title>
+  <title>Chat Xiao bing</title>
   <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
   <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -21,7 +21,7 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">Story Recommend Performance</h1>
+  <h1 class="page-title">Chat Xiaobing</h1>
 </div>
 
 
@@ -39,16 +39,16 @@
 // MARK: - These are different in every page. 
 
 // Replace with your view ID.
-var VIEW_ID = '10995661';
+var VIEW_ID = '108134561';
 //var startDate = '2017-04-27';
 // var endDate = '2017-05-16';
 
-var startDate = '2017-07-10';
-var endDate = '2017-07-12';
+var startDate = '2017-11-09';
+var endDate = '2017-11-12';
 
 function constructQuerryData(startDate, endDate) {
   var queryData = [
-    {
+  {
       'viewId': VIEW_ID,
       'dateRanges': [
         {
@@ -58,7 +58,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:totalEvents'
+          'expression': 'ga:screenviews'
         }
       ],
       'dimensions': [
@@ -71,18 +71,10 @@ function constructQuerryData(startDate, endDate) {
           'operator': 'AND',
           'filters': [
             {
-              'dimensionName': 'ga:eventCategory',
+              'dimensionName': 'ga:screenName',
               'operator': 'EXACT',
               'expressions': [
-                'Story Recommend'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                'Seen-002'
+                'Chat/Xiaobing'
               ],
               'caseSensitive': true
             }
@@ -116,7 +108,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Story Recommend'
+                'Chat/Xiaobing'
               ],
               'caseSensitive': true
             },
@@ -124,7 +116,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'Click-002'
+                'Open story'
               ],
               'caseSensitive': true
             }
@@ -132,6 +124,7 @@ function constructQuerryData(startDate, endDate) {
         }
       ]
     }
+    
   ];
   return queryData;
 }
@@ -149,38 +142,24 @@ function drawCharts(gaDataSource) {
   });
 
   // MARK: Get Google Analytics Dimensions
-  var seenCounts = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
-  var clickCounts = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
+  var enterCounts = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
+  var openStoryCounts = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
 
 
   // MARK: Calculate Percentages that are ueful for charts
-  var clickRates = calculateRates(clickCounts, seenCounts);
+  var openStoryRates = calculateRates(openStoryCounts, enterCounts);
   
 
-/*
-  const resultData =[];
-  for(let i=0, len = keys.length;i<len;i++) {
-    const datum = {
-      date:keys[i],
-      seenCounts:seenCounts[i],
-      clickCounts: clickCounts[i],
-      clickRates: clickRates[i]
-    }
-    resultData.push(datum);
-  }
- 
-  console.log(JSON.stringify(resultData));
-*/
+
+
   // MARK:Get The data
   const outputData = [];
   for(let i=0,len=keys.length;i<len;i++) {
     const outputDatum = {
       date:keys[i],
-      seenCounts:seenCounts[i]
-      /*
-      clickCounts:clickCounts[i],
-      clickRates:clickRates[i]
-      */
+      enterCounts:enterCounts[i],
+      openStoryCounts:openStoryCounts[i],
+      openStoryRates:`${openStoryRates[i]}%`
     }
     outputData.push(outputDatum);
   }
@@ -191,11 +170,11 @@ function drawCharts(gaDataSource) {
   chartId = createChart();
   var clickRatesChart = new Highcharts.Chart({
       chart: {
-          type: 'area',
+          type: 'column',
           renderTo: chartId
       },
       title: {
-          text: 'Click Rates'
+          text: 'Enter Counts'
       },
       xAxis: {
           categories: keys,
@@ -206,18 +185,21 @@ function drawCharts(gaDataSource) {
       },
       yAxis: {
           title: {
-              text: 'Percent'
+              text: 'Value'
           },
           //max: 100,
           //min: Math.min.apply(null, successRates)
       },
       tooltip: {
-          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
           shared: true
       },
       series: [{
-          name: 'Success Rate',
-          data: clickRates
+        name: 'enterCounts',
+        data: enterCounts
+      },{
+        name: 'Open Story',
+        data: openStoryCounts
       }],
       credits: {
         enabled: false
@@ -234,7 +216,7 @@ function drawCharts(gaDataSource) {
           renderTo: chartId
       },
       title: {
-          text: 'Seen and Click Counts'
+          text: 'Open Story Rate'
       },
       xAxis: {
           categories: keys,
@@ -244,23 +226,17 @@ function drawCharts(gaDataSource) {
           }
       },
       yAxis: {
-          // title: {
-          //     text: 'Percent'
-          // },
-          //max: 100,
-          //min: Math.min.apply(null, successRates)
+         title: {
+             text: 'Percent'
+         }
       },
       tooltip: {
           pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.0f}</b><br/>',
           shared: true
       },
       series: [{
-          name: 'Seen',
-          data: seenCounts
-      }, 
-      {
-          name: 'Click',
-          data: clickCounts
+          name: 'Rate',
+          data: openStoryRates
       }
       ],
       credits: {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>DoubleClick Gap Report</title>
+  <title>Data about Ulu Ad</title>
   <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
   <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -44,8 +44,8 @@ var VIEW_ID = '10995661';
 
 //var startDate = '2017-06-21';//测试那天为06-21
 //var endDate = '2017-06-21';
-var startDate = '2017-07-03';
-var endDate = '2017-07-04';
+var startDate = '2017-07-10';
+var endDate = '2017-07-14';
 function constructQuerryData(startDate, endDate) {
   var queryData = [
     {//监控广告点击后客户记录成功
@@ -336,12 +336,10 @@ function drawCharts(gaData) {
   for(let i=0,len=keys.length;i<len;i++) {
     const outputDatum = {
       date:keys[i],
-      seccessRecord:successRecord[i],
-      failRecord:failRecord[i],
-      //requestRecord: requestRecord[i],
-      clickRecord: clickRecord[i],
+      gotDataRecord: gotDataRecord[i],
       inviewRecord: inviewRecord[i],
-      gotDataRecord: gotDataRecord[i]
+      clickRecord: clickRecord[i],
+      seccessRecord:successRecord[i]
     }
     outputData.push(outputDatum);
   }
