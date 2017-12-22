@@ -672,6 +672,48 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 19 iOS Server connection failure
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'CatchError'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Fail to Connect'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -866,6 +908,10 @@ function drawChartsAll() {
       {
         index: 17,
         name: 'iOS HTML Validation Fail'
+      },
+      {
+        index: 19,
+        name: 'iOS Server Connection Failure'
       },
       {
         index: 18,
