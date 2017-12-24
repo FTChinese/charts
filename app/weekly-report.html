@@ -714,6 +714,106 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 20 iOS Standard Subscription Buying
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'In-App Purchase'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
+              'expressions': [
+                'com.ft.ftchinese.mobile.subscription.member'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 21 iOS Server connection failure
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'In-App Purchase'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
+              'expressions': [
+                'com.ft.ftchinese.mobile.subscription.vip'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -916,6 +1016,23 @@ function drawChartsAll() {
       {
         index: 18,
         name: 'Page Validation Fail'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    title: 'New Subscriptions',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 20,
+        name: 'Standard'
+      },
+      {
+        index: 21,
+        name: 'Premium'
       }
     ]
   });
