@@ -42,7 +42,7 @@
 var VIEW_ID = '10995661';
 // var startDate = '14daysago';
 //var startDate = '2017-08-02';
- var startDate = '14daysago';
+ var startDate = '30daysago';
 var endDate = 'yesterday';
 
 function constructQuerryData(startDate, endDate) {
@@ -129,7 +129,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:pageviews'
+          'expression': 'ga:totalEvents'
         }
       ],
       'dimensions': [
@@ -142,10 +142,18 @@ function constructQuerryData(startDate, endDate) {
           'operator': 'AND',
           'filters': [
             {
-              'dimensionName': 'ga:pagePath',
-              'operator': 'REGEXP',
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
               'expressions': [
-                'iphone-'
+                'iPhone App Launch'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Success'
               ],
               'caseSensitive': true
             }
@@ -622,6 +630,90 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 18 Web page Server Errors probably related to database failure
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'CatchError'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Page Validation Fail'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 19 iOS Server connection failure
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'CatchError'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Fail to Connect'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -808,14 +900,22 @@ function drawChartsAll() {
   });
 
   drawChartByKey({
-    title: 'iOS App Server-Side Errors',
+    title: 'Catch Errors',
     type: 'column',
     percentage: false,
     keys: keys,
     data: [
       {
         index: 17,
-        name: 'HTML Validation Fail'
+        name: 'iOS HTML Validation Fail'
+      },
+      {
+        index: 19,
+        name: 'iOS Server Connection Failure'
+      },
+      {
+        index: 18,
+        name: 'Page Validation Fail'
       }
     ]
   });

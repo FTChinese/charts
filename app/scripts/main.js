@@ -216,7 +216,9 @@ function drawChartByKey(obj) {
   var multiplier = obj.multiplier || 1;
   var series = obj.data.map(function(x) {
     var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
-    dataArray = dataArray.map(x => x * multiplier);
+    if (dataArray) {
+      dataArray = dataArray.map(x => x * multiplier);
+    }
     return {
       name: x.name + ' (Average: ' + averageOfArray(dataArray) + percentageSign + ')',
       data: dataArray
