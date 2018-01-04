@@ -27,6 +27,8 @@
 
 
 <script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/modules/funnel.js"></script>
+
 <script src="../bower_components/highcharts/highcharts-more.js"></script>
 <script src="../bower_components/highmaps-beta/modules/map.js"></script>
 <script src="../bower_components/highmaps-beta/modules/data.js"></script>
@@ -170,82 +172,39 @@ function drawCharts(gaDataSource) {
   chartId = createChart();
   var clickRatesChart = new Highcharts.Chart({
       chart: {
-          type: 'column',
+          type: 'pyramid',
           renderTo: chartId
       },
       title: {
-          text: 'Enter Counts'
+          text: 'Engagement pyramid'
       },
-      xAxis: {
-          categories: keys,
-          tickmarkPlacement: 'on',
-          title: {
-              enabled: false
-          }
-      },
-      yAxis: {
-          title: {
-              text: 'Value'
-          },
-          //max: 100,
-          //min: Math.min.apply(null, successRates)
-      },
-      tooltip: {
-          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-          shared: true
-      },
-      series: [{
-        name: 'enterCounts',
-        data: enterCounts
-      },{
-        name: 'Open Story',
-        data: openStoryCounts
-      }],
-      credits: {
+      plotOptions: {
+        series: {
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b> ({point.y:,.0f})',
+                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                softConnector: true
+            },
+            center: ['40%', '50%'],
+            width: '80%'
+        }
+    },
+    legend: {
         enabled: false
-      },
-      legend: {
-        enabled: false
-      }
-    });
+    },
+    series: [{
+      name: 'Unique users',
+      data: [
+        ['All Users', 9111698],
+        ['App Users',  243563],
+        ['Standard Users', 4000],
+        ['Premium Users',  1000]
+      ]
+    }]
+  });
 
-  chartId = createChart();
-  var seenCountChart = new Highcharts.Chart({
-      chart: {
-          type: 'column',
-          renderTo: chartId
-      },
-      title: {
-          text: 'Open Story Rate'
-      },
-      xAxis: {
-          categories: keys,
-          tickmarkPlacement: 'on',
-          title: {
-              enabled: false
-          }
-      },
-      yAxis: {
-         title: {
-             text: 'Percent'
-         }
-      },
-      tooltip: {
-          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.0f}</b><br/>',
-          shared: true
-      },
-      series: [{
-          name: 'Rate',
-          data: openStoryRates
-      }
-      ],
-      credits: {
-        enabled: false
-      },
-      legend: {
-        enabled: true
-      }
-    });
+ 
 }
 
 
