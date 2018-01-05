@@ -4,10 +4,45 @@ var gCurrentChartIndex = 0;
 // Query the API and print the results to the page.
 
 
+
+
+function queryDifferentReqorts() {
+  //MARK:适用于ReportRequest对象的dateRange、viewId不同的情况
+  /**
+   * @dest:发出数个ReportRequest对象不同的请求，所有请求都完成后再绘图。
+   * @depend gaDataArr：TYPE Arr 用于存储数个ReportRequest对象
+   * @depend responseDataArr
+   * 其对应实参会在具体的图形页面中设置。
+   */
+   const requestNum = gaDataArr.length;
+   let requestIndex = 0;
+
+  function oneRequest() {
+      gapi.client.request({
+        path: '/v4/reports:batchGet',
+        root: 'https://analyticsreporting.googleapis.com/',
+        method: 'POST',
+        body: {
+          reportRequests: gaDataArr[requestIndex]
+        }
+      }).then((response)=> {
+        requestIndex++;
+        console.log(response.reports);
+        responseDataArr.push(response.reports);
+        if (requestIndex < requestNum) {
+          oneRequest();
+        } else {
+          drawCharts();
+        }
+      },console.error.bind(console));
+   }
+   
+   oneRequest();
+}
+
 var gaDataReports = [];
-
-
 function queryReportsAll() {
+  //MARK:适用于ReportRequest对象的dateRange、viewId都相同，但ReportRequest对象的数量超过5个的情况。
 
   function requestBatch(index, reportRequests) {
     var startIndex = index * reportBatchLimit;
