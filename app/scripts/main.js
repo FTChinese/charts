@@ -6,7 +6,7 @@ var gCurrentChartIndex = 0;
 
 
 
-function queryDifferentReqorts() {
+function queryDifferentReports() {
   //MARK:适用于ReportRequest对象的dateRange、viewId不同的情况
   /**
    * @dest:发出数个ReportRequest对象不同的请求，所有请求都完成后再绘图。
