@@ -46,10 +46,10 @@ const VIEW_ID_iPhoneApp = '108134561'; //
 //var startDate = '2017-04-27';
 // var endDate = '2017-05-16';
 
-const startDate = '90daysago';
+const  startDate = '90daysago';
 const endDate = 'today';
 
-const queryData0 = [
+var requestData0 = [
   {
     'viewId': VIEW_ID_All,
     'dateRanges': [
@@ -65,7 +65,7 @@ const queryData0 = [
     ]
   }
 ];
-const queryData1 = [
+const requestData1 = [
   {
     'viewId': VIEW_ID_iPhoneApp,
     'dateRanges': [
@@ -95,20 +95,29 @@ const gaDataArr = [
   }
 ];
 */
-const gaDataArr = [queryData0,queryData1];
+const requestDataArr = [requestData0, requestData1];
 const responseDataArr = [];
 
 
 
-function drawCharts(gaDataSource) {
-  var chartId;
-  var gaData = gaDataSource;
-  console.log(JSON.stringify(gaData));
- 
+function drawCharts(responseDataArr) {
+  console.log(responseDataArr);
+  let chartId;
+  const resultData0 = responseDataArr[0].reports[0].data.rows[0].metrics[0].values[0];
+  console.log(`resultData0:${resultData0}`);
+  const resultData1 = responseDataArr[1].reports[0].data.rows[0].metrics[0].values[0];
+  console.log(`resultData1:${resultData1}`);
 
+  const allUsers = Number(resultData0);
+  const opportunityTotalUsers = Number(resultData1);
+  const standardUsers = 5000;
+  const premiumUsers = 2000;
+
+  const restUsers = allUsers-opportunityTotalUsers;
+  const opportunityUsers = opportunityTotalUsers - standardUsers - premiumUsers;
   // MARK:Draw
   chartId = createChart();
-  var clickRatesChart = new Highcharts.Chart({
+  const  pyramid = new Highcharts.Chart({
       chart: {
           type: 'pyramid',
           renderTo: chartId
@@ -134,17 +143,17 @@ function drawCharts(gaDataSource) {
     series: [{
       name: 'Unique users',
       data: [
-        ['All Users', 9111698], //9074799
-        ['App Users',  243563], //247243
-        ['Standard Users', 4000],
-        ['Premium Users',  1000]
+        ['Rest Users', restUsers], //9074799
+        ['Opportunity Users',  opportunityUsers], //247243
+        ['Standard Users', standardUsers],
+        ['Premium Users',  premiumUsers]
       ]
     }]
   });
 
  
 }
-
+// 分布图绘制Demo:http://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/demo/bellcurve/
 
 </script>
 

@@ -1,45 +1,46 @@
-
-
-var gCurrentChartIndex = 0;
-// Query the API and print the results to the page.
-
-
-
-
 function queryDifferentReports() {
   //MARK:适用于ReportRequest对象的dateRange、viewId不同的情况
   /**
-   * @dest:发出数个ReportRequest对象不同的请求，所有请求都完成后再绘图。
-   * @depend gaDataArr：TYPE Arr 用于存储数个ReportRequest对象
-   * @depend responseDataArr
-   * 其对应实参会在具体的图形页面中设置。
+   * @dest:发出数个ReportRequest对象不同的请求，所有请求都完成后得到响应数据，再处理响应数据并绘图。
+   * @depend requestDataArr：TYPE Arr 用于存储数个ReportRequest对象,来自具体展示页面设置的全局常量。
+   * @depend responseDataArr： TYPE Arr 用于存储数个response.result对象，来自具体展示页面设置的全局常量。
    */
-   const requestNum = gaDataArr.length;
-   let requestIndex = 0;
-
+  const  requestNum = requestDataArr.length;
+  console.log(requestNum);
+  let requestIndex = 0;
   function oneRequest() {
-      gapi.client.request({
-        path: '/v4/reports:batchGet',
-        root: 'https://analyticsreporting.googleapis.com/',
-        method: 'POST',
-        body: {
-          reportRequests: gaDataArr[requestIndex]
-        }
-      }).then((response)=> {
-        requestIndex++;
-        console.log(response.reports);
-        responseDataArr.push(response.reports);
-        if (requestIndex < requestNum) {
-          oneRequest();
-        } else {
-          drawCharts();
-        }
-      },console.error.bind(console));
-   }
+    const requestData = requestDataArr[requestIndex];
+    console.log(requestData);
+    gapi.client.request({
+      path: '/v4/reports:batchGet',
+      root: 'https://analyticsreporting.googleapis.com/',
+      method: 'POST',
+      body: {
+        reportRequests:requestDataArr[requestIndex]
+      }
+    }).then(function(response) {
+      requestIndex++;
+      //console.log(response);
+      responseDataArr.push(response.result);
+      //console.log(JSON.stringify(response.reports));
+      //displayResults(response);
+      console.log(JSON.stringify(response.result))
+      
+      if (requestIndex < requestNum) {
+        oneRequest();
+      } else {
+        drawCharts(responseDataArr);
+      }
+      
+
+    },console.error.bind(console));
+  }
    
    oneRequest();
 }
 
+var gCurrentChartIndex = 0;
+// Query the API and print the results to the page.
 var gaDataReports = [];
 function queryReportsAll() {
   //MARK:适用于ReportRequest对象的dateRange、viewId都相同，但ReportRequest对象的数量超过5个的情况。
@@ -95,7 +96,9 @@ function queryReports() {
 }
 
 function displayResults(response) {
+  //console.log(response);
   drawCharts(response.result);
+  
 }
 
 // MARK:Append an div for drawing chart in it.
