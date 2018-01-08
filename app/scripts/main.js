@@ -39,6 +39,19 @@ function queryDifferentReports() {
    oneRequest();
 }
 
+function getStoredDataFile(filePath) {
+  return fetch(filePath, {
+    method:'GET',
+    headers: {
+      'Accept':'application/json',
+      'Content-Type':'application/json'
+    }
+  })
+  .then((response) => {
+    return response.json();
+  })
+}
+
 var gCurrentChartIndex = 0;
 // Query the API and print the results to the page.
 var gaDataReports = [];

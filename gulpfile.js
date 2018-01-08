@@ -5,7 +5,8 @@ const browserSync = require('browser-sync').create();
 const del = require('del');
 const wiredep = require('wiredep').stream;
 const runSequence = require('run-sequence');
-
+const fs = require('fs-jetpack');
+const path = require('path');
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
@@ -95,7 +96,7 @@ gulp.task('extras', () => {
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 gulp.task('serve', () => {
-  runSequence(['clean', 'wiredep'], ['styles', 'scripts', 'fonts'], () => {
+  runSequence(['clean', 'wiredep'], ['styles', 'scripts', 'fonts','copydata'], () => {
     browserSync.init({
       notify: false,
       port: 8080,
@@ -176,15 +177,6 @@ gulp.task('default', () => {
   });
 });
 
-
-
-
-
-
-
-
-
-
 //MARK: Customized gulp functions
 gulp.task('copy', ['build'], function () {
   const dest = 'dev_cms/chartist';
@@ -194,5 +186,69 @@ gulp.task('copy', ['build'], function () {
   .pipe(gulp.dest(`../testing/${dest}`));
 });
 
+function getRandomInt(min, max) {
+  /**
+   * @dest 生成min~max之间的随机整数，如果min和max都为整数，那么生成区间包含min,不包含max
+   * @param min TYPE Number, the min value of the range min~max
+   * @param max TYPE Number, the max value of the range min~max
+   * @return TYPE Int, the random int between min~max, witch containing min ,not containg max
+   */
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; 
+}
+function getNumberInNormalDistribution(mean,std_dev){//生成正态分布位伪随机数
+  return mean+(randomNormalDistribution()*std_dev);
+}
 
+function randomNormalDistribution(){
+  var u=0.0, v=0.0, w=0.0, c=0.0;
+  do{
+      //获得两个（-1,1）的独立随机变量
+      u=Math.random()*2-1.0;
+      v=Math.random()*2-1.0;
+      w=u*u+v*v;
+  }while(w==0.0||w>=1.0)
+  //这里就是 Box-Muller转换
+  c=Math.sqrt((-2*Math.log(w))/w);
+  //返回2个标准正态分布的随机数，封装进一个数组返回
+  //当然，因为这个函数运行较快，也可以扔掉一个
+  //return [u*c,v*c];
+  //return u*c;
+  return Math.round(u*c);//四舍五入为整数
+}
 
+gulp.task('produceSimulatedData',()=>{
+  /**
+   * @dest:生成engagement模拟数据
+   */
+  const dataArr = [];
+  const dataSize = 100;
+  for(let i=0;i<dataSize;i++) {
+    //const R = getRandomInt(0,91);
+    const R = getNumberInNormalDistribution(5,2);
+    //const F = getRandomInt(0,101);
+    const F = getNumberInNormalDistribution(10,5);
+    //const V = getRandomInt(0,201);
+    const V = getNumberInNormalDistribution(13,4);
+
+    const S = F * Math.sqrt(V) / (R + 1);
+    const C = getRandomInt(0,4);
+    const oneDataItem = {
+      R,
+      F,
+      V,
+      S,
+      C
+    };
+    dataArr.push(oneDataItem);
+  }
+
+  const destFile = path.resolve('data','engagementData.json');
+  fs.writeAsync(destFile, dataArr);
+});
+
+gulp.task('copydata',() => {
+  return gulp.src('data/*.json')
+    .pipe(gulp.dest('.tmp/data'));
+})

@@ -25,13 +25,18 @@
 </div>
 
 
-
+<!--
 <script src="../bower_components/highcharts/highcharts.js"></script>
 <script src="../bower_components/highcharts/modules/funnel.js"></script>
+
 
 <script src="../bower_components/highcharts/highcharts-more.js"></script>
 <script src="../bower_components/highmaps-beta/modules/map.js"></script>
 <script src="../bower_components/highmaps-beta/modules/data.js"></script>
+-->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/funnel.js"></script>
+<script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
 <script type="text/javascript" src="scripts/highcharts.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
 
@@ -49,7 +54,7 @@ const VIEW_ID_iPhoneApp = '108134561'; //
 const  startDate = '90daysago';
 const endDate = 'today';
 
-var requestData0 = [
+const requestData0 = [
   {
     'viewId': VIEW_ID_All,
     'dateRanges': [
@@ -81,28 +86,14 @@ const requestData1 = [
     ]
   }
 ];
-/*
-const gaDataArr = [
-  {
-    requestId:0,
-    requestData:queryData0,
-    responseData:[]
-  },
-  {
-    requestId:1,
-    requestData:queryData1,
-    responseData:[]
-  }
-];
-*/
 const requestDataArr = [requestData0, requestData1];
 const responseDataArr = [];
 
 
 
-function drawCharts(responseDataArr) {
+async function drawCharts(responseDataArr) {
   console.log(responseDataArr);
-  let chartId;
+  var chartId;
   const resultData0 = responseDataArr[0].reports[0].data.rows[0].metrics[0].values[0];
   console.log(`resultData0:${resultData0}`);
   const resultData1 = responseDataArr[1].reports[0].data.rows[0].metrics[0].values[0];
@@ -151,7 +142,112 @@ function drawCharts(responseDataArr) {
     }]
   });
 
- 
+  const engagementData = await getStoredDataFile('../data/engagementData.json');
+  console.log(engagementData);
+  console.log(JSON.stringify(engagementData));
+  const SDataSet = [];
+  const FDataSet = [];
+  const VDataSet = [];
+  const RDataSet = [];
+  for(const oneDataItem of engagementData){
+    const S = oneDataItem.S;
+    const F = oneDataItem.F;
+    const V = oneDataItem.V;
+    const R = oneDataItem.R;
+    SDataSet.push(S);
+    FDataSet.push(F);
+    VDataSet.push(V);
+    RDataSet.push(R);
+  }
+  //S的分布图
+  console.log(SDataSet);
+  chartId = createChart();
+  Highcharts.chart(chartId, {
+    title: {
+        text: 'Bell curve'
+    },
+
+    xAxis: [{
+        title: {
+            text: 'Data'
+        },
+        alignTicks: false
+    }, {
+        title: {
+            text: 'Bell curve'
+        },
+        alignTicks: false,
+        opposite: true
+    }],
+
+    yAxis: [{
+        title: { text: 'Data' }
+    }, {
+        title: { text: 'Bell curve' },
+        opposite: true
+    }],
+
+    series: [{
+        name: 'Bell curve',
+        type: 'bellcurve',
+        xAxis: 1,
+        yAxis: 1,
+        baseSeries: 1,
+        zIndex: -1
+    }, {
+        name: 'Data',
+        type: 'scatter',
+        data: SDataSet,
+        marker: {
+            radius: 1.5
+        }
+    }]
+  });
+
+  //F的分布图
+  console.log(FDataSet);
+  chartId = createChart();
+  Highcharts.chart(chartId, {
+    title: {
+        text: 'Bell curve'
+    },
+
+    xAxis: [{
+        title: {
+            text: 'Data'
+        },
+        alignTicks: false
+    }, {
+        title: {
+            text: 'Bell curve'
+        },
+        alignTicks: false,
+        opposite: true
+    }],
+
+    yAxis: [{
+        title: { text: 'Data' }
+    }, {
+        title: { text: 'Bell curve' },
+        opposite: true
+    }],
+
+    series: [{
+        name: 'Bell curve',
+        type: 'bellcurve',
+        xAxis: 1,
+        yAxis: 1,
+        baseSeries: 1,
+        zIndex: -1
+    }, {
+        name: 'Data',
+        type: 'scatter',
+        data: FDataSet,
+        marker: {
+            radius: 1.5
+        }
+    }]
+  });
 }
 // 分布图绘制Demo:http://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/demo/bellcurve/
 
