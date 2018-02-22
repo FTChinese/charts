@@ -265,16 +265,30 @@ function drawChartByKey(obj) {
   var percentageSign = (obj.percentage === true) ? '%': '';
   var keys = obj.keys;
   var multiplier = obj.multiplier || 1;
-  var series = obj.data.map(function(x) {
-    var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
-    if (dataArray) {
-      dataArray = dataArray.map(x => x * multiplier);
-    }
-    return {
-      name: x.name + ' (Average: ' + averageOfArray(dataArray) + percentageSign + ')',
-      data: dataArray
-    };
-  });
+  var series;
+  if (obj.conversion === true && obj.data.length === 2) {
+    // MARK: Draw conversion rates between two sets of data
+    var series1 = extractDataFromGAAPI(gaDataReports[obj.data[0].index].data.rows, keys);
+    var series2 = extractDataFromGAAPI(gaDataReports[obj.data[1].index].data.rows, keys);
+    var conversionRate = calculateRates(series2, series1);
+    var overallConversionRate = calculateOverallRates(series2, series1);
+    series = [{
+      name: obj.data[1].name + "/" + obj.data[0].name + '(Overall: ' + overallConversionRate + '%)',
+      data: conversionRate
+    }];
+    percentageSign = '%';
+  } else {
+    series = obj.data.map(function(x) {
+      var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
+      if (dataArray) {
+        dataArray = dataArray.map(x => x * multiplier);
+      }
+      return {
+        name: x.name + ' (Average: ' + averageOfArray(dataArray) + percentageSign + ')',
+        data: dataArray
+      };
+    });
+  }
   var chartId = createChart();
   var chart = new Highcharts.Chart({
       chart: {

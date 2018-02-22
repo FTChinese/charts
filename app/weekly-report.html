@@ -764,7 +764,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 21 iOS Server connection failure
+    },// 21 iOS Buy Premium Subscription
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -814,6 +814,174 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 22 iOS Paywall Displayed in Story Page
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Display'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 23 iOS Paywall Tap Subscription Page in Story Page
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Tap Subscription'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 24 iOS Buy Standard Subscription
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy: com.ft.ftchinese.mobile.subscription.member'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 25 iOS Buy Premium Subscription
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy: com.ft.ftchinese.mobile.subscription.vip'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -829,11 +997,131 @@ function drawChartsAll() {
 
 
   // MARK: Filter out dates when data collection experienced problems
-  keys = keys.filter(function(item){
-    if (['20170527','20170528','20170529','20170530','20170531'].indexOf(item) < 0) {
-      return item;
-    }
+  // keys = keys.filter(function(item){
+  //   if (['20170527','20170528','20170529','20170530','20170531'].indexOf(item) < 0) {
+  //     return item;
+  //   }
+  // });
+
+
+  drawChartByKey({
+    title: 'New Subscriptions',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 20,
+        name: 'Standard'
+      },
+      {
+        index: 21,
+        name: 'Premium'
+      }
+    ]
   });
+
+
+  drawChartByKey({
+    title: 'Subscriber Acquisition',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 22,
+        name: 'Paywall Displayed in Story'
+      },
+      {
+        index: 23,
+        name: 'Check the Subscription Options'
+      },
+      {
+        index: 24,
+        name: 'Buy Standard Subscription'
+      },
+      {
+        index: 25,
+        name: 'Buy Premium Subscription'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Paywall Conversion: Checked',
+    type: 'area',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 22,
+        name: 'Displayed'
+      },
+      {
+        index: 23,
+        name: 'Checked'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Paywall Conversion: Bought',
+    type: 'area',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 23,
+        name: 'Checked'
+      },
+      {
+        index: 24,
+        name: 'Bought'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Paywall Conversion: Overall',
+    type: 'area',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 22,
+        name: 'Displayed'
+      },
+      {
+        index: 24,
+        name: 'Bought'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Paywall Seen',
+    type: 'area',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 0,
+        name: 'All Users'
+      },
+      {
+        index: 22,
+        name: 'Paywall Displayed'
+      }
+    ]
+  });
+
 
   drawChartByKey({
     title: 'Users',
@@ -1020,22 +1308,7 @@ function drawChartsAll() {
     ]
   });
 
-  drawChartByKey({
-    title: 'New Subscriptions',
-    type: 'column',
-    percentage: false,
-    keys: keys,
-    data: [
-      {
-        index: 20,
-        name: 'Standard'
-      },
-      {
-        index: 21,
-        name: 'Premium'
-      }
-    ]
-  });
+
 
 }
 </script>
