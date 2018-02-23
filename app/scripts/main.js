@@ -1,3 +1,102 @@
+/**
+ *  Calculate the person correlation score between two items in a dataset.
+ *
+ *  @param  {object}  prefs The dataset containing data about both items that
+ *                    are being compared.
+ *  @param  {string}  p1 Item one for comparison.
+ *  @param  {string}  p2 Item two for comparison.
+ *  @return {float}  The pearson correlation score.
+ */
+function pearsonCorrelation(prefs, p1, p2) {
+  var si = [];
+
+  for (var key in prefs[p1]) {
+    if (prefs[p2][key]) si.push(key);
+  }
+
+  var n = si.length;
+
+  if (n == 0) return 0;
+
+  var sum1 = 0;
+  for (var i = 0; i < si.length; i++) sum1 += prefs[p1][si[i]];
+
+  var sum2 = 0;
+  for (var i = 0; i < si.length; i++) sum2 += prefs[p2][si[i]];
+
+  var sum1Sq = 0;
+  for (var i = 0; i < si.length; i++) {
+    sum1Sq += Math.pow(prefs[p1][si[i]], 2);
+  }
+
+  var sum2Sq = 0;
+  for (var i = 0; i < si.length; i++) {
+    sum2Sq += Math.pow(prefs[p2][si[i]], 2);
+  }
+
+  var pSum = 0;
+  for (var i = 0; i < si.length; i++) {
+    pSum += prefs[p1][si[i]] * prefs[p2][si[i]];
+  }
+
+  var num = pSum - (sum1 * sum2 / n);
+  var den = Math.sqrt((sum1Sq - Math.pow(sum1, 2) / n) *
+      (sum2Sq - Math.pow(sum2, 2) / n));
+
+  if (den == 0) return 0;
+
+  var final = Math.round(100 * (num / den))/100;
+
+  return final;
+}
+
+
+/**
+Exactly –1. A perfect downhill (negative) linear relationship
+
+–0.70. A strong downhill (negative) linear relationship
+
+–0.50. A moderate downhill (negative) relationship
+
+–0.30. A weak downhill (negative) linear relationship
+
+0. No linear relationship
+
++0.30. A weak uphill (positive) linear relationship
+
++0.50. A moderate uphill (positive) relationship
+
++0.70. A strong uphill (positive) linear relationship
+
+Exactly +1. A perfect uphill (positive) linear relationship
+**/
+
+function correlationExplained(r) {
+  if (r < -1) {
+    return 'value meaningless';
+  } else if (r <= -0.85) {
+    return 'perfect negative';
+  } else if (r <= -0.6) {
+    return 'strong negative';
+  } else if (r <= -0.4) {
+    return 'moderate negative';
+  } else if (r <= -0.15) {
+    return 'weak negative';
+  } else if (r <= 0.15) {
+    return 'No linear relationship';
+  } else if (r <= 0.4) {
+    return 'weak positive';
+  } else if (r <= 0.6) {
+    return 'moderate positive';
+  } else if (r <= 0.85) {
+    return 'strong positive';
+  } else if (r <= 1) {
+    return 'perfect positive';
+  } else {
+    return 'value meaningless';
+  }
+}
+
 function queryDifferentReports() {
   //MARK:适用于ReportRequest对象的dateRange、viewId不同的情况
   /**
@@ -123,6 +222,13 @@ function createChart() {
   gCurrentChartIndex += 1;
   document.getElementById('charts-container').appendChild(chartContainer);
   return chartId;
+}
+
+function insertPicture(title, src) {
+  var imgContainer = document.createElement('div');
+  imgContainer.innerHTML = '<div class="chart-title">' + title + '</div><img src="'+ src +'">';
+  imgContainer.className = 'chart-container';
+  document.getElementById('charts-container').appendChild(imgContainer);
 }
 
 // MARK:Append an div for drawing table in it.
@@ -266,17 +372,22 @@ function drawChartByKey(obj) {
   var keys = obj.keys;
   var multiplier = obj.multiplier || 1;
   var series;
+  var subtitle = '';
   if (obj.conversion === true && obj.data.length === 2) {
     // MARK: Draw conversion rates between two sets of data
     var series1 = extractDataFromGAAPI(gaDataReports[obj.data[0].index].data.rows, keys);
     var series2 = extractDataFromGAAPI(gaDataReports[obj.data[1].index].data.rows, keys);
     var conversionRate = calculateRates(series2, series1);
     var overallConversionRate = calculateOverallRates(series2, series1);
+    var correlationDataSet = [series1, series2];
+    var r = pearsonCorrelation(correlationDataSet, 0, 1);
+    var rExplained = correlationExplained(r);
     series = [{
-      name: obj.data[1].name + "/" + obj.data[0].name + '(Overall: ' + overallConversionRate + '%)',
+      name: obj.data[1].name + " vs " + obj.data[0].name,
       data: conversionRate
     }];
     percentageSign = '%';
+    subtitle = 'Overall Conversion: ' + overallConversionRate + '%, Correlation: '+r + ' (' + rExplained + ')';
   } else {
     series = obj.data.map(function(x) {
       var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
@@ -298,6 +409,12 @@ function drawChartByKey(obj) {
       },
       title: {
           text: obj.title
+      },
+      subtitle: {
+          text: subtitle,
+          style: {
+            fontSize: '18px'
+          }
       },
       xAxis: {
           categories: keys,
