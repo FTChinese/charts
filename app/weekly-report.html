@@ -1090,32 +1090,7 @@ function drawChartsAll() {
   insertPicture('Subscription Acquisition Channel: Exclusive Story', 'http://i.ftimg.net/picture/0/000076060_piclink.jpg');
 
   drawChartByKey({
-    title: 'Exclusive Story Daily Conversion',
-    type: 'column',
-    percentage: false,
-    keys: keys,
-    data: [
-      {
-        index: 22,
-        name: 'Paywall Displayed in Story'
-      },
-      {
-        index: 23,
-        name: 'Check the Subscription Options'
-      },
-      {
-        index: 24,
-        name: 'Buy Standard Subscription'
-      },
-      {
-        index: 25,
-        name: 'Buy Premium Subscription'
-      }
-    ]
-  });
-
-  drawChartByKey({
-    title: 'Exclusive Story Conversion Funnel',
+    title: 'Conversion Funnel',
     type: 'funnel',
     unitName: 'Event',
     percentage: false,
@@ -1139,12 +1114,35 @@ function drawChartsAll() {
     ]
   });
 
-
+  drawChartByKey({
+    title: 'Daily Performance',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 22,
+        name: 'Paywall Displayed in Story'
+      },
+      {
+        index: 23,
+        name: 'Check the Subscription Options'
+      },
+      {
+        index: 24,
+        name: 'Buy Standard Subscription'
+      },
+      {
+        index: 25,
+        name: 'Buy Premium Subscription'
+      }
+    ]
+  });
 
 
   drawChartByKey({
     conversion: true,
-    title: 'Overall: Bought VS Displayed',
+    title: 'Daily: Bought VS Displayed',
     type: 'area',
     percentage: false,
     keys: keys,
@@ -1163,7 +1161,7 @@ function drawChartsAll() {
 
   drawChartByKey({
     conversion: true,
-    title: 'Checked VS Displayed',
+    title: 'Daily: Checked VS Displayed',
     type: 'area',
     percentage: false,
     keys: keys,
@@ -1181,7 +1179,7 @@ function drawChartsAll() {
 
   drawChartByKey({
     conversion: true,
-    title: 'Bought VS Checked',
+    title: 'Daily: Bought VS Checked',
     type: 'area',
     percentage: false,
     keys: keys,
@@ -1200,7 +1198,7 @@ function drawChartsAll() {
 
   drawChartByKey({
     conversion: true,
-    title: 'Paywall Seen',
+    title: 'Daily: Paywall Seen',
     type: 'area',
     percentage: false,
     keys: keys,
