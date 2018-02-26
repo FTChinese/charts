@@ -982,6 +982,40 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 26 iOS Home Page PV
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'EXACT',
+              'expressions': [
+                '/?webview=ftcapp'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -1115,8 +1149,8 @@ function drawChartsAll() {
     keys: keys,
     data: [
       {
-        index: 0,
-        name: 'All Users'
+        index: 26,
+        name: 'iOS Home Page PV'
       },
       {
         index: 22,
