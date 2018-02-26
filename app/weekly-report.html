@@ -14,7 +14,6 @@
 <body>
 
 
-
 <p align=right>
   <!-- The Sign-in button. This will run `queryReports()` on success. -->
   <div class="g-signin2" data-onsuccess="queryReportsAll"></div>
@@ -30,6 +29,7 @@
 <script src="../bower_components/highcharts/highcharts-more.js"></script>
 <script src="../bower_components/highmaps-beta/modules/map.js"></script>
 <script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<script src="../bower_components/highcharts/modules/funnel.js"></script>
 <script type="text/javascript" src="scripts/highcharts.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
 
@@ -749,15 +749,6 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.member'
-              ],
-              'caseSensitive': true
-            },
-            /*
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
                 'buy success'
               ],
               'caseSensitive': true
@@ -770,7 +761,6 @@ function constructQuerryData(startDate, endDate) {
               ],
               'caseSensitive': true
             }
-            */
           ]
         }
       ]
@@ -862,6 +852,14 @@ function constructQuerryData(startDate, endDate) {
                 'Display'
               ],
               'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'premium/'
+              ],
+              'caseSensitive': true
             }
           ]
         }
@@ -904,6 +902,14 @@ function constructQuerryData(startDate, endDate) {
                 'Tap Subscription'
               ],
               'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'premium/'
+              ],
+              'caseSensitive': true
             }
           ]
         }
@@ -943,7 +949,15 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'buy: com.ft.ftchinese.mobile.subscription.member'
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'premium/'
               ],
               'caseSensitive': true
             }
@@ -985,7 +999,15 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'buy: com.ft.ftchinese.mobile.subscription.vip'
+                'buy success: com.ft.ftchinese.mobile.subscription.vip'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'premium/'
               ],
               'caseSensitive': true
             }
@@ -1065,12 +1087,10 @@ function drawChartsAll() {
     ]
   });
 
-
-  insertPicture('Key Steps for Subscription Acquisition', 'http://i.ftimg.net/picture/0/000076060_piclink.jpg');
-
+  insertPicture('Subscription Acquisition Channel: Exclusive Story', 'http://i.ftimg.net/picture/0/000076060_piclink.jpg');
 
   drawChartByKey({
-    title: 'Subscriber Acquisition',
+    title: 'Exclusive Story Daily Conversion',
     type: 'column',
     percentage: false,
     keys: keys,
@@ -1094,10 +1114,37 @@ function drawChartsAll() {
     ]
   });
 
+  drawChartByKey({
+    title: 'Exclusive Story Conversion Funnel',
+    type: 'funnel',
+    unitName: 'Event',
+    percentage: false,
+    data: [
+      {
+        index: 22,
+        name: 'Paywall Displayed in Story'
+      },
+      {
+        index: 23,
+        name: 'Check the Subscription Options'
+      },
+      {
+        index: 24,
+        name: 'Buy Standard Subscription'
+      },
+      {
+        index: 25,
+        name: 'Buy Premium Subscription'
+      }
+    ]
+  });
+
+
+
 
   drawChartByKey({
     conversion: true,
-    title: 'Paywall Conversion: Checked',
+    title: 'Overall: Bought VS Displayed',
     type: 'area',
     percentage: false,
     keys: keys,
@@ -1105,24 +1152,6 @@ function drawChartsAll() {
       {
         index: 22,
         name: 'Displayed'
-      },
-      {
-        index: 23,
-        name: 'Checked'
-      }
-    ]
-  });
-
-  drawChartByKey({
-    conversion: true,
-    title: 'Paywall Conversion: Bought',
-    type: 'area',
-    percentage: false,
-    keys: keys,
-    data: [
-      {
-        index: 23,
-        name: 'Checked'
       },
       {
         index: 24,
@@ -1134,7 +1163,7 @@ function drawChartsAll() {
 
   drawChartByKey({
     conversion: true,
-    title: 'Paywall Conversion: Overall',
+    title: 'Checked VS Displayed',
     type: 'area',
     percentage: false,
     keys: keys,
@@ -1142,6 +1171,24 @@ function drawChartsAll() {
       {
         index: 22,
         name: 'Displayed'
+      },
+      {
+        index: 23,
+        name: 'Checked'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Bought VS Checked',
+    type: 'area',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 23,
+        name: 'Checked'
       },
       {
         index: 24,

@@ -105,11 +105,11 @@ function queryDifferentReports() {
    * @depend responseDataArr： TYPE Arr 用于存储数个response.result对象，来自具体展示页面设置的全局常量。
    */
   const  requestNum = requestDataArr.length;
-  console.log(requestNum);
+  //console.log(requestNum);
   let requestIndex = 0;
   function oneRequest() {
     const requestData = requestDataArr[requestIndex];
-    console.log(requestData);
+    //console.log(requestData);
     gapi.client.request({
       path: '/v4/reports:batchGet',
       root: 'https://analyticsreporting.googleapis.com/',
@@ -370,10 +370,43 @@ function createTable(data) {
 function drawChartByKey(obj) {
   var percentageSign = (obj.percentage === true) ? '%': '';
   var keys = obj.keys;
+  var unitName = obj.unitName || '';
   var multiplier = obj.multiplier || 1;
   var series;
   var subtitle = '';
-  if (obj.conversion === true && obj.data.length === 2) {
+  if (!keys) {
+    var baseData; 
+    var seriesData = obj.data.map(function(x, index) {
+      //console.log (gaDataReports[x.index].data);
+      //var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
+      var dataTotal = gaDataReports[x.index].data.totals[0].values[0];
+      var dataDetail = '';
+      var dataPercentage;
+      dataTotal = parseInt(dataTotal, 10);
+      if (obj.type === 'funnel' || obj.type === 'pyramid') {
+        if (index === 0) {
+          baseData = parseInt(dataTotal, 10);
+        }
+        if (index>0) {
+          dataPercentage = Math.round(parseInt(10000 * dataTotal/baseData, 10)) / 100;
+          dataPercentage += '%';
+          dataDetail = '('+  dataTotal + ', ' + dataPercentage +')';
+        } else {
+          dataDetail = '('+  dataTotal  +')';
+        }
+      }
+
+      
+      return [
+        x.name + dataDetail, dataTotal
+      ];
+    });
+    series = [{
+        name: unitName,
+        data: seriesData
+    }];
+    // console.log (series);
+  } else if (obj.conversion === true && obj.data.length === 2) {
     // MARK: Draw conversion rates between two sets of data
     var series1 = extractDataFromGAAPI(gaDataReports[obj.data[0].index].data.rows, keys);
     var series2 = extractDataFromGAAPI(gaDataReports[obj.data[1].index].data.rows, keys);
