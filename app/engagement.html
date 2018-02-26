@@ -84,8 +84,254 @@ const requestData1 = [
         'expression': 'ga:users'
       }
     ]
+  },
+  {
+    'viewId': VIEW_ID_iPhoneApp,
+    'dateRanges': [
+    {
+        'startDate': startDate,
+        'endDate': endDate
+    }
+    ],
+    'metrics': [
+    {
+        'expression': 'ga:totalEvents'
+    }
+    ],
+    'dimensionFilterClauses': [
+        {
+            'operator': 'AND',
+            'filters': [
+            {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                'Privileges'
+                ],
+                'caseSensitive': true
+            },
+            {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'BEGINS_WITH',
+                'expressions': [
+                'buy success: '//为什么这里和统计EXACT buy success: com.ft.ftchinese.mobile.subscription.member加上buy success: com.ft.ftchinese.mobile.subscription.vip不一样
+                ],
+                'caseSensitive': true
+            }
+            ]
+        }
+    ]
+  },
+  {
+    'viewId': VIEW_ID_iPhoneApp,
+    'dateRanges': [
+    {
+        'startDate': startDate,
+        'endDate': endDate
+    }
+    ],
+    'metrics': [
+    {
+        'expression': 'ga:totalEvents'
+    }
+    ],
+    'dimensionFilterClauses': [
+        {
+            'operator': 'AND',
+            'filters': [
+                {
+                    'dimensionName': 'ga:eventCategory',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'Privileges'
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                    'dimensionName': 'ga:eventAction',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'buy success: com.ft.ftchinese.mobile.subscription.vip'
+                    ],
+                    'caseSensitive': true
+                }
+            ]
+        }
+    ]
   }
 ];
+//QUEST:金字塔关注的是buy success，而用户行为相关性分析关注buy ？
+const requestData2 = [
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:date'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Display'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:date'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                            'Tap Subscription'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy: com.ft.ftchinese.mobile.subscription.member'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy: com.ft.ftchinese.mobile.subscription.vip'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+]
+
 const requestDataArr = [requestData0, requestData1];
 const responseDataArr = [];
 
@@ -97,16 +343,20 @@ async function drawCharts(responseDataArr) {
   const resultData0 = responseDataArr[0].reports[0].data.rows[0].metrics[0].values[0];
   console.log(`resultData0:${resultData0}`);
   const resultData1 = responseDataArr[1].reports[0].data.rows[0].metrics[0].values[0];
+  const resultData2 = responseDataArr[1].reports[1].data.rows[0].metrics[0].values[0];//购买成功的总数
+  const resultData3 = responseDataArr[1].reports[2].data.rows[0].metrics[0].values[0];
   console.log(`resultData1:${resultData1}`);
 
+  // MARK:金字塔图
   const allUsers = Number(resultData0);
-  const opportunityTotalUsers = Number(resultData1);
-  const standardUsers = 5000;
-  const premiumUsers = 2000;
-
+  const opportunityTotalUsers = Number(resultData1-resultData2);
+  const standardUsers = Number(resultData2-resultData3);  
+  const premiumUsers = Number(resultData3);
+  
   const restUsers = allUsers-opportunityTotalUsers;
   const opportunityUsers = opportunityTotalUsers - standardUsers - premiumUsers;
-  // MARK:Draw
+
+  
   chartId = createChart();
   const  pyramid = new Highcharts.Chart({
       chart: {
@@ -141,6 +391,9 @@ async function drawCharts(responseDataArr) {
       ]
     }]
   });
+
+
+ 
 
   const engagementData = await getStoredDataFile('../data/engagementData.json');
   console.log(engagementData);
