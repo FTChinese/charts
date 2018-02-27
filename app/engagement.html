@@ -112,9 +112,9 @@ const requestData1 = [
             },
             {
                 'dimensionName': 'ga:eventAction',
-                'operator': 'BEGINS_WITH',
+                'operator': 'EXACT',
                 'expressions': [
-                'buy success: '//为什么这里和统计EXACT buy success: com.ft.ftchinese.mobile.subscription.member加上buy success: com.ft.ftchinese.mobile.subscription.vip不一样
+                'buy success: com.ft.ftchinese.mobile.subscription.member'//加上buy success: com.ft.ftchinese.mobile.subscription.vip不一样
                 ],
                 'caseSensitive': true
             }
@@ -160,8 +160,8 @@ const requestData1 = [
     ]
   }
 ];
-//QUEST:金字塔关注的是buy success，而用户行为相关性分析关注buy ？
-const requestData2 = [
+
+const requestData2 = [//整体转换的相关行为数据
     {
         'viewId': VIEW_ID_iPhoneApp,
         'dateRanges': [
@@ -247,6 +247,48 @@ const requestData2 = [
         ]
     },
     {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:date'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                            'Pop Subscription'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
       'viewId': VIEW_ID_iPhoneApp,
       'dateRanges': [
         {
@@ -280,7 +322,7 @@ const requestData2 = [
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'buy: com.ft.ftchinese.mobile.subscription.member'
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
               ],
               'caseSensitive': true
             }
@@ -322,7 +364,7 @@ const requestData2 = [
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'buy: com.ft.ftchinese.mobile.subscription.vip'
+                'buy success: com.ft.ftchinese.mobile.subscription.vip'
               ],
               'caseSensitive': true
             }
@@ -330,70 +372,950 @@ const requestData2 = [
         }
       ]
     }
-]
+];
 
-const requestDataArr = [requestData0, requestData1];
+const requestData3 = [ //从premium这条转换线得到的相关行为数据
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:date'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Display'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'BEGINS_WITH',
+                        'expressions': [
+                        'premium/'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:date'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                            'Tap Subscription'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'BEGINS_WITH',
+                        'expressions': [
+                        'premium/'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:date'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                            'Pop Subscription'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'BEGINS_WITH',
+                        'expressions': [
+                        'premium/'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
+              ],
+              'caseSensitive': true
+            },
+            {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'BEGINS_WITH',
+                'expressions': [
+                'premium/'
+                ],
+                'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.vip'
+              ],
+              'caseSensitive': true
+            },
+            {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'BEGINS_WITH',
+                'expressions': [
+                'premium/'
+                ],
+                'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+];
+
+const requestData4 = [ //从EnglishAudio这条转换线得到的相关行为数据,注意它没有display这一项，也没有tap subscription
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:date'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                            'Pop Subscription'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'BEGINS_WITH',
+                        'expressions': [
+                            'EnglishAudio/'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
+              ],
+              'caseSensitive': true
+            },
+            {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'BEGINS_WITH',
+                'expressions': [
+                    'EnglishAudio/'
+                ],
+                'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.vip'
+              ],
+              'caseSensitive': true
+            },
+            {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'BEGINS_WITH',
+                'expressions': [
+                'EnglishAudio/'
+                ],
+                'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+];
+
+const requestData5 = [ //从story(编辑精选)这条转换线得到的相关行为数据
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:date'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Display'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'BEGINS_WITH',
+                        'expressions': [
+                        'story/'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:date'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                            'Tap Subscription'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'BEGINS_WITH',
+                        'expressions': [
+                        'story/'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:date'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                            'Pop Subscription'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'BEGINS_WITH',
+                        'expressions': [
+                        'story/'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.vip'
+              ],
+              'caseSensitive': true
+            },
+            {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'BEGINS_WITH',
+                'expressions': [
+                'story/'
+                ],
+                'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+];
+
+const requestDataArr = [requestData0, requestData1, requestData2,requestData3, requestData4, requestData5];
 const responseDataArr = [];
 
 
 
 async function drawCharts(responseDataArr) {
-  console.log(responseDataArr);
+  // console.log(responseDataArr);
   var chartId;
-  const resultData0 = responseDataArr[0].reports[0].data.rows[0].metrics[0].values[0];
-  console.log(`resultData0:${resultData0}`);
-  const resultData1 = responseDataArr[1].reports[0].data.rows[0].metrics[0].values[0];
-  const resultData2 = responseDataArr[1].reports[1].data.rows[0].metrics[0].values[0];//购买成功的总数
-  const resultData3 = responseDataArr[1].reports[2].data.rows[0].metrics[0].values[0];
-  console.log(`resultData1:${resultData1}`);
 
-  // MARK:金字塔图
-  const allUsers = Number(resultData0);
-  const opportunityTotalUsers = Number(resultData1-resultData2);
-  const standardUsers = Number(resultData2-resultData3);  
-  const premiumUsers = Number(resultData3);
-  
-  const restUsers = allUsers-opportunityTotalUsers;
-  const opportunityUsers = opportunityTotalUsers - standardUsers - premiumUsers;
+  //MARK:1. 金字塔图
+    const resultData0 = responseDataArr[0].reports[0].data.rows[0].metrics[0].values[0];//总用户数
+    console.log(`resultData0:${resultData0}`);
+    const resultData1 = responseDataArr[1].reports[0].data.rows[0].metrics[0].values[0];//iPhoneApp用户数
+    const resultData2 = responseDataArr[1].reports[1].data.rows[0].metrics[0].values[0];//standard会员数
+    const resultData3 = responseDataArr[1].reports[2].data.rows[0].metrics[0].values[0];//premium会员数
+    console.log(`resultData1:${resultData1}`);
 
-  
-  chartId = createChart();
-  const  pyramid = new Highcharts.Chart({
-      chart: {
-          type: 'pyramid',
-          renderTo: chartId
-      },
-      title: {
-          text: 'Engagement pyramid'
-      },
-      plotOptions: {
-        series: {
-            dataLabels: {
-                enabled: true,
-                format: '<b>{point.name}</b> ({point.y:,.0f})',
-                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
-                softConnector: true
+    const restUsers = Number(resultData0-resultData1);//非iPhoneApp用户数，即金字塔第1级
+    const opportunityUsers = Number(resultData1-resultData2-resultData3);//iPhoneApp用户中还未订阅的用户数，即金字塔第2级
+    const standardUsers = Number(resultData2);//standard会员数，即金字塔第3级  
+    const premiumUsers = Number(resultData3);//premium会员数，即金字塔第4级
+    
+
+    
+    chartId = createChart();
+    const  pyramid = new Highcharts.Chart({
+        chart: {
+            type: 'pyramid',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Engagement pyramid'
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b> ({point.y:,.0f})',
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                    softConnector: true
+                },
+                center: ['40%', '50%'],
+                width: '80%'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        series: [{
+        name: 'Unique users',
+        data: [
+            ['Rest Users', restUsers], //9074799
+            ['Opportunity Users',  opportunityUsers], //247243
+            ['Standard Users', standardUsers],
+            ['Premium Users',  premiumUsers]
+        ]
+        }]
+    });
+
+  //MARK:2. New Subscriptions 条形图
+    var keys = responseDataArr[2].reports[0].data.rows.map(row => row.dimensions[0]);
+
+    var displayed = extractDataFromGAAPI(responseDataArr[2].reports[0].data.rows, keys);
+    var tapChecked = extractDataFromGAAPI(responseDataArr[2].reports[1].data.rows, keys);
+    var popChecked = extractDataFromGAAPI(responseDataArr[2].reports[2].data.rows, keys);
+    var buySuccessOfStandard = extractDataFromGAAPI(responseDataArr[2].reports[3].data.rows, keys);
+    var buySuccessOfPremium = extractDataFromGAAPI(responseDataArr[2].reports[4].data.rows, keys);
+
+
+    chartId = createChart();
+    var newSubscriptionChart = new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: chartId
+        },
+        title: {
+            text: 'New Subscription'
+        },
+        xAxis: {
+            categories: keys,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
             },
-            center: ['40%', '50%'],
-            width: '80%'
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'Standard'+' (Average: ' + averageOfArray(buySuccessOfStandard) +')',
+            data: buySuccessOfStandard
+        },{
+            name: 'Premium'+' (Average: ' + averageOfArray(buySuccessOfPremium) +')',
+            data: buySuccessOfPremium
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
         }
-    },
-    legend: {
-        enabled: false
-    },
-    series: [{
-      name: 'Unique users',
-      data: [
-        ['Rest Users', restUsers], //9074799
-        ['Opportunity Users',  opportunityUsers], //247243
-        ['Standard Users', standardUsers],
-        ['Premium Users',  premiumUsers]
-      ]
-    }]
-  });
+    });
 
+  //MARK:3. display,tap checked,pop checked, buy seccess of standard, buy success of premium 条形图
+    chartId = createChart();
+    var engagementPerformanceChart = new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Engagement Daily Performance'
+        },
+        xAxis: {
+            categories: keys,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [
+        {
+            name: 'Displayed'+' (Average: ' + averageOfArray(displayed) +')',
+            data: displayed
+        },{
+            name: 'Tap Checked'+' (Average: ' + averageOfArray(tapChecked) +')',
+            data: tapChecked
+        },{
+            name: 'Pop Checked'+' (Average: ' + averageOfArray(popChecked) +')',
+            data: popChecked
+        },{
+            name: 'Standard'+' (Average: ' + averageOfArray(buySuccessOfStandard) +')',
+            data: buySuccessOfStandard
+        },{
+            name: 'Premium'+' (Average: ' + averageOfArray(buySuccessOfPremium) +')',
+            data: buySuccessOfPremium
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
 
+  //MARK:4. 以上5个指标在label:premium这条线的数据,即是从首页的付费文章点进去
+    var displayedFromPaidstory = extractDataFromGAAPI(responseDataArr[3].reports[0].data.rows, keys);
+    var tapCheckedFromPaidstory = extractDataFromGAAPI(responseDataArr[3].reports[1].data.rows, keys);
+    var popCheckedFromPaidstory = extractDataFromGAAPI(responseDataArr[3].reports[2].data.rows, keys);
+    var buySuccessOfStandardFromPaidstory = extractDataFromGAAPI(responseDataArr[3].reports[3].data.rows, keys);
+    var buySuccessOfPremiumFromPaidstory = extractDataFromGAAPI(responseDataArr[3].reports[4].data.rows, keys);
+  
+    chartId = createChart();
+    var engagementPerformanceFromPaidstoryChart = new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Engagement Daily Performance From Paidstory'
+        },
+        xAxis: {
+            categories: keys,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [
+        {
+            name: 'Displayed'+' (Average: ' + averageOfArray(displayedFromPaidstory) +')',
+            data: displayedFromPaidstory
+        },{
+            name: 'Tap Checked'+' (Average: ' + averageOfArray(tapCheckedFromPaidstory) +')',
+            data: tapCheckedFromPaidstory
+        },{
+            name: 'Pop Checked'+' (Average: ' + averageOfArray(popCheckedFromPaidstory) +')',
+            data: popCheckedFromPaidstory
+        },{
+            name: 'Standard'+' (Average: ' + averageOfArray(buySuccessOfStandardFromPaidstory) +')',
+            data: buySuccessOfStandardFromPaidstory
+        },{
+            name: 'Premium'+' (Average: ' + averageOfArray(buySuccessOfPremiumFromPaidstory) +')',
+            data: buySuccessOfPremiumFromPaidstory
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+    
+  //MARK:5. 3个指标在label:EnglishAudio这条线的数据,即是从首页的付费文章点进去
  
+    var popCheckedFromEnglishAudio = extractDataFromGAAPI(responseDataArr[4].reports[0].data.rows, keys);
+    var buySuccessOfStandardFromEnglishAudio = extractDataFromGAAPI(responseDataArr[4].reports[1].data.rows, keys);
+    var buySuccessOfPremiumFromEnglishAudio = extractDataFromGAAPI(responseDataArr[4].reports[2].data.rows, keys);
+  
+    chartId = createChart();
+    var engagementPerformanceFromEnglishAudioChart = new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Engagement Daily Performance From EnglishAudio'
+        },
+        xAxis: {
+            categories: keys,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [
+        {
+            name: 'Pop Checked'+' (Average: ' + averageOfArray(popCheckedFromEnglishAudio) +')',
+            data: popCheckedFromEnglishAudio
+        },{
+            name: 'Standard'+' (Average: ' + averageOfArray(buySuccessOfStandardFromEnglishAudio) +')',
+            data: buySuccessOfStandardFromEnglishAudio
+        },{
+            name: 'Premium'+' (Average: ' + averageOfArray(buySuccessOfPremiumFromEnglishAudio) +')',
+            data: buySuccessOfPremiumFromEnglishAudio
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+  
+  //MARK:6. 以上几个指标在label:story这条线的数据,即是从“编辑精选”点进去的。注意这里只有premium购买，没有standard购买
+    var displayedFromEditSelect = extractDataFromGAAPI(responseDataArr[5].reports[0].data.rows, keys);
+    var tapCheckedFromEditSelect = extractDataFromGAAPI(responseDataArr[5].reports[1].data.rows, keys);
+    var popCheckedFromEditSelect = extractDataFromGAAPI(responseDataArr[5].reports[2].data.rows, keys);
+    var buySuccessOfPremiumFromEditSelect = extractDataFromGAAPI(responseDataArr[5].reports[3].data.rows, keys);
+  
+    chartId = createChart();
+    var engagementPerformanceFromEditSelectChart = new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Engagement Daily Performance From EditSelect'
+        },
+        xAxis: {
+            categories: keys,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [
+        {
+            name: 'Displayed'+' (Average: ' + averageOfArray(displayedFromEditSelect) +')',
+            data: displayedFromEditSelect
+        },{
+            name: 'Tap Checked'+' (Average: ' + averageOfArray(tapCheckedFromEditSelect) +')',
+            data: tapCheckedFromEditSelect
+        },{
+            name: 'Pop Checked'+' (Average: ' + averageOfArray(popCheckedFromEditSelect) +')',
+            data: popCheckedFromEditSelect
+        },{
+            name: 'Premium'+' (Average: ' + averageOfArray(buySuccessOfPremiumFromEditSelect) +')',
+            data: buySuccessOfPremiumFromEditSelect
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+  //TODO：相关性分析等
+
+  //MARK:9. 各级用户S/F/V/R指标分布图
 
   const engagementData = await getStoredDataFile('../data/engagementData.json');
   console.log(engagementData);
