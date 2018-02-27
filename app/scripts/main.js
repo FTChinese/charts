@@ -315,7 +315,7 @@ function averageOfArray(arrayObject) {
       sum += parseInt(arrayObject[i], 10); //don't forget to add the base
   }
   avg = sum/arrayObject.length;
-  avg = Math.round(avg);
+  avg = Math.round(avg * 100)/100;
   } catch (ignore) {
 
   }
