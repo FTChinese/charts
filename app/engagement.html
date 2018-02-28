@@ -983,22 +983,274 @@ const requestData5 = [ //从story(编辑精选)这条转换线得到的相关行
     }
 ];
 
-const requestDataArr = [requestData0, requestData1, requestData2,requestData3, requestData4, requestData5];
+const requestData6 = [//以文章id划分的数据
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:eventLabel'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Display'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'REGEXP',
+                        'expressions': [
+                            '^premium/[0-9]{9}$'
+                        ],
+                        'caseSensitive': true
+                        }
+                ]
+            }
+        ]
+    },
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:eventLabel'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                            'Tap Subscription'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'REGEXP',
+                        'expressions': [
+                            '^premium/[0-9]{9}$'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:eventLabel'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                            'Pop Subscription'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'REGEXP',
+                        'expressions': [
+                            '^premium/[0-9]{9}$'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:eventLabel'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '^premium/[0-9]{9}$'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:eventLabel'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.vip'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '^premium/[0-9]{9}$'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+];
+
+const requestDataArr = [requestData0, requestData1, requestData2,requestData3, requestData4, requestData5, requestData6];
 const responseDataArr = [];
 
 
 
 async function drawCharts(responseDataArr) {
-  // console.log(responseDataArr);
+   console.log('here');
+   console.log(JSON.stringify(responseDataArr[6]));
   var chartId;
 
   //MARK:1. 金字塔图
     const resultData0 = responseDataArr[0].reports[0].data.rows[0].metrics[0].values[0];//总用户数
-    console.log(`resultData0:${resultData0}`);
     const resultData1 = responseDataArr[1].reports[0].data.rows[0].metrics[0].values[0];//iPhoneApp用户数
     const resultData2 = responseDataArr[1].reports[1].data.rows[0].metrics[0].values[0];//standard会员数
     const resultData3 = responseDataArr[1].reports[2].data.rows[0].metrics[0].values[0];//premium会员数
-    console.log(`resultData1:${resultData1}`);
 
     const restUsers = Number(resultData0-resultData1);//非iPhoneApp用户数，即金字塔第1级
     const opportunityUsers = Number(resultData1-resultData2-resultData3);//iPhoneApp用户中还未订阅的用户数，即金字塔第2级
@@ -1315,11 +1567,26 @@ async function drawCharts(responseDataArr) {
 
   //TODO：相关性分析等
 
-  //MARK:9. 各级用户S/F/V/R指标分布图
+  //MARK8：绘制文章维度表格数据
+  var labelKeys =  responseDataArr[6].reports[0].data.rows.map(row => row.dimensions[0]);
+  //console.log(labelKeys);
+  
+  var displayedEachStory = extractDataFromGAAPI(responseDataArr[6].reports[0].data.rows, labelKeys);
+  //console.log(displayedEachStory);
+  var tapCheckedEachStory = extractDataFromGAAPI(responseDataArr[6].reports[1].data.rows, labelKeys);
+  var popCheckedEachStory = extractDataFromGAAPI(responseDataArr[6].reports[2].data.rows, labelKeys);
+  var buySuccessOfStandardEachStory = extractDataFromGAAPI(responseDataArr[6].reports[3].data.rows, labelKeys);
+  var buySuccessOfPremiumEachStory = extractDataFromGAAPI(responseDataArr[6].reports[4].data.rows, labelKeys);
+  //console.log(buySuccessOfStandardEachStory);
 
+  var objData = extractObjData(responseDataArr[6].reports, ["story","displayed","tapChecked","popChecked","buySuccessOfStandard","buySuccessOfPremium"], labelKeys,"buySuccessOfStandard");
+
+  console.log(objData);
+  createNormalTable(objData, ["story","displayed","tapChecked","popChecked","buySuccessOfStandard","buySuccessOfPremium"]);
+ //MARK:9. 各级用户S/F/V/R指标分布图
   const engagementData = await getStoredDataFile('../data/engagementData.json');
-  console.log(engagementData);
-  console.log(JSON.stringify(engagementData));
+  //console.log(engagementData);
+  //console.log(JSON.stringify(engagementData));
   const SDataSet = [];
   const FDataSet = [];
   const VDataSet = [];
@@ -1335,7 +1602,7 @@ async function drawCharts(responseDataArr) {
     RDataSet.push(R);
   }
   //S的分布图
-  console.log(SDataSet);
+  //console.log(SDataSet);
   chartId = createChart();
   Highcharts.chart(chartId, {
     title: {
@@ -1380,7 +1647,7 @@ async function drawCharts(responseDataArr) {
   });
 
   //F的分布图
-  console.log(FDataSet);
+  //console.log(FDataSet);
   chartId = createChart();
   Highcharts.chart(chartId, {
     title: {

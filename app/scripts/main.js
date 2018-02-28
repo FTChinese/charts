@@ -123,7 +123,7 @@ function queryDifferentReports() {
       responseDataArr.push(response.result);
       //console.log(JSON.stringify(response.reports));
       //displayResults(response);
-      console.log(JSON.stringify(response.result))
+      //console.log(JSON.stringify(response.result))
       
       if (requestIndex < requestNum) {
         oneRequest();
@@ -268,6 +268,49 @@ function extractDataFromGAAPI(dataSource, baseKeys) {
   return dimensions;
 }
 
+//MARK:By wangyichen, 根据ga响应原始数据集，得到想要的obj数据,一般用于给table用作数据集
+/**
+ * 
+ * @param {Array} gaResponseReports: ga响应原始数据集的reports字段值，即含有至多五个Obj的数组
+ * @param {Array} propsArr：最终得到obj各属性名称组成的数组，其中第一个为 key的名称，第二个为reports[0]数值项的名称，第三个为reports[1]数值项的名称....
+ * @param {Array} keys：主键值数组,最终数据集将按照keys数组的顺序程现。
+ * @param {string} orderBy: 按照从多到少排序的字段，是propsArr中除key外的某一个
+ */
+function extractObjData(gaResponseReports, propsArr, keys, orderBy) {
+  const resultData = [];
+  
+  keys.forEach(onekey => { //处理每个key,一个key对应一个最后数组数组的一项obj
+    const oneObj = {};
+    oneObj[propsArr[0]] = onekey; //该obj的第一个属性键为propsArr[0],值为key本身的值
+
+    for (const [index, elem] of gaResponseReports.entries()) {//该obj剩下的属性值分别从这几个reports中获取
+      const oneReportDataArray = elem.data.rows;
+      const thisField = propsArr[index+1];
+      for(const datum of oneReportDataArray ) {
+        if (datum.dimensions[0] == onekey) {
+          oneObj[thisField] = Number(datum.metrics[0].values[0]);
+        }
+      }
+      if(!oneObj[thisField]) {
+        oneObj[thisField] = 0;
+      }
+    }
+
+    resultData.push(oneObj);
+  });
+  if (!orderBy) {
+    return resultData;
+  }
+  resultData.sort((a,b) => { //Note:sort方法是会改变原数组的
+    if(a[orderBy] > b[orderBy]) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
+  return resultData;
+}
+
 // MARK: Calculate percentage between two sets of data
 function calculateRates(part, total) {
   var rates=[];
@@ -366,6 +409,72 @@ function createTable(data) {
   return chartId;
 }
 
+// MARK:Append an div for drawing table in it.
+/**
+ * 
+ * @param {Array} data:绘制table所用的数据集，最后得到的数据呈现方式完全是和数据集对应的，一行是数据集的一项，字段就是每一项的props
+ * @param {Array} fields:数据集每一项的属性组成的数组，其顺序决定了呈现在表格中从左到右的顺序
+ */
+function createNormalTable(data, fields) {
+  const chartContainer = document.createElement('div');
+  const chartId = 'chart-container-' + gCurrentChartIndex;
+  chartContainer.id = chartId;
+  chartContainer.className = 'chart-container';
+  gCurrentChartIndex += 1;
+  const tableContainer = document.createElement('table');
+  const tableThead = document.createElement('thead');
+  const tableTbody = document.createElement('tbody');
+
+  tableContainer.className = 'o-table o-table--row-stripes';
+  
+  let ths = '';
+  for(const item of fields) {
+    ths+=`<th>${item}</th>`
+  }
+  tableThead.innerHTML = ths;
+  tableContainer.appendChild(tableThead);
+
+  for(const item of data) {
+     let tds = '';
+     for(const field of fields) {
+       tds += `<td>${item[field]}</td>`
+     };
+    const tableTr = document.createElement('tr');
+    tableTr.innerHTML = tds;
+    tableTbody.appendChild(tableTr);
+  }
+  tableContainer.appendChild(tableTbody);
+  chartContainer.appendChild(tableContainer);
+  document.getElementById('charts-container').appendChild(chartContainer);
+  return chartId;
+}
+
+// MARK：By wangyichen, 按照某项指标前多少名获取keys
+/**
+ * @param {Array} keys，数据主键，如文章id
+ * @param {Array} orderFieldValue, 用于排序的字段值数组，一般可以根据keys获得
+ * @param {Number} n,用于取前多少名
+ */
+function getKeysByOder(keys,n) {
+  const request = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
+  const keyAndRequestArray = [];
+  for(let i=0,len=keys.length;i<len;i++) {
+    const keyAndRequest = {
+      ad:keys[i],
+      request:request[i]
+    }
+    keyAndRequestArray.push(keyAndRequest);
+  }
+  const top30Records = keyAndRequestArray.sort(function(a,b) {
+    if(a.request > b.request) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }).slice(0,30);
+
+  const ads = [];
+}
 // MARK: A quick way to draw just one chart with just enought information
 function drawChartByKey(obj) {
   var percentageSign = (obj.percentage === true) ? '%': '';
