@@ -425,7 +425,7 @@ function createNormalTable(data, fields) {
   const tableThead = document.createElement('thead');
   const tableTbody = document.createElement('tbody');
 
-  tableContainer.className = 'o-table o-table--row-stripes';
+  tableContainer.className = 'ftc-table ftc-table--responsive-overflow ftc-table--row-stripes ftc-table--vertical-lines';
   
   let ths = '';
   for(const item of fields) {
