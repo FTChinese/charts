@@ -20,7 +20,7 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">Weekly Report</h1>
+  <h1 class="page-title">Subscription</h1>
 </div>
 
 
@@ -47,44 +47,7 @@ var endDate = 'yesterday';
 
 function constructQuerryData(startDate, endDate) {
   var queryData = [
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:users'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ]
-    },
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:pageviews'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ]
-    },
+    // 0 iOS Standard Subscription Buying
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -111,41 +74,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Ad Impression'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:totalEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                'iPhone App Launch'
+                'In-App Purchase'
               ],
               'caseSensitive': true
             },
@@ -153,14 +82,272 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'Success'
+                'buy success'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
+              'expressions': [
+                'com.ft.ftchinese.mobile.subscription.member'
               ],
               'caseSensitive': true
             }
           ]
         }
       ]
-    },
+    },// 1 iOS Buy Premium Subscription
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'In-App Purchase'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'EXACT',
+              'expressions': [
+                'com.ft.ftchinese.mobile.subscription.vip'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 2 iOS Paywall Displayed in Story Page
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Display'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'premium/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 3 iOS Paywall Tap Subscription Page in Story Page
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Tap Subscription'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'premium/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 4 iOS Buy Standard Subscription from Exclusive Story
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'premium/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 5 iOS Buy Premium Subscription
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.vip'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'premium/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 6 iOS Home Page PV
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -185,50 +372,16 @@ function constructQuerryData(startDate, endDate) {
           'filters': [
             {
               'dimensionName': 'ga:pagePath',
-              'operator': 'REGEXP',
+              'operator': 'EXACT',
               'expressions': [
-                'androidapp'
+                '/?webview=ftcapp'
               ],
               'caseSensitive': true
             }
           ]
         }
       ]
-    },
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:pageviews'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:pagePath',
-              'operator': 'REGEXP',
-              'expressions': [
-                'ipad-'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },
+    },// 7 iOS Buy Standard Subscription from English Audio in Story
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -255,382 +408,30 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Tap Notification'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:users'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:deviceCategory',
-              'operator': 'REGEXP',
-              'expressions': [
-                'mobile|tablet'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:users'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:deviceCategory',
-              'operator': 'REGEXP',
-              'expressions': [
-                'desktop'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:pageviews'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:deviceCategory',
-              'operator': 'REGEXP',
-              'expressions': [
-                'mobile|tablet'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:pageviews'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:deviceCategory',
-              'operator': 'REGEXP',
-              'expressions': [
-                'desktop'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:totalEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:deviceCategory',
-              'operator': 'REGEXP',
-              'expressions': [
-                'mobile|tablet'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                'Ad Impression'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:totalEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:deviceCategory',
-              'operator': 'REGEXP',
-              'expressions': [
-                'desktop'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                'Ad Impression'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:users'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:hour'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:deviceCategory',
-              'operator': 'REGEXP',
-              'expressions': [
-                'mobile|tablet'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },
-    {// 14
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:users'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:hour'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:deviceCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                'desktop'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },
-    {// 15
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:goal15Completions'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ]
-    },
-    {// 16
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:goal14Completions'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ]
-    },// 17 iPhone Server Errors
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:totalEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                'CatchError'
+                'Privileges'
               ],
               'caseSensitive': true
             },
             {
               'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                'HTML Validation Fail|HTML Data Conversion Fail'
+                'EnglishAudio/'
               ],
               'caseSensitive': true
             }
           ]
         }
       ]
-    },// 18 Web page Server Errors probably related to database failure
+    },// 8 iOS Buy Premium Subscription from Editor's Choice
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -657,57 +458,23 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'CatchError'
+                'Privileges'
               ],
               'caseSensitive': true
             },
             {
               'dimensionName': 'ga:eventAction',
-              'operator': 'REGEXP',
-              'expressions': [
-                'Page Validation Fail'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 19 iOS Server connection failure
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:totalEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'CatchError'
+                'buy success: com.ft.ftchinese.mobile.subscription.vip'
               ],
               'caseSensitive': true
             },
             {
-              'dimensionName': 'ga:eventAction',
+              'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                'Fail to Connect'
+                'story/'
               ],
               'caseSensitive': true
             }
@@ -736,193 +503,186 @@ function drawChartsAll() {
   // });
 
 
-  
-
-
   drawChartByKey({
-    title: 'Users',
-    type: 'area',
+    title: 'New Subscriptions',
+    type: 'column',
     percentage: false,
     keys: keys,
     data: [
       {
         index: 0,
-        name: 'Unique Users'
-      }
-    ]
-  });
-
-
-  drawChartByKey({
-    title: 'Users By Device',
-    type: 'column',
-    percentage: false,
-    keys: keys,
-    data: [
-      {
-        index: 7,
-        name: 'Mobile and Tablet'
+        name: 'Standard'
       },
-      {
-        index: 8,
-        name: 'Desktop'
-      }
-    ]
-  });
-
-  drawChartByKey({
-    title: 'Page Views',
-    type: 'area',
-    percentage: false,
-    keys: keys,
-    data: [
       {
         index: 1,
-        name: 'Page Views'
+        name: 'Premium'
       }
     ]
   });
 
   drawChartByKey({
-    title: 'Pageviews By Device',
+    title: 'Standard Subscription Triggers',
     type: 'column',
     percentage: false,
     keys: keys,
     data: [
       {
-        index: 9,
-        name: 'Mobile and Tablet'
+        index: 4,
+        name: 'Exclusive Story'
       },
       {
-        index: 10,
-        name: 'Desktop'
+        index: 7,
+        name: 'English Audio'
+      }
+    ]
+  });
+
+
+  // drawChartByKey({
+  //   title: 'Premium Subscription Sources',
+  //   type: 'column',
+  //   percentage: false,
+  //   keys: keys,
+  //   data: [
+  //     {
+  //       index: 5,
+  //       name: 'Exclusive Story'
+  //     },
+  //     {
+  //       index: 8,
+  //       name: 'Editors\' Choice'
+  //     }
+  //   ]
+  // });
+
+  insertPicture('Subscription Acquisition Channel: Exclusive Story', 'http://i.ftimg.net/picture/0/000076060_piclink.jpg');
+
+  drawChartByKey({
+    title: 'Conversion Funnel',
+    type: 'funnel',
+    unitName: 'Event',
+    percentage: false,
+    data: [
+      {
+        index: 2,
+        name: 'Paywall Displayed in Story'
+      },
+      {
+        index: 3,
+        name: 'Check the Subscription Options'
+      },
+      {
+        index: 4,
+        name: 'Buy Standard Subscription'
+      },
+      {
+        index: 5,
+        name: 'Buy Premium Subscription'
       }
     ]
   });
 
   drawChartByKey({
-    title: 'Ad Impressions',
+    title: 'Daily Performance',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 2,
+        name: 'Paywall Displayed in Story'
+      },
+      {
+        index: 3,
+        name: 'Check the Subscription Options'
+      },
+      {
+        index: 4,
+        name: 'Buy Standard Subscription'
+      },
+      {
+        index: 5,
+        name: 'Buy Premium Subscription'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Daily: Bought VS Displayed',
     type: 'area',
     percentage: false,
     keys: keys,
     data: [
       {
         index: 2,
-        name: 'Ad Impressions'
+        name: 'Displayed'
+      },
+      {
+        index: 4,
+        name: 'Bought'
       }
     ]
   });
 
+
   drawChartByKey({
-    title: 'Ad Impressions By Device',
-    type: 'column',
+    conversion: true,
+    title: 'Daily: Checked VS Displayed',
+    type: 'area',
     percentage: false,
     keys: keys,
     data: [
       {
-        index: 11,
-        name: 'Mobile and Tablet'
+        index: 2,
+        name: 'Displayed'
       },
       {
-        index: 12,
-        name: 'Desktop'
+        index: 3,
+        name: 'Checked'
       }
     ]
   });
 
   drawChartByKey({
-    title: 'App Launches',
-    type: 'column',
+    conversion: true,
+    title: 'Daily: Bought VS Checked',
+    type: 'area',
     percentage: false,
     keys: keys,
     data: [
       {
         index: 3,
-        name: 'iPhone'
+        name: 'Checked'
       },
       {
         index: 4,
-        name: 'Android'
-      },
-      {
-        index: 5,
-        name: 'iPad'
+        name: 'Bought'
       }
     ]
   });
 
+
   drawChartByKey({
-    title: 'Push Notification',
+    conversion: true,
+    title: 'Daily: Paywall Seen',
     type: 'area',
     percentage: false,
     keys: keys,
     data: [
       {
         index: 6,
-        name: 'Taps'
+        name: 'iOS Home Page PV'
+      },
+      {
+        index: 2,
+        name: 'Paywall Displayed'
       }
     ]
   });
 
 
-  drawChartByKey({
-    title: 'Users By Hour',
-    type: 'column',
-    percentage: false,
-    multiplier: 1/14,
-    keys: gaDataReports[13].data.rows.map(function(row){
-        return row.dimensions[0];
-      }),
-    data: [
-      {
-        index: 13,
-        name: 'Mobile and Tablet'
-      },
-      {
-        index: 14,
-        name: 'Desktop'
-      }
-    ]
-  });
-
-
-  drawChartByKey({
-    title: 'New Registration',
-    type: 'column',
-    percentage: false,
-    keys: keys,
-    data: [
-      {
-        index: 15,
-        name: 'From Web Site'
-      },
-      {
-        index: 16,
-        name: 'From Apps'
-      }
-    ]
-  });
-
-  drawChartByKey({
-    title: 'Catch Errors',
-    type: 'column',
-    percentage: false,
-    keys: keys,
-    data: [
-      {
-        index: 17,
-        name: 'iOS HTML Validation Fail'
-      },
-      {
-        index: 19,
-        name: 'iOS Server Connection Failure'
-      },
-      {
-        index: 18,
-        name: 'Page Validation Fail'
-      }
-    ]
-  });
 
 
 
