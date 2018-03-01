@@ -320,7 +320,7 @@ function extractObjData(gaResponseReports, propsArr, keys, orderBy) {
  *    @param {String} Obj.prop2 第二个被操作数在数据集中的属性名称
  *    @param {String} Obj.propNew 操作后的结果在数据集中的属性名称
  */
-function addForObjData(data, addPropsArr) {
+function addPropsToData(data, addPropsArr) {
   return data.map(datum => {
     for (const item of addPropsArr) {
       const operatedNum1 = datum[item.prop1];
@@ -333,13 +333,128 @@ function addForObjData(data, addPropsArr) {
 }
 
 /**
+ * By wangyichen,为数据集增加统计指标行
+ * @param {Array:[Obj,Obj,Obj]} data:原数据集
+ * @param {Array:[Obj,Obj,Obj]} addStatisRowArr:需要增加的统计信息行相关信息
+ *   @param {String} Obj.rowNameValue:新的一行的名称，即位于表格第一列
+ *   @param {String} Obj.rowNameKey:新的一行的名称为于原数据集的属性名
+ *   @param {String} Obj.operateFunc:操作函数
+ *   @param {Array:[String,String]} Obj.propsArr:需要操作得到统计结果的属性数组
+ * 
+ */
+function addStatisRowToData(data, addStatisRowArr) {
+  const dataItemPropArr = Object.keys(data[0]);//得到数据集每项的属性组成的数组
+  for (const item of addStatisRowArr) {//遍历要计算的统计值信息数组，一项对应新增的一行
+    const newObj = {};//一行对应一个新对象
+    if(!dataItemPropArr.includes(item.rowNameKey)) {//如果不包含这个属性名，则跳过
+      continue;
+    }
+    newObj[item.rowNameKey] = item.rowNameValue;
+
+    for (const prop of item.propsArr) {
+      if (!dataItemPropArr.includes(prop)) {
+        continue;
+      }
+      console.log(prop);
+      const numArr = data.map(datum => {
+        return datum[prop];
+      });
+      newObj[prop] = item.operateFunc(numArr);
+    }
+
+    for (const prop of dataItemPropArr) {
+      if (newObj[prop] == undefined) {
+        newObj[prop] = '--';
+      }
+    }
+    console.log(newObj);
+    data.push(newObj);
+  }
+  return data;
+}
+
+/*** 一系列数据计算方法：Start ***/
+/**
  * By wangyichen:得到两数之商，结果是百分比的数，保留两位小数
  * @param {Number} a 被除数
  * @param {Number} b 除数--除数为0返回NaN
  */
-function  divide(a,b) {
+function divide(a,b) {
   return Math.round(a/b * 10000)/100;
 }
+/**
+ * By wangyichen:计算一系列数之和
+ * @param {Array:[Number,Number..]} numArray 
+ */
+function sumOfAll(numArray) {
+  let sum = 0;
+  for(const item of numArray) {
+    let numItem ;
+    if(typeof item === 'number') {
+      numItem = item;
+    } else {
+      numItem = Number(item);
+    }
+    if (numItem !== numItem || numItem === 'undefined') {//说明它是NaN
+      numItem = 0;
+    } 
+    sum += numItem;
+  }
+  return sum;
+}
+
+/**
+ * By wangyichen:计算一系列数的平均数
+ * @param {Array:[Number,Number..]} numArray 
+ */
+function meanOfAll(numArray) {
+  let sum = 0, n=0;
+  for(const item of numArray) {
+    let numItem ;
+    if(typeof item === 'number') {
+      numItem = item;
+    } else {
+      numItem = Number(item);
+    }
+    if (numItem === numItem ) {//说明它不是NaN
+      n++; //NaN的时候不计算数量
+      sum += numItem;
+    }
+  }
+  if(n > 0) {
+    return Math.round(sum/n * 100)/ 100;
+  } else {
+    return 0;
+  }
+}
+
+/**
+ * By wangyichen:计算一系列数的中位数
+ * @param {Array:[Number,Number..]} numArray 
+ */
+function medianOfAll(numArray) {
+  const cleanNumArr = numArray.map(num => {
+    if (typeof num === 'number') {
+      return num;//这里也有可能是NaN
+    } else {
+      return Number(num);//这里也有可能是NaN,如Number(undefined)
+    }
+  }).filter(num =>{
+    return num === num;//过滤掉NaN
+  });
+  cleanNumArr.sort((a,b) => {//从小到大就地排序
+    return a-b;
+  });
+  const len = cleanNumArr.length;
+  if (len%2 === 0) {//如果为偶数个
+    return Math.round((cleanNumArr[len/2] + cleanNumArr[len/2+1])/2*100)/100;
+  } else {//如果为奇数个
+    return Math.round(cleanNumArr[(len-1)/2]*100)/100;
+  }
+}
+/*** 一系列数据计算方法：End ***/
+
+
 
 // MARK: Calculate percentage between two sets of data
 function calculateRates(part, total) {

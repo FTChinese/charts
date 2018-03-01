@@ -1597,8 +1597,7 @@ const responseDataArr = [];
 
 
 async function drawCharts(responseDataArr) {
-   console.log('here');
-   console.log(JSON.stringify(responseDataArr[6]));
+   
   var chartId;
 
   //MARK:1. 金字塔图
@@ -1825,7 +1824,7 @@ async function drawCharts(responseDataArr) {
         */
         var objData = extractObjData(responseDataArr[6].reports, ["story","disp","tap","pop","buySucS","buySucP"], labelKeys,"buySucS");
 
-        var newObjData = addForObjData(objData, [{
+        var newObjData = addPropsToData(objData, [{
             operateFunc:divide,
             prop1:"tap",
             prop2:"disp",
@@ -1847,9 +1846,27 @@ async function drawCharts(responseDataArr) {
             propNew:"buySucS/disp"
           }
         ]);
-
-        console.log(newObjData);
-        createNormalTable(newObjData, ["story","disp","tap","pop","buySucS","buySucP","tap/disp","pop/tap","buySucS/pop","buySucS/disp"]);
+          
+        var newObjDataWithStatis = addStatisRowToData(newObjData,[
+            {
+                rowNameValue:"sum",
+                rowNameKey:"story",
+                operateFunc:sumOfAll,
+                propsArr:["disp","tap","pop","buySucS","buySucP"]
+            },{
+                rowNameValue:"mean",
+                rowNameKey:"story",
+                operateFunc:meanOfAll,
+                propsArr:["disp","tap","pop","buySucS","buySucP","tap/disp","pop/tap","buySucS/pop","buySucS/disp"]
+            },{
+                rowNameValue:"median",
+                rowNameKey:"story",
+                operateFunc:medianOfAll,
+                propsArr:["disp","tap","pop","buySucS","buySucP","tap/disp","pop/tap","buySucS/pop","buySucS/disp"]
+            }
+        ])
+        console.log(newObjDataWithStatis);
+        createNormalTable(newObjDataWithStatis, ["story","disp","tap","pop","buySucS","buySucP","tap/disp","pop/tap","buySucS/pop","buySucS/disp"]);
 
 
   //MARK:6. 3个指标在label:EnglishAudio这条线的数据,即是从首页的付费文章点进去
