@@ -983,7 +983,7 @@ const requestData5 = [ //从story(编辑精选)这条转换线得到的相关行
     }
 ];
 
-const requestData6 = [//以文章id划分的数据
+const requestData6 = [//以文章id划分的数据:premium线
     {
         'viewId': VIEW_ID_iPhoneApp,
         'dateRanges': [
@@ -1236,7 +1236,362 @@ const requestData6 = [//以文章id划分的数据
     }
 ];
 
-const requestDataArr = [requestData0, requestData1, requestData2,requestData3, requestData4, requestData5, requestData6];
+const requestData7 = [//以文章id划分的数据:EnglishAudio线
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:eventLabel'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                            'Pop Subscription'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'REGEXP',
+                        'expressions': [
+                            '^EnglishAudio/[0-9]{9}$'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:eventLabel'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '^EnglishAudio/[0-9]{9}$'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:eventLabel'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.vip'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '^EnglishAudio/[0-9]{9}$'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+];
+
+const requestData8 = [//以文章id划分的数据:story(编辑精选)线
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:eventLabel'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Display'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'REGEXP',
+                        'expressions': [
+                            '^story/[0-9]{9}$'
+                        ],
+                        'caseSensitive': true
+                        }
+                ]
+            }
+        ]
+    },
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:eventLabel'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                            'Tap Subscription'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'REGEXP',
+                        'expressions': [
+                            '^story/[0-9]{9}$'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:totalEvents'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:eventLabel'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:eventCategory',
+                        'operator': 'EXACT',
+                        'expressions': [
+                        'Privileges'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventAction',
+                        'operator': 'EXACT',
+                        'expressions': [
+                            'Pop Subscription'
+                        ],
+                        'caseSensitive': true
+                    },
+                    {
+                        'dimensionName': 'ga:eventLabel',
+                        'operator': 'REGEXP',
+                        'expressions': [
+                            '^story/[0-9]{9}$'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:eventLabel'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.vip'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                '^story/[0-9]{9}$'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+];
+const requestDataArr = [requestData0, requestData1, requestData2,requestData3, requestData4, requestData5, requestData6,requestData7, requestData8];
 const responseDataArr = [];
 
 
@@ -1398,7 +1753,7 @@ async function drawCharts(responseDataArr) {
             enabled: true
         }
     });
-
+   
   //MARK:4. 以上5个指标在label:premium这条线的数据,即是从首页的付费文章点进去
     var displayedFromPaidstory = extractDataFromGAAPI(responseDataArr[3].reports[0].data.rows, keys);
     var tapCheckedFromPaidstory = extractDataFromGAAPI(responseDataArr[3].reports[1].data.rows, keys);
@@ -1413,7 +1768,7 @@ async function drawCharts(responseDataArr) {
             renderTo: chartId
         },
         title: {
-            text: 'Engagement Daily Performance From Paidstory'
+            text: 'Engagement From Paidstory'
         },
         xAxis: {
             categories: keys,
@@ -1457,8 +1812,47 @@ async function drawCharts(responseDataArr) {
             enabled: true
         }
     });
-    
-  //MARK:5. 3个指标在label:EnglishAudio这条线的数据,即是从首页的付费文章点进去
+
+  //MARK:5. label:premium的每篇文章数据表格
+        var labelKeys =  responseDataArr[6].reports[0].data.rows.map(row => row.dimensions[0]);
+        //console.log(labelKeys);
+        /*
+            var displayedEachStory = extractDataFromGAAPI(responseDataArr[6].reports[0].data.rows, labelKeys);
+            var tapCheckedEachStory = extractDataFromGAAPI(responseDataArr[6].reports[1].data.rows, labelKeys);
+            var popCheckedEachStory = extractDataFromGAAPI(responseDataArr[6].reports[2].data.rows, labelKeys);
+            var buySuccessOfStandardEachStory = extractDataFromGAAPI(responseDataArr[6].reports[3].data.rows, labelKeys);
+            var buySuccessOfPremiumEachStory = extractDataFromGAAPI(responseDataArr[6].reports[4].data.rows, labelKeys);
+        */
+        var objData = extractObjData(responseDataArr[6].reports, ["story","disp","tap","pop","buySucS","buySucP"], labelKeys,"buySucS");
+
+        var newObjData = addForObjData(objData, [{
+            operateFunc:divide,
+            prop1:"tap",
+            prop2:"disp",
+            propNew:"tap/disp"
+          },{
+            operateFunc:divide,
+            prop1:"pop",
+            prop2:"tap",
+            propNew:"pop/tap"
+          },{
+            operateFunc:divide,
+            prop1:"buySucS",
+            prop2:"pop",
+            propNew:"buySucS/pop"
+          },{
+            operateFunc:divide,
+            prop1:"buySucS",
+            prop2:"disp",
+            propNew:"buySucS/disp"
+          }
+        ]);
+
+        console.log(newObjData);
+        createNormalTable(newObjData, ["story","disp","tap","pop","buySucS","buySucP","tap/disp","pop/tap","buySucS/pop","buySucS/disp"]);
+
+
+  //MARK:6. 3个指标在label:EnglishAudio这条线的数据,即是从首页的付费文章点进去
  
     var popCheckedFromEnglishAudio = extractDataFromGAAPI(responseDataArr[4].reports[0].data.rows, keys);
     var buySuccessOfStandardFromEnglishAudio = extractDataFromGAAPI(responseDataArr[4].reports[1].data.rows, keys);
@@ -1471,7 +1865,7 @@ async function drawCharts(responseDataArr) {
             renderTo: chartId
         },
         title: {
-            text: 'Engagement Daily Performance From EnglishAudio'
+            text: 'Engagement From EnglishAudio'
         },
         xAxis: {
             categories: keys,
@@ -1510,7 +1904,22 @@ async function drawCharts(responseDataArr) {
         }
     });
   
-  //MARK:6. 以上几个指标在label:story这条线的数据,即是从“编辑精选”点进去的。注意这里只有premium购买，没有standard购买
+  //MARK:7. label:EnglishAudio的每篇文章数据表格
+    var labelKeysForEnglishAudio =  responseDataArr[7].reports[0].data.rows.map(row => row.dimensions[0]);
+            //console.log(labelKeys);
+    /*
+        var popCheckedEachEnglishAudio = extractDataFromGAAPI(responseDataArr[7].reports[0].data.rows, labelKeysForEnglishAudio);
+        var buySuccessOfStandardEachEnglishAudio = extractDataFromGAAPI(responseDataArr[7].reports[1].data.rows, labelKeysForEnglishAudio);
+        var buySuccessOfPremiumEachEnglishAudio = extractDataFromGAAPI(responseDataArr[7].reports[2].data.rows, labelKeysForEnglishAudio);
+    */
+    //console.log(buySuccessOfStandardEachStory);
+
+    var objDataForEnglishAudio = extractObjData(responseDataArr[7].reports, ["story","popChecked","buySuccessOfStandard","buySuccessOfPremium"], labelKeysForEnglishAudio,"buySuccessOfStandard");
+
+    createNormalTable(objDataForEnglishAudio, ["story","popChecked","buySuccessOfStandard","buySuccessOfPremium"]);
+  
+  //MARK:8. label:story这条线的数据,即是从“编辑精选”点进去的。注意这里只有premium购买，没有standard购买
+   
     var displayedFromEditSelect = extractDataFromGAAPI(responseDataArr[5].reports[0].data.rows, keys);
     var tapCheckedFromEditSelect = extractDataFromGAAPI(responseDataArr[5].reports[1].data.rows, keys);
     var popCheckedFromEditSelect = extractDataFromGAAPI(responseDataArr[5].reports[2].data.rows, keys);
@@ -1523,7 +1932,7 @@ async function drawCharts(responseDataArr) {
             renderTo: chartId
         },
         title: {
-            text: 'Engagement Daily Performance From EditSelect'
+            text: 'Engagement From EditSelect'
         },
         xAxis: {
             categories: keys,
@@ -1565,24 +1974,23 @@ async function drawCharts(responseDataArr) {
         }
     });
 
+  //MARK:9. label:story的每篇文章数据表格
+    var labelKeysForEditSelect =  responseDataArr[8].reports[0].data.rows.map(row => row.dimensions[0]);
+    /*
+        var displayEachEditSelect = extractDataFromGAAPI(responseDataArr[8].reports[0].data.rows, labelKeysForEditSelect);
+        var tapCheckedEachEditSelect = extractDataFromGAAPI(responseDataArr[8].reports[1].data.rows, labelKeysForEditSelect);
+        var popCheckedEachEditSelect = extractDataFromGAAPI(responseDataArr[8].reports[2].data.rows, labelKeysForEditSelect);
+        var buySuccessOfPremiumEachEditSelect = extractDataFromGAAPI(responseDataArr[8].reports[3].data.rows, labelKeysForEditSelect);
+    */
+    //console.log(buySuccessOfStandardEachStory);
+
+    var objDataForEditSelect = extractObjData(responseDataArr[8].reports, ["story","display","tapChecked","popChecked","buySuccessOfPremium"], labelKeysForEditSelect,"buySuccessOfPremium");
+
+    createNormalTable(objDataForEditSelect, ["story","display","tapChecked","popChecked","buySuccessOfPremium"]);
+  
   //TODO：相关性分析等
 
-  //MARK8：绘制文章维度表格数据
-  var labelKeys =  responseDataArr[6].reports[0].data.rows.map(row => row.dimensions[0]);
-  //console.log(labelKeys);
-  
-  var displayedEachStory = extractDataFromGAAPI(responseDataArr[6].reports[0].data.rows, labelKeys);
-  //console.log(displayedEachStory);
-  var tapCheckedEachStory = extractDataFromGAAPI(responseDataArr[6].reports[1].data.rows, labelKeys);
-  var popCheckedEachStory = extractDataFromGAAPI(responseDataArr[6].reports[2].data.rows, labelKeys);
-  var buySuccessOfStandardEachStory = extractDataFromGAAPI(responseDataArr[6].reports[3].data.rows, labelKeys);
-  var buySuccessOfPremiumEachStory = extractDataFromGAAPI(responseDataArr[6].reports[4].data.rows, labelKeys);
-  //console.log(buySuccessOfStandardEachStory);
-
-  var objData = extractObjData(responseDataArr[6].reports, ["story","displayed","tapChecked","popChecked","buySuccessOfStandard","buySuccessOfPremium"], labelKeys,"buySuccessOfStandard");
-
-  console.log(objData);
-  createNormalTable(objData, ["story","displayed","tapChecked","popChecked","buySuccessOfStandard","buySuccessOfPremium"]);
+ 
  //MARK:9. 各级用户S/F/V/R指标分布图
   const engagementData = await getStoredDataFile('../data/engagementData.json');
   //console.log(engagementData);

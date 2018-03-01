@@ -311,6 +311,36 @@ function extractObjData(gaResponseReports, propsArr, keys, orderBy) {
   return resultData;
 }
 
+/**
+ * By wangyichen,为已经处理好的数据集添加新属性，新属性由已有属性值计算得到
+ * @param {Array:[Obj,Obj,Obj]} data
+ * @param {Array:[Obj,Obj,Obj]} addPropsArr 
+ *    @param {Function} Obj.operateFunc 操作函数
+ *    @param {String} Obj.prop1 第一个被操作数在数据集中的属性名称
+ *    @param {String} Obj.prop2 第二个被操作数在数据集中的属性名称
+ *    @param {String} Obj.propNew 操作后的结果在数据集中的属性名称
+ */
+function addForObjData(data, addPropsArr) {
+  return data.map(datum => {
+    for (const item of addPropsArr) {
+      const operatedNum1 = datum[item.prop1];
+      const operatedNum2 = datum[item.prop2];
+      const propNewValue = item.operateFunc(operatedNum1, operatedNum2);
+      datum[item.propNew] = propNewValue;
+    }
+    return datum;
+  });
+}
+
+/**
+ * By wangyichen:得到两数之商，结果是百分比的数，保留两位小数
+ * @param {Number} a 被除数
+ * @param {Number} b 除数--除数为0返回NaN
+ */
+function  divide(a,b) {
+  return Math.round(a/b * 10000)/100;
+}
+
 // MARK: Calculate percentage between two sets of data
 function calculateRates(part, total) {
   var rates=[];
@@ -437,7 +467,7 @@ function createNormalTable(data, fields) {
   for(const item of data) {
      let tds = '';
      for(const field of fields) {
-       tds += `<td>${item[field]}</td>`
+       tds += `<td class="ftc-table__cell--numeric">${item[field]}</td>`
      };
     const tableTr = document.createElement('tr');
     tableTr.innerHTML = tds;
