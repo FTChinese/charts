@@ -714,6 +714,90 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 20 iOS Share Screen Shots
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Share'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'iOS Screen Shot'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 21 iOS Share Web Page
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Share'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'iOS Web Page'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -924,7 +1008,22 @@ function drawChartsAll() {
     ]
   });
 
-
+  drawChartByKey({
+    title: 'iOS Share',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 20,
+        name: 'Screen Shot'
+      },
+      {
+        index: 21,
+        name: 'Web Page'
+      }
+    ]
+  });
 
 }
 </script>
