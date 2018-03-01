@@ -85,44 +85,7 @@ const requestData1 = [
       }
     ]
   },
-  {
-    'viewId': VIEW_ID_iPhoneApp,
-    'dateRanges': [
-    {
-        'startDate': startDate,
-        'endDate': endDate
-    }
-    ],
-    'metrics': [
-    {
-        'expression': 'ga:totalEvents'
-    }
-    ],
-    'dimensionFilterClauses': [
-        {
-            'operator': 'AND',
-            'filters': [
-            {
-                'dimensionName': 'ga:eventCategory',
-                'operator': 'EXACT',
-                'expressions': [
-                'Privileges'
-                ],
-                'caseSensitive': true
-            },
-            {
-                'dimensionName': 'ga:eventAction',
-                'operator': 'EXACT',
-                'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.member'//加上buy success: com.ft.ftchinese.mobile.subscription.vip不一样
-                ],
-                'caseSensitive': true
-            }
-            ]
-        }
-    ]
-  },
-  {
+  {// buy success standard总数
     'viewId': VIEW_ID_iPhoneApp,
     'dateRanges': [
     {
@@ -143,7 +106,7 @@ const requestData1 = [
                     'dimensionName': 'ga:eventCategory',
                     'operator': 'EXACT',
                     'expressions': [
-                    'Privileges'
+                    'In-App Purchase'//这个包括不限于Privilege
                     ],
                     'caseSensitive': true
                 },
@@ -151,7 +114,160 @@ const requestData1 = [
                     'dimensionName': 'ga:eventAction',
                     'operator': 'EXACT',
                     'expressions': [
-                    'buy success: com.ft.ftchinese.mobile.subscription.vip'
+                    'buy success'//加上buy success: com.ft.ftchinese.mobile.subscription.vip不一样
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'EXACT',
+                'expressions': [
+                    'com.ft.ftchinese.mobile.subscription.member'
+                ],
+                'caseSensitive': true
+                }
+            ]
+        }
+    ]
+  },
+  {// buy success premium总数
+    'viewId': VIEW_ID_iPhoneApp,
+    'dateRanges': [
+    {
+        'startDate': startDate,
+        'endDate': endDate
+    }
+    ],
+    'metrics': [
+    {
+        'expression': 'ga:totalEvents'
+    }
+    ],
+    'dimensionFilterClauses': [
+        {
+            'operator': 'AND',
+            'filters': [
+                {
+                    'dimensionName': 'ga:eventCategory',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'In-App Purchase'
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                    'dimensionName': 'ga:eventAction',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'buy success'
+                    ],
+                    'caseSensitive': true
+                }, 
+                {
+                    'dimensionName': 'ga:eventLabel',
+                    'operator': 'EXACT',
+                    'expressions': [
+                        'com.ft.ftchinese.mobile.subscription.vip'
+                    ],
+                    'caseSensitive': true
+                }
+            ]
+        }
+    ]
+  },
+  {// buy success standard daily
+    'viewId': VIEW_ID_iPhoneApp,
+    'dateRanges': [
+    {
+        'startDate': startDate,
+        'endDate': endDate
+    }
+    ],
+    'metrics': [
+        {
+            'expression': 'ga:totalEvents'
+        }
+    ],
+    'dimensions': [
+        {
+            'name': 'ga:date'
+        }
+    ],
+    'dimensionFilterClauses': [
+        {
+            'operator': 'AND',
+            'filters': [
+                {
+                    'dimensionName': 'ga:eventCategory',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'In-App Purchase'//这个包括不限于Privilege
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                    'dimensionName': 'ga:eventAction',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'buy success'//加上buy success: com.ft.ftchinese.mobile.subscription.vip不一样
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'EXACT',
+                'expressions': [
+                    'com.ft.ftchinese.mobile.subscription.member'
+                ],
+                'caseSensitive': true
+                }
+            ]
+        }
+    ]
+  },
+  {// buy success premium daily
+    'viewId': VIEW_ID_iPhoneApp,
+    'dateRanges': [
+    {
+        'startDate': startDate,
+        'endDate': endDate
+    }
+    ],
+    'metrics': [
+        {
+            'expression': 'ga:totalEvents'
+        }
+    ],
+    'dimensions': [
+        {
+            'name': 'ga:date'
+        }
+    ],
+    'dimensionFilterClauses': [
+        {
+            'operator': 'AND',
+            'filters': [
+                {
+                    'dimensionName': 'ga:eventCategory',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'In-App Purchase'
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                    'dimensionName': 'ga:eventAction',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'buy success'
+                    ],
+                    'caseSensitive': true
+                }, 
+                {
+                    'dimensionName': 'ga:eventLabel',
+                    'operator': 'EXACT',
+                    'expressions': [
+                        'com.ft.ftchinese.mobile.subscription.vip'
                     ],
                     'caseSensitive': true
                 }
@@ -1649,15 +1765,11 @@ async function drawCharts(responseDataArr) {
     });
 
   //MARK:2. New Subscriptions 条形图
-    var keys = responseDataArr[2].reports[0].data.rows.map(row => row.dimensions[0]);
+    var keysNewSub = responseDataArr[1].reports[3].data.rows.map(row => row.dimensions[0]);
+    var newSubStandard = extractDataFromGAAPI(responseDataArr[1].reports[3].data.rows, keysNewSub);
+    var newSubPremium = extractDataFromGAAPI(responseDataArr[1].reports[4].data.rows, keysNewSub);
 
-    var displayed = extractDataFromGAAPI(responseDataArr[2].reports[0].data.rows, keys);
-    var tapChecked = extractDataFromGAAPI(responseDataArr[2].reports[1].data.rows, keys);
-    var popChecked = extractDataFromGAAPI(responseDataArr[2].reports[2].data.rows, keys);
-    var buySuccessOfStandard = extractDataFromGAAPI(responseDataArr[2].reports[3].data.rows, keys);
-    var buySuccessOfPremium = extractDataFromGAAPI(responseDataArr[2].reports[4].data.rows, keys);
-
-
+   
     chartId = createChart();
     var newSubscriptionChart = new Highcharts.Chart({
         chart: {
@@ -1686,11 +1798,11 @@ async function drawCharts(responseDataArr) {
             shared: true
         },
         series: [{
-            name: 'Standard'+' (Average: ' + averageOfArray(buySuccessOfStandard) +')',
-            data: buySuccessOfStandard
+            name: 'Standard'+' (Average: ' + meanOfAll(newSubStandard) +')',
+            data: newSubStandard
         },{
-            name: 'Premium'+' (Average: ' + averageOfArray(buySuccessOfPremium) +')',
-            data: buySuccessOfPremium
+            name: 'Premium'+' (Average: ' + meanOfAll(newSubPremium) +')',
+            data: newSubPremium
         }],
         credits: {
             enabled: false
@@ -1701,6 +1813,13 @@ async function drawCharts(responseDataArr) {
     });
 
   //MARK:3. display,tap checked,pop checked, buy seccess of standard, buy success of premium 条形图
+    var keys = responseDataArr[2].reports[0].data.rows.map(row => row.dimensions[0]);
+
+    var displayed = extractDataFromGAAPI(responseDataArr[2].reports[0].data.rows, keys);
+    var tapChecked = extractDataFromGAAPI(responseDataArr[2].reports[1].data.rows, keys);
+    var popChecked = extractDataFromGAAPI(responseDataArr[2].reports[2].data.rows, keys);
+    var buySuccessOfStandard = extractDataFromGAAPI(responseDataArr[2].reports[3].data.rows, keys);
+    var buySuccessOfPremium = extractDataFromGAAPI(responseDataArr[2].reports[4].data.rows, keys);
     chartId = createChart();
     var engagementPerformanceChart = new Highcharts.Chart({
         chart: {
