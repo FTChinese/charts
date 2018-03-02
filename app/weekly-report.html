@@ -798,6 +798,40 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 22 iOS Request Review
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Request Review'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -1021,6 +1055,20 @@ function drawChartsAll() {
       {
         index: 21,
         name: 'Web Page'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
+    title: 'iOS Request Review',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 22,
+        name: 'Request'
       }
     ]
   });
