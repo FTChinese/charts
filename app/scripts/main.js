@@ -1,3 +1,5 @@
+import { CLIENT_RENEG_LIMIT } from "tls";
+
 /**
  *  Calculate the person correlation score between two items in a dataset.
  *
@@ -571,10 +573,15 @@ function createNormalTable(data, fields) {
   const tableTbody = document.createElement('tbody');
 
   tableContainer.className = 'ftc-table ftc-table--responsive-overflow ftc-table--row-stripes ftc-table--vertical-lines';
-  
+  tableContainer.setAttribute('data-ftc-component','ftc-table');
+  tableContainer.setAttribute('data-ftc-table--no-js','');
   let ths = '';
   for(const item of fields) {
-    ths+=`<th>${item}</th>`
+    if(typeof data[0][item] == 'number') {
+      ths+=`<th aria-sort='none' data-ftc-table--datatype="numeric" class="ftc-table__cell--numeric">${item}</th>`;
+    } else {
+      ths+=`<th aria-sort='none'>${item}</th>`;
+    }
   }
   tableThead.innerHTML = ths;
   tableContainer.appendChild(tableThead);
@@ -582,7 +589,12 @@ function createNormalTable(data, fields) {
   for(const item of data) {
      let tds = '';
      for(const field of fields) {
-       tds += `<td class="ftc-table__cell--numeric">${item[field]}</td>`
+       if(typeof item[field] === 'number') {
+         tds += `<td class="ftc-table__cell--numeric">${item[field]}</td>`;
+       } else {
+         tds += `<td>${item[field]}</td>`;
+       }
+      
      };
     const tableTr = document.createElement('tr');
     tableTr.innerHTML = tds;
