@@ -481,6 +481,40 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 9 iOS Expired User Visit
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'iOS Subscription Expires'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -683,7 +717,19 @@ function drawChartsAll() {
   });
 
 
-
+  drawChartByKey({
+    conversion: true,
+    title: 'Subscription Expires',
+    type: 'area',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 9,
+        name: 'iOS'
+      }
+    ]
+  });
 
 
 }
