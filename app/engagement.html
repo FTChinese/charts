@@ -39,6 +39,7 @@
 <script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
 <script type="text/javascript" src="scripts/highcharts.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
+<script src="scripts/addFeatureToTable.js"></script>
 
 
 
@@ -1932,6 +1933,7 @@ async function drawCharts(responseDataArr) {
     });
 
   //MARK:5. label:premium的每篇文章数据表格
+        //console.log(responseDataArr[6].reports[0]);
         var labelKeys =  responseDataArr[6].reports[0].data.rows.map(row => row.dimensions[0]);
         //console.log(labelKeys);
         /*
@@ -2234,6 +2236,8 @@ async function drawCharts(responseDataArr) {
         }
     }]
   });
+
+   addFeatureToTable();
 }
 // 分布图绘制Demo:http://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/demo/bellcurve/
 
@@ -2244,6 +2248,7 @@ async function drawCharts(responseDataArr) {
 
 <!-- Load the JavaScript API client and Sign-in library. -->
 <script src="https://apis.google.com/js/client:platform.js"></script>
+
 
 </body>
 </html>

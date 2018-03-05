@@ -279,13 +279,16 @@ function extractDataFromGAAPI(dataSource, baseKeys) {
  * @param {string} orderBy: 按照从多到少排序的字段，是propsArr中除key外的某一个
  */
 function extractObjData(gaResponseReports, propsArr, keys, orderBy) {
+  console.log('exect');
   const resultData = [];
-  
-  keys.forEach(onekey => { //处理每个key,一个key对应一个最后数组数组的一项obj
+  console.log(keys);
+  keys.forEach(function(onekey) { //处理每个key,一个key对应一个最后数组数组的一项obj
     const oneObj = {};
     oneObj[propsArr[0]] = onekey; //该obj的第一个属性键为propsArr[0],值为key本身的值
-
+    console.log(onekey);
     for (const [index, elem] of gaResponseReports.entries()) {//该obj剩下的属性值分别从这几个reports中获取
+    //for(var index = 0, len = gaResponseReports.length; index<len;index++) {
+      //const elem = gaResponseReports[index];
       const oneReportDataArray = elem.data.rows;
       const thisField = propsArr[index+1];
       for(const datum of oneReportDataArray ) {

@@ -10,6 +10,11 @@ const path = require('path');
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
+const rollup = require('rollup').rollup;
+const babel = require('rollup-plugin-babel');
+const nodeResolve = require('rollup-plugin-node-resolve');
+
+
 var dev = true;
 
 gulp.task('styles', () => {
@@ -26,15 +31,47 @@ gulp.task('styles', () => {
     .pipe(gulp.dest('.tmp/styles'))
     .pipe(reload({stream: true}));
 });
-
+/*
 gulp.task('scripts', () => {
-  return gulp.src('app/scripts/**/*.js')
-    .pipe($.plumber())
+  //return gulp.src('app/scripts/**/ /*.js')
+    /*.pipe($.plumber())
     .pipe($.if(dev, $.sourcemaps.init()))
     .pipe($.babel())
     .pipe($.if(dev, $.sourcemaps.write('.')))
     .pipe(gulp.dest('.tmp/scripts'))
     .pipe(reload({stream: true}));
+});
+*/
+gulp.task('scripts', () => {
+  return gulp.src('app/scripts/**/*.js')
+    .pipe(gulp.dest('.tmp/scripts'))
+});
+
+
+gulp.task('rollup', async () => {
+  // TODO:关于rollup需要再认真学习一下
+
+    const bundle = await rollup({
+      input:`app/es6/addFeatureToTable.js`,
+      plugins:[
+        babel({//这里需要配置文件.babelrc
+          exclude:'node_modules/**'
+        }),
+        nodeResolve({
+          jsnext:true,
+        })
+      // rollupUglify({}, minifyEs6)//压缩es6代码
+      ]
+    });
+
+    await bundle.write({//返回promise，以便下一步then()
+        file: `.tmp/scripts/addFeatureToTable.js`,
+        format: 'iife',
+        name:'addFeatureToTable',
+        sourcemap: true,
+        
+    });
+    browserSync.reload();
 });
 
 function lint(files) {
@@ -96,7 +133,7 @@ gulp.task('extras', () => {
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 gulp.task('serve', () => {
-  runSequence(['clean', 'wiredep'], ['styles', 'scripts', 'fonts','copydata'], () => {
+  runSequence(['clean', 'wiredep'], ['styles', 'rollup','scripts', 'fonts','copydata'], () => {
     browserSync.init({
       notify: false,
       port: 8080,
@@ -116,6 +153,7 @@ gulp.task('serve', () => {
 
     gulp.watch('app/styles/**/*.scss', ['styles']);
     gulp.watch('app/scripts/**/*.js', ['scripts']);
+    gulp.watch('app/es6/*.js',['rollup']);
     gulp.watch('app/fonts/**/*', ['fonts']);
     gulp.watch('bower.json', ['wiredep', 'fonts']);
   });
