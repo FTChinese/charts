@@ -400,7 +400,7 @@ function sumOfAll(numArray) {
     } else {
       numItem = Number(item);
     }
-    if (numItem !== numItem || numItem === 'undefined') {//说明它是NaN
+    if (numItem !== numItem || numItem === 'undefined') {//说明它是NaN或者是undefined
       numItem = 0;
     } 
     sum += numItem;
@@ -452,7 +452,7 @@ function medianOfAll(numArray) {
   });
   const len = cleanNumArr.length;
   if (len%2 === 0) {//如果为偶数个
-    return Math.round((cleanNumArr[len/2] + cleanNumArr[len/2+1])/2*100)/100;
+    return Math.round((cleanNumArr[len/2] + cleanNumArr[len/2-1])/2*100)/100;
   } else {//如果为奇数个
     return Math.round(cleanNumArr[(len-1)/2]*100)/100;
   }
