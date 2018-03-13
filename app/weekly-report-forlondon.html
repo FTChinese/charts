@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Weekly Report For London</title>
+  <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+
+
+<p align=right>
+  <!-- The Sign-in button. This will run `queryReports()` on success. -->
+  <div class="g-signin2" data-onsuccess="queryDifferentReports"></div>
+</p>
+
+<div class="page-container" id="charts-container">
+  <h1 class="page-title">Weekly Report For London</h1>
+</div>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/funnel.js"></script>
+<script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
+<script type="text/javascript" src="scripts/highcharts.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+
+
+
+<script>
+// MARK: - These are different in every page. 
+
+// Replace with your view ID.
+const VIEW_ID_All = '10995661'; 
+const VIEW_ID_iPhoneApp = '108134561'; //
+//var startDate = '2017-04-27';
+// var endDate = '2017-05-16';
+
+const startDate = '7daysago';
+const endDate = 'today';
+
+
+const requestData0 = [//iOS App相关数据
+    {//Screen Views
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+          {
+              'startDate': startDate,
+              'endDate': endDate
+          }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:screenviews'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:date'
+            }
+        ]
+    },
+    {//Story Screens
+        'viewId': VIEW_ID_iPhoneApp,
+        'dateRanges': [
+        {
+            'startDate': startDate,
+            'endDate': endDate
+        }
+        ],
+        'metrics': [
+            {
+                'expression': 'ga:screenviews'
+            }
+        ],
+        'dimensions': [
+            {
+                'name': 'ga:date'
+            }
+        ],
+        'dimensionFilterClauses': [
+            {
+                'operator': 'AND',
+                'filters': [
+                    {
+                        'dimensionName': 'ga:screenName',
+                        'operator': 'REGEXP',
+                        'expressions': [
+                          '/iPhone/story/[0-9]{9}/'
+                        ],
+                        'caseSensitive': true
+                    }
+                ]
+            }
+        ]
+    },
+    {//iPhone App launches
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'iPhone App Launch'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Success'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {//Connection Failure
+      'viewId': VIEW_ID_iPhoneApp,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'CatchError'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Fail to Connect'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+];
+
+const requestData1 = [ //Page View相关数据
+  {//Overall PV
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:pageviews'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ]
+  },
+  {//Mobile|Tablet PV
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:pageviews'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:deviceCategory',
+            'operator': 'REGEXP',
+            'expressions': [
+              'mobile|tablet'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  },
+  {//Desktop PV
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:pageviews'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:deviceCategory',
+            'operator': 'REGEXP',
+            'expressions': [
+              'desktop'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  },
+];
+
+const requestData2 = [//Ad Impression总体相关数据
+  {//Overall
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:totalEvents'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:eventCategory',
+            'operator': 'EXACT',
+            'expressions': [
+              'Ad Impression'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  },
+  {//Desktop
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:totalEvents'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:deviceCategory',
+            'operator': 'REGEXP',
+            'expressions': [
+              'desktop'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:eventCategory',
+            'operator': 'EXACT',
+            'expressions': [
+              'Ad Impression'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  }
+]
+
+const requestData3 = [// Ad Impression分设备相关数据
+   {//iOS App
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:totalEvents'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:eventCategory',
+            'operator': 'EXACT',
+            'expressions': [
+              'Ad Impression'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:eventAction',
+            'operator': 'BEGINS_WITH',
+            'expressions': [
+              '2000'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  },
+  {//iOS Web
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:totalEvents'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:eventCategory',
+            'operator': 'EXACT',
+            'expressions': [
+              'Ad Impression'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:eventAction',
+            'operator': 'BEGINS_WITH',
+            'expressions': [
+              '3000'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  },
+  {//Android App
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:totalEvents'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:eventCategory',
+            'operator': 'EXACT',
+            'expressions': [
+              'Ad Impression'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:eventAction',
+            'operator': 'BEGINS_WITH',
+            'expressions': [
+              '4000'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  },
+  {//Android Web
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:totalEvents'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:eventCategory',
+            'operator': 'EXACT',
+            'expressions': [
+              'Ad Impression'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:eventAction',
+            'operator': 'BEGINS_WITH',
+            'expressions': [
+              '5000'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  },
+]
+
+const requestData4 = [//Android App相关数据
+  {//pv
+    //1. /phone/|phoneapp.html|phone.html|androidapp.html|iphone-2014.html|bb-2014.html|ftcapp
+    // 2. android system
+    // 3. storypage
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:pageviews'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:pagePath',
+            'operator': 'REGEXP',
+            'expressions': [
+              '/phone/|phoneapp.html|phone.html|androidapp.html|iphone-2014.html|bb-2014.html|ftcapp'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:operatingSystem',
+            'operator': 'EXACT',
+            'expressions': [
+              'Android'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:pageviews'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:pagePath',
+            'operator': 'REGEXP',
+            'expressions': [
+              '/phone/|phoneapp.html|phone.html|androidapp.html|iphone-2014.html|bb-2014.html|ftcapp'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:operatingSystem',
+            'operator': 'EXACT',
+            'expressions': [
+              'Android'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:pagePath',
+            'operator': 'REGEXP',
+            'expressions': [
+              'storypage'
+            ],
+            'caseSensitive': true
+          },
+        ]
+      }
+    ]
+  },
+  {
+      'viewId': VIEW_ID_All,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'androidapp'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+]
+const requestDataArr = [requestData0,requestData1,requestData2,requestData3, requestData4];
+const responseDataArr = [];
+
+
+
+async function drawCharts(responseDataArr) {
+   
+  let chartId;
+  const dates = responseDataArr[0].reports[0].data.rows.map(row => row.dimensions[0]);
+
+  //MARK:1. iOS App相关数据  
+    const iOSAppScreenViews = extractDataFromGAAPI(responseDataArr[0].reports[0].data.rows, dates);
+    const iOSAppStoryScreens = extractDataFromGAAPI(responseDataArr[0].reports[1].data.rows, dates);
+    const iOSAppStoryLaunches = extractDataFromGAAPI(responseDataArr[0].reports[2].data.rows, dates);
+    const iOSAppConnectionFailures = extractDataFromGAAPI(responseDataArr[0].reports[3].data.rows, dates);
+
+   
+    chartId = createChart();
+    const iOSAppScreenViewsChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'iOSApp Screen Views'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'sv',
+            data: iOSAppScreenViews
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+    
+    chartId = createChart();
+    const iOSAppStoryScreensChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'iOSApp Story Screens'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'sv',
+            data: iOSAppStoryScreens
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const iOSAppLaunchesChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'iOSApp Launches'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'launches',
+            data: iOSAppStoryLaunches
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const iOSAppConnectionFailuresChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'iOSApp Connection Failures'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'failures',
+            data: iOSAppConnectionFailures
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+  //END:1. iOS APP相关数据 
+
+  //MARK:2. PV相关数据
+    const pageviewsOverall = extractDataFromGAAPI(responseDataArr[1].reports[0].data.rows, dates);
+    const pageviewsMobileAndTablet = extractDataFromGAAPI(responseDataArr[1].reports[1].data.rows, dates);
+    const pageviewsDesktop = extractDataFromGAAPI(responseDataArr[1].reports[2].data.rows, dates);
+
+    chartId = createChart();
+    const pageviewsOverallChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Pageviews Overall'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'pv',
+            data: pageviewsOverall
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+    
+    chartId = createChart();
+    const pageviewsMobileAndTabletChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Pageviews Mobile|Tablet'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'pv',
+            data: pageviewsMobileAndTablet
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const pageviewsDesktopChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Pageviews Desktop'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'pv',
+            data: pageviewsDesktop
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+  //END:2. PV相关数据
+
+  //MARK:3. Ad Impressions相关数据
+    const adImpOverall = extractDataFromGAAPI(responseDataArr[2].reports[0].data.rows, dates);
+    const adImpDesktop = extractDataFromGAAPI(responseDataArr[2].reports[1].data.rows, dates);
+
+    const adImpiOSApp = extractDataFromGAAPI(responseDataArr[3].reports[0].data.rows, dates);
+    const adImpiOSWeb = extractDataFromGAAPI(responseDataArr[3].reports[1].data.rows, dates);
+    const adImpAndroidApp = extractDataFromGAAPI(responseDataArr[3].reports[2].data.rows, dates);
+    const adImpAndroidWeb = extractDataFromGAAPI(responseDataArr[3].reports[3].data.rows, dates);
+
+    chartId = createChart();
+    const adImpOverallChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Ad Impressions Overall'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'adImps',
+            data: adImpOverall
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+    
+    chartId = createChart();
+    const adImpDesktopChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Ad Impressions Desktop'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'adImps',
+            data: adImpDesktop
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const adImpiOSAppChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Ad Impressions iOSApp'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'adImp',
+            data: adImpiOSApp
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const adImpiOSWebChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Ad Impressions iOSWeb'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'adImp',
+            data: adImpiOSWeb
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const adImpAndroidAppChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Ad Impressions AndroidApp'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'adImp',
+            data: adImpAndroidApp
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const adImpAndroidWebChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Ad Impressions AndroidWeb'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'adImp',
+            data: adImpAndroidWeb
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+  //END:3.Ad Impressions相关数据
+
+  //MARK:4. Android相关数据
+    const androidPv = extractDataFromGAAPI(responseDataArr[4].reports[0].data.rows, dates);
+    const androidStoryPv = extractDataFromGAAPI(responseDataArr[4].reports[1].data.rows, dates);
+    const androidLaunches = extractDataFromGAAPI(responseDataArr[4].reports[2].data.rows, dates);
+
+    chartId = createChart();
+    const androidPvChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Android Pageviews'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'pv',
+            data: androidPv
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+    
+    chartId = createChart();
+    const androidStoryPvChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Android Story Pageviews'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'pv',
+            data: androidStoryPv
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const androidLaunchesChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Android Launches'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'launches',
+            data: androidLaunches
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+  //End:4. Android相关数据
+}
+
+</script>
+
+
+
+
+<!-- Load the JavaScript API client and Sign-in library. -->
+<script src="https://apis.google.com/js/client:platform.js"></script>
+
+
+</body>
+</html>

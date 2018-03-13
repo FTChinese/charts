@@ -281,11 +281,11 @@ function extractDataFromGAAPI(dataSource, baseKeys) {
 function extractObjData(gaResponseReports, propsArr, keys, orderBy) {
   console.log('exect');
   const resultData = [];
-  console.log(keys);
+  //console.log(keys);
   keys.forEach(function(onekey) { //处理每个key,一个key对应一个最后数组数组的一项obj
     const oneObj = {};
     oneObj[propsArr[0]] = onekey; //该obj的第一个属性键为propsArr[0],值为key本身的值
-    console.log(onekey);
+    //console.log(onekey);
     for (const [index, elem] of gaResponseReports.entries()) {//该obj剩下的属性值分别从这几个reports中获取
     //for(var index = 0, len = gaResponseReports.length; index<len;index++) {
       //const elem = gaResponseReports[index];
@@ -360,7 +360,7 @@ function addStatisRowToData(data, addStatisRowArr) {
       if (!dataItemPropArr.includes(prop)) {
         continue;
       }
-      console.log(prop);
+      //console.log(prop);
       const numArr = data.map(datum => {
         return datum[prop];
       });
@@ -372,7 +372,7 @@ function addStatisRowToData(data, addStatisRowArr) {
         newObj[prop] = '--';
       }
     }
-    console.log(newObj);
+    //console.log(newObj);
     data.push(newObj);
   }
   return data;
@@ -564,8 +564,9 @@ function createTable(data) {
  * 
  * @param {Array} data:绘制table所用的数据集，最后得到的数据呈现方式完全是和数据集对应的，一行是数据集的一项，字段就是每一项的props
  * @param {Array} fields:数据集每一项的属性组成的数组，其顺序决定了呈现在表格中从左到右的顺序
+ * @param {Array} statistcFields:需要进行统计信息计算的fields，应该是fields中的若干项
  */
-function createNormalTable(data, fields) {
+function createNormalTable(data, fields,statisticFields) {
   const chartContainer = document.createElement('div');
   const chartId = 'chart-container-' + gCurrentChartIndex;
   chartContainer.id = chartId;
@@ -578,10 +579,22 @@ function createNormalTable(data, fields) {
   tableContainer.className = 'ftc-table ftc-table--responsive-overflow ftc-table--row-stripes ftc-table--vertical-lines';
   tableContainer.setAttribute('data-ftc-component','ftc-table');
   tableContainer.setAttribute('data-ftc-table--no-js','');
+  tableContainer.setAttribute('data-ftc-table--statistic','');
+  tableContainer.setAttribute('data-ftc-table--wrapped','');
+  tableContainer.setAttribute('data-ftc-table--wrapper-width','100%');
+  tableContainer.setAttribute('data-ftc-table--wrapper-height','500px');
+  //TODO:将class和attribute作为函数参数
+
+  //data-ftc-table--wrapped data-ftc-table--wrapper-width="100%" data-ftc-table--wrapper-height="180px"
   let ths = '';
   for(const item of fields) {
     if(typeof data[0][item] == 'number') {
-      ths+=`<th aria-sort='none' data-ftc-table--datatype="numeric" class="ftc-table__cell--numeric">${item}</th>`;
+      if(statisticFields.includes(item)) {
+        ths+=`<th aria-sort='none' data-ftc-table--datatype="numeric" data-ftc-table--tostatistic class="ftc-table__cell--numeric">${item}</th>`;
+      } else {
+        ths+=`<th aria-sort='none' data-ftc-table--datatype="numeric" class="ftc-table__cell--numeric">${item}</th>`;
+      }
+    
     } else {
       ths+=`<th aria-sort='none'>${item}</th>`;
     }
