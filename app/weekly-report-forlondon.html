@@ -525,8 +525,138 @@ const requestData3 = [// Ad Impression分设备相关数据
   },
 ]
 
-
-const requestDataArr = [requestData0,requestData1,requestData2,requestData3];
+const requestData4 = [//Android App相关数据
+  {//pv
+    //1. /phone/|phoneapp.html|phone.html|androidapp.html|iphone-2014.html|bb-2014.html|ftcapp
+    // 2. android system
+    // 3. storypage
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:pageviews'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:pagePath',
+            'operator': 'REGEXP',
+            'expressions': [
+              '/phone/|phoneapp.html|phone.html|androidapp.html|iphone-2014.html|bb-2014.html|ftcapp'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:operatingSystem',
+            'operator': 'EXACT',
+            'expressions': [
+              'Android'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:pageviews'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:pagePath',
+            'operator': 'REGEXP',
+            'expressions': [
+              '/phone/|phoneapp.html|phone.html|androidapp.html|iphone-2014.html|bb-2014.html|ftcapp'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:operatingSystem',
+            'operator': 'EXACT',
+            'expressions': [
+              'Android'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:pagePath',
+            'operator': 'REGEXP',
+            'expressions': [
+              'storypage'
+            ],
+            'caseSensitive': true
+          },
+        ]
+      }
+    ]
+  },
+  {
+      'viewId': VIEW_ID_All,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'androidapp'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+]
+const requestDataArr = [requestData0,requestData1,requestData2,requestData3, requestData4];
 const responseDataArr = [];
 
 
@@ -1066,6 +1196,129 @@ async function drawCharts(responseDataArr) {
         }
     });
   //END:3.Ad Impressions相关数据
+
+  //MARK:4. Android相关数据
+    const androidPv = extractDataFromGAAPI(responseDataArr[4].reports[0].data.rows, dates);
+    const androidStoryPv = extractDataFromGAAPI(responseDataArr[4].reports[1].data.rows, dates);
+    const androidLaunches = extractDataFromGAAPI(responseDataArr[4].reports[2].data.rows, dates);
+
+    chartId = createChart();
+    const androidPvChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Android Pageviews'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'pv',
+            data: androidPv
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+    
+    chartId = createChart();
+    const androidStoryPvChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Android Story Pageviews'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'pv',
+            data: androidStoryPv
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const androidLaunchesChart = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Android Launches'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'launches',
+            data: androidLaunches
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+  //End:4. Android相关数据
 }
 
 </script>
