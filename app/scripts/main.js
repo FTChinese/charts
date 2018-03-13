@@ -685,7 +685,7 @@ function drawChartByKey(obj) {
     var r = pearsonCorrelation(correlationDataSet, 0, 1);
     var rExplained = correlationExplained(r);
     series = [{
-      name: obj.data[1].name + " vs " + obj.data[0].name,
+      name: obj.data[1].name + ' vs ' + obj.data[0].name,
       data: conversionRate
     }];
     percentageSign = '%';
