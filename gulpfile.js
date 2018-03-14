@@ -74,6 +74,11 @@ gulp.task('rollup', async () => {
     browserSync.reload();
 });
 
+gulp.task('build:es6',['rollup'],() => {
+  return gulp.src('.tmp/scripts/addFeatureToTable.js')
+    .pipe(gulp.dest('dist/scripts'));
+})
+
 function lint(files) {
   return gulp.src(files)
     .pipe($.eslint({ fix: true }))
@@ -204,7 +209,7 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
-gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
+gulp.task('build', ['lint', 'html', 'build:es6','images', 'fonts', 'extras'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 
