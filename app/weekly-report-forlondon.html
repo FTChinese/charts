@@ -21,7 +21,7 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">Weekly Report For London</h1>
+  <h1 class="page-title">FTC Traffic Report</h1>
 </div>
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -41,8 +41,8 @@ const VIEW_ID_iPhoneApp = '108134561'; //
 //var startDate = '2017-04-27';
 // var endDate = '2017-05-16';
 
-const startDate = '7daysago';
-const endDate = 'today';
+const startDate = '14daysago';
+const endDate = 'yesterday';
 
 
 const requestData0 = [//iOS App相关数据
@@ -676,11 +676,11 @@ async function drawCharts(responseDataArr) {
     chartId = createChart();
     const iOSAppScreenViewsChart = new Highcharts.Chart({
         chart: {
-            type: 'line',
+            type: 'area',
             renderTo: chartId
         },
         title: {
-            text: 'iOSApp Screen Views'
+            text: 'iOS App Screen Views'
         },
         xAxis: {
             categories: dates,
@@ -701,7 +701,7 @@ async function drawCharts(responseDataArr) {
             shared: true
         },
         series: [{
-            name: 'sv',
+            name: 'Screen View',
             data: iOSAppScreenViews
         }],
         credits: {
@@ -715,11 +715,11 @@ async function drawCharts(responseDataArr) {
     chartId = createChart();
     const iOSAppStoryScreensChart = new Highcharts.Chart({
         chart: {
-            type: 'line',
+            type: 'area',
             renderTo: chartId
         },
         title: {
-            text: 'iOSApp Story Screens'
+            text: 'iOS App Story Screen Views'
         },
         xAxis: {
             categories: dates,
@@ -740,7 +740,7 @@ async function drawCharts(responseDataArr) {
             shared: true
         },
         series: [{
-            name: 'sv',
+            name: 'Screen View',
             data: iOSAppStoryScreens
         }],
         credits: {
@@ -754,11 +754,11 @@ async function drawCharts(responseDataArr) {
     chartId = createChart();
     const iOSAppLaunchesChart = new Highcharts.Chart({
         chart: {
-            type: 'line',
+            type: 'area',
             renderTo: chartId
         },
         title: {
-            text: 'iOSApp Launches'
+            text: 'iOS App Launches'
         },
         xAxis: {
             categories: dates,
@@ -779,7 +779,7 @@ async function drawCharts(responseDataArr) {
             shared: true
         },
         series: [{
-            name: 'launches',
+            name: 'Launches',
             data: iOSAppStoryLaunches
         }],
         credits: {
@@ -793,11 +793,11 @@ async function drawCharts(responseDataArr) {
     chartId = createChart();
     const iOSAppConnectionFailuresChart = new Highcharts.Chart({
         chart: {
-            type: 'line',
+            type: 'area',
             renderTo: chartId
         },
         title: {
-            text: 'iOSApp Connection Failures'
+            text: 'iOS App Connection Failures'
         },
         xAxis: {
             categories: dates,
@@ -818,7 +818,7 @@ async function drawCharts(responseDataArr) {
             shared: true
         },
         series: [{
-            name: 'failures',
+            name: 'Connection Failures',
             data: iOSAppConnectionFailures
         }],
         credits: {
@@ -830,372 +830,10 @@ async function drawCharts(responseDataArr) {
     });
   //END:1. iOS APP相关数据 
 
-  //MARK:2. PV相关数据
-    const pageviewsOverall = extractDataFromGAAPI(responseDataArr[1].reports[0].data.rows, dates);
-    const pageviewsMobileAndTablet = extractDataFromGAAPI(responseDataArr[1].reports[1].data.rows, dates);
-    const pageviewsDesktop = extractDataFromGAAPI(responseDataArr[1].reports[2].data.rows, dates);
 
-    chartId = createChart();
-    const pageviewsOverallChart = new Highcharts.Chart({
-        chart: {
-            type: 'line',
-            renderTo: chartId
-        },
-        title: {
-            text: 'Pageviews Overall'
-        },
-        xAxis: {
-            categories: dates,
-            tickmarkPlacement: 'on',
-            title: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Value'
-            },
-            //max: 100,
-            //min: Math.min.apply(null, successRates)
-        },
-        tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-            shared: true
-        },
-        series: [{
-            name: 'pv',
-            data: pageviewsOverall
-        }],
-        credits: {
-            enabled: false
-        },
-        legend: {
-            enabled: true
-        }
-    });
-    
-    chartId = createChart();
-    const pageviewsMobileAndTabletChart = new Highcharts.Chart({
-        chart: {
-            type: 'line',
-            renderTo: chartId
-        },
-        title: {
-            text: 'Pageviews Mobile|Tablet'
-        },
-        xAxis: {
-            categories: dates,
-            tickmarkPlacement: 'on',
-            title: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Value'
-            },
-            //max: 100,
-            //min: Math.min.apply(null, successRates)
-        },
-        tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-            shared: true
-        },
-        series: [{
-            name: 'pv',
-            data: pageviewsMobileAndTablet
-        }],
-        credits: {
-            enabled: false
-        },
-        legend: {
-            enabled: true
-        }
-    });
 
-    chartId = createChart();
-    const pageviewsDesktopChart = new Highcharts.Chart({
-        chart: {
-            type: 'line',
-            renderTo: chartId
-        },
-        title: {
-            text: 'Pageviews Desktop'
-        },
-        xAxis: {
-            categories: dates,
-            tickmarkPlacement: 'on',
-            title: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Value'
-            },
-            //max: 100,
-            //min: Math.min.apply(null, successRates)
-        },
-        tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-            shared: true
-        },
-        series: [{
-            name: 'pv',
-            data: pageviewsDesktop
-        }],
-        credits: {
-            enabled: false
-        },
-        legend: {
-            enabled: true
-        }
-    });
-  //END:2. PV相关数据
 
-  //MARK:3. Ad Impressions相关数据
-    const adImpOverall = extractDataFromGAAPI(responseDataArr[2].reports[0].data.rows, dates);
-    const adImpDesktop = extractDataFromGAAPI(responseDataArr[2].reports[1].data.rows, dates);
 
-    const adImpiOSApp = extractDataFromGAAPI(responseDataArr[3].reports[0].data.rows, dates);
-    const adImpiOSWeb = extractDataFromGAAPI(responseDataArr[3].reports[1].data.rows, dates);
-    const adImpAndroidApp = extractDataFromGAAPI(responseDataArr[3].reports[2].data.rows, dates);
-    const adImpAndroidWeb = extractDataFromGAAPI(responseDataArr[3].reports[3].data.rows, dates);
-
-    chartId = createChart();
-    const adImpOverallChart = new Highcharts.Chart({
-        chart: {
-            type: 'line',
-            renderTo: chartId
-        },
-        title: {
-            text: 'Ad Impressions Overall'
-        },
-        xAxis: {
-            categories: dates,
-            tickmarkPlacement: 'on',
-            title: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Value'
-            },
-            //max: 100,
-            //min: Math.min.apply(null, successRates)
-        },
-        tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-            shared: true
-        },
-        series: [{
-            name: 'adImps',
-            data: adImpOverall
-        }],
-        credits: {
-            enabled: false
-        },
-        legend: {
-            enabled: true
-        }
-    });
-    
-    chartId = createChart();
-    const adImpDesktopChart = new Highcharts.Chart({
-        chart: {
-            type: 'line',
-            renderTo: chartId
-        },
-        title: {
-            text: 'Ad Impressions Desktop'
-        },
-        xAxis: {
-            categories: dates,
-            tickmarkPlacement: 'on',
-            title: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Value'
-            },
-            //max: 100,
-            //min: Math.min.apply(null, successRates)
-        },
-        tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-            shared: true
-        },
-        series: [{
-            name: 'adImps',
-            data: adImpDesktop
-        }],
-        credits: {
-            enabled: false
-        },
-        legend: {
-            enabled: true
-        }
-    });
-
-    chartId = createChart();
-    const adImpiOSAppChart = new Highcharts.Chart({
-        chart: {
-            type: 'line',
-            renderTo: chartId
-        },
-        title: {
-            text: 'Ad Impressions iOSApp'
-        },
-        xAxis: {
-            categories: dates,
-            tickmarkPlacement: 'on',
-            title: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Value'
-            },
-            //max: 100,
-            //min: Math.min.apply(null, successRates)
-        },
-        tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-            shared: true
-        },
-        series: [{
-            name: 'adImp',
-            data: adImpiOSApp
-        }],
-        credits: {
-            enabled: false
-        },
-        legend: {
-            enabled: true
-        }
-    });
-
-    chartId = createChart();
-    const adImpiOSWebChart = new Highcharts.Chart({
-        chart: {
-            type: 'line',
-            renderTo: chartId
-        },
-        title: {
-            text: 'Ad Impressions iOSWeb'
-        },
-        xAxis: {
-            categories: dates,
-            tickmarkPlacement: 'on',
-            title: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Value'
-            },
-            //max: 100,
-            //min: Math.min.apply(null, successRates)
-        },
-        tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-            shared: true
-        },
-        series: [{
-            name: 'adImp',
-            data: adImpiOSWeb
-        }],
-        credits: {
-            enabled: false
-        },
-        legend: {
-            enabled: true
-        }
-    });
-
-    chartId = createChart();
-    const adImpAndroidAppChart = new Highcharts.Chart({
-        chart: {
-            type: 'line',
-            renderTo: chartId
-        },
-        title: {
-            text: 'Ad Impressions AndroidApp'
-        },
-        xAxis: {
-            categories: dates,
-            tickmarkPlacement: 'on',
-            title: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Value'
-            },
-            //max: 100,
-            //min: Math.min.apply(null, successRates)
-        },
-        tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-            shared: true
-        },
-        series: [{
-            name: 'adImp',
-            data: adImpAndroidApp
-        }],
-        credits: {
-            enabled: false
-        },
-        legend: {
-            enabled: true
-        }
-    });
-
-    chartId = createChart();
-    const adImpAndroidWebChart = new Highcharts.Chart({
-        chart: {
-            type: 'line',
-            renderTo: chartId
-        },
-        title: {
-            text: 'Ad Impressions AndroidWeb'
-        },
-        xAxis: {
-            categories: dates,
-            tickmarkPlacement: 'on',
-            title: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Value'
-            },
-            //max: 100,
-            //min: Math.min.apply(null, successRates)
-        },
-        tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
-            shared: true
-        },
-        series: [{
-            name: 'adImp',
-            data: adImpAndroidWeb
-        }],
-        credits: {
-            enabled: false
-        },
-        legend: {
-            enabled: true
-        }
-    });
-  //END:3.Ad Impressions相关数据
 
   //MARK:4. Android相关数据
     const androidPv = extractDataFromGAAPI(responseDataArr[4].reports[0].data.rows, dates);
@@ -1205,7 +843,7 @@ async function drawCharts(responseDataArr) {
     chartId = createChart();
     const androidPvChart = new Highcharts.Chart({
         chart: {
-            type: 'line',
+            type: 'area',
             renderTo: chartId
         },
         title: {
@@ -1244,7 +882,7 @@ async function drawCharts(responseDataArr) {
     chartId = createChart();
     const androidStoryPvChart = new Highcharts.Chart({
         chart: {
-            type: 'line',
+            type: 'area',
             renderTo: chartId
         },
         title: {
@@ -1283,7 +921,7 @@ async function drawCharts(responseDataArr) {
     chartId = createChart();
     const androidLaunchesChart = new Highcharts.Chart({
         chart: {
-            type: 'line',
+            type: 'area',
             renderTo: chartId
         },
         title: {
@@ -1319,6 +957,589 @@ async function drawCharts(responseDataArr) {
         }
     });
   //End:4. Android相关数据
+
+
+
+
+
+  //MARK:2. PV相关数据
+    const pageviewsOverall = extractDataFromGAAPI(responseDataArr[1].reports[0].data.rows, dates);
+    const pageviewsMobileAndTablet = extractDataFromGAAPI(responseDataArr[1].reports[1].data.rows, dates);
+    const pageviewsDesktop = extractDataFromGAAPI(responseDataArr[1].reports[2].data.rows, dates);
+
+    
+    
+    chartId = createChart();
+    const pageviewsMobileAndTabletChart = new Highcharts.Chart({
+        chart: {
+            type: 'area',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Mobile Pageviews (App and Web Page)'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'pv',
+            data: pageviewsMobileAndTablet
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const pageviewsDesktopChart = new Highcharts.Chart({
+        chart: {
+            type: 'area',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Desktop Pageviews'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'pv',
+            data: pageviewsDesktop
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+
+    chartId = createChart();
+    const pageviewsOverallChart = new Highcharts.Chart({
+        chart: {
+            type: 'area',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Overall Pageviews'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'pv',
+            data: pageviewsOverall
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+
+    chartId = createChart();
+    const pageviewsBreakdownChart = new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Pageviews Breakdown'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [
+          {
+              name: 'Mobile',
+              data: pageviewsMobileAndTablet
+          },
+          {
+              name: 'Desktop',
+              data: pageviewsDesktop
+          }
+        ],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+
+
+  //END:2. PV相关数据
+
+  //MARK:3. Ad Impressions相关数据
+    const adImpOverall = extractDataFromGAAPI(responseDataArr[2].reports[0].data.rows, dates);
+
+
+    const adImpDesktop = extractDataFromGAAPI(responseDataArr[2].reports[1].data.rows, dates);
+    const adImpiOSApp = extractDataFromGAAPI(responseDataArr[3].reports[0].data.rows, dates);
+    const adImpiOSWeb = extractDataFromGAAPI(responseDataArr[3].reports[1].data.rows, dates);
+    const adImpAndroidApp = extractDataFromGAAPI(responseDataArr[3].reports[2].data.rows, dates);
+    const adImpAndroidWeb = extractDataFromGAAPI(responseDataArr[3].reports[3].data.rows, dates);
+
+    chartId = createChart();
+    const adImpOverallChart = new Highcharts.Chart({
+        chart: {
+            type: 'area',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Overall Ad Impressions'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'adImps',
+            data: adImpOverall
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+    
+    chartId = createChart();
+    const adImpDesktopChart = new Highcharts.Chart({
+        chart: {
+            type: 'area',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Desktop Ad Impressions'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'adImps',
+            data: adImpDesktop
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const adImpiOSAppChart = new Highcharts.Chart({
+        chart: {
+            type: 'area',
+            renderTo: chartId
+        },
+        title: {
+            text: 'iOS App Ad Impressions'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'adImp',
+            data: adImpiOSApp
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const adImpiOSWebChart = new Highcharts.Chart({
+        chart: {
+            type: 'area',
+            renderTo: chartId
+        },
+        title: {
+            text: 'iOS Web Ad Impressions'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'adImp',
+            data: adImpiOSWeb
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const adImpAndroidAppChart = new Highcharts.Chart({
+        chart: {
+            type: 'area',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Android App Ad Impressions'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'adImp',
+            data: adImpAndroidApp
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+    chartId = createChart();
+    const adImpAndroidWebChart = new Highcharts.Chart({
+        chart: {
+            type: 'area',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Android Web Ad Impressions'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [{
+            name: 'adImp',
+            data: adImpAndroidWeb
+        }],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+
+    chartId = createChart();
+    const adImpBreakdownChart = new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: chartId
+        },
+        title: {
+            text: 'All Ad Impressions Breakdown'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [
+          {
+              name: 'Desktop',
+              data: adImpDesktop
+          },
+          {
+              name: 'iOS App',
+              data: adImpiOSApp
+          },
+          {
+              name: 'iOS Web',
+              data: adImpiOSWeb
+          },
+          {
+              name: 'Android App',
+              data: adImpAndroidApp
+          },
+          {
+              name: 'Android Web',
+              data: adImpAndroidWeb
+          }
+        ],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+
+
+    chartId = createChart();
+    const adImpiOSBreakdownChart = new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: chartId
+        },
+        title: {
+            text: 'iOS Ad Impressions Breakdown'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [
+          {
+              name: 'App',
+              data: adImpiOSApp
+          },
+          {
+              name: 'Web',
+              data: adImpiOSWeb
+          }
+        ],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+
+
+    chartId = createChart();
+    const adImpAndroidBreakdownChart = new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Android Ad Impressions Breakdown'
+        },
+        xAxis: {
+            categories: dates,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            //max: 100,
+            //min: Math.min.apply(null, successRates)
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+            shared: true
+        },
+        series: [
+          {
+              name: 'App',
+              data: adImpAndroidApp
+          },
+          {
+              name: 'Web',
+              data: adImpAndroidWeb
+          }
+        ],
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: true
+        }
+    });
+    //     const adImpDesktop = extractDataFromGAAPI(responseDataArr[2].reports[1].data.rows, dates);
+    // const adImpiOSApp = extractDataFromGAAPI(responseDataArr[3].reports[0].data.rows, dates);
+    // const adImpiOSWeb = extractDataFromGAAPI(responseDataArr[3].reports[1].data.rows, dates);
+    // const adImpAndroidApp = extractDataFromGAAPI(responseDataArr[3].reports[2].data.rows, dates);
+    // const adImpAndroidWeb = extractDataFromGAAPI(responseDataArr[3].reports[3].data.rows, dates);
+
+  //END:3.Ad Impressions相关数据
+
+
 }
 
 </script>

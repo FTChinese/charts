@@ -39,7 +39,8 @@
 // MARK: - These are different in every page. 
 
 // Replace with your view ID.
-var VIEW_ID = '10995661';
+var VIEW_ID = '108134561';
+var VIEW_ID_1 = '10995661';
 // var startDate = '14daysago';
 //var startDate = '2017-08-02';
  var startDate = '30daysago';
@@ -58,7 +59,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:totalEvents'
+          'expression': 'ga:uniqueEvents'
         }
       ],
       'dimensions': [
@@ -94,8 +95,10 @@ function constructQuerryData(startDate, endDate) {
               ],
               'caseSensitive': true
             }
+            
           ]
         }
+
       ]
     },// 1 iOS Buy Premium Subscription
     {
@@ -108,7 +111,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:totalEvents'
+          'expression': 'ga:uniqueEvents'
         }
       ],
       'dimensions': [
@@ -158,7 +161,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:totalEvents'
+          'expression': 'ga:uniqueEvents'
         }
       ],
       'dimensions': [
@@ -208,7 +211,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:totalEvents'
+          'expression': 'ga:uniqueEvents'
         }
       ],
       'dimensions': [
@@ -258,7 +261,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:totalEvents'
+          'expression': 'ga:uniqueEvents'
         }
       ],
       'dimensions': [
@@ -308,7 +311,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:totalEvents'
+          'expression': 'ga:uniqueEvents'
         }
       ],
       'dimensions': [
@@ -358,7 +361,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:pageviews'
+          'expression': 'ga:screenviews'
         }
       ],
       'dimensions': [
@@ -371,10 +374,10 @@ function constructQuerryData(startDate, endDate) {
           'operator': 'AND',
           'filters': [
             {
-              'dimensionName': 'ga:pagePath',
-              'operator': 'EXACT',
+              'dimensionName': 'ga:screenName',
+              'operator': 'REGEXP',
               'expressions': [
-                '/?webview=ftcapp'
+                'homepage'
               ],
               'caseSensitive': true
             }
@@ -392,7 +395,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:totalEvents'
+          'expression': 'ga:uniqueEvents'
         }
       ],
       'dimensions': [
@@ -442,7 +445,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:totalEvents'
+          'expression': 'ga:uniqueEvents'
         }
       ],
       'dimensions': [
@@ -492,7 +495,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:totalEvents'
+          'expression': 'ga:uniqueEvents'
         }
       ],
       'dimensions': [
