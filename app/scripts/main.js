@@ -233,6 +233,13 @@ function insertPicture(title, src) {
   document.getElementById('charts-container').appendChild(imgContainer);
 }
 
+function insertDiv(height) {
+  var divContainer = document.createElement('div');
+  divContainer.innerHTML = '<div style="height:'+height+'px;"></div>';
+  document.getElementById('charts-container').appendChild(divContainer);
+}
+
+
 // MARK:Append an div for drawing table in it.
 function createTable() {
   var chartContainer = document.createElement('div');
