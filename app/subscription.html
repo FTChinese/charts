@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Weekly Report</title>
+  <title>iOS Subscription Report</title>
   <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
   <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -20,7 +20,7 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">Subscription</h1>
+  <h1 class="page-title">iOS Subscription</h1>
 </div>
 
 
@@ -518,6 +518,356 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 10 iOS Buy Subscription from Exclusive Story
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'premium/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 11 iOS Buy Subscription from English Text
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'EnglishText/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 12 iOS Buy Subscription from FT Radio
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Radio/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 13 iOS Buy Subscription from Speed Read
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'SpeedReading/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 14 iOS Buy Subscription from Archive
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Archive/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 15 iOS Buy Subscription from Editor's Choice
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'EditorsChoice/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 16 iOS Buy Subscription from Editor's Choice
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'EnglishAudio/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -734,6 +1084,43 @@ function drawChartsAll() {
     ]
   });
 
+  drawChartByKey({
+    conversion: true,
+    title: 'Subscription Sources',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 10,
+        name: 'Exclusive Story'
+      },
+      {
+        index: 11,
+        name: 'English Text'
+      },
+      {
+        index: 12,
+        name: 'FT Radio'
+      },
+      {
+        index: 13,
+        name: 'Speedread'
+      },
+      {
+        index: 14,
+        name: 'Archive'
+      },
+      {
+        index: 15,
+        name: 'Editors\'s Choice'
+      },
+      {
+        index: 16,
+        name: 'English Audio'
+      }
+    ]
+  });
 
 }
 </script>

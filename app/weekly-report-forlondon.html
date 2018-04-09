@@ -21,12 +21,16 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">FTC Traffic Report</h1>
+  <h1 class="page-title">FTC Traffic Report for London</h1>
 </div>
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/funnel.js"></script>
-<script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
+
+
+<script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/highcharts-more.js"></script>
+<script src="../bower_components/highmaps-beta/modules/map.js"></script>
+<script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<script src="../bower_components/highcharts/modules/funnel.js"></script>
 <script type="text/javascript" src="scripts/highcharts.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
 
@@ -43,7 +47,6 @@ const VIEW_ID_iPhoneApp = '108134561'; //
 
 const startDate = '2018-03-06';
 const endDate = 'yesterday';
-
 
 const requestData0 = [//iOS App相关数据
     {//Screen Views
@@ -847,7 +850,7 @@ async function drawCharts(responseDataArr) {
             renderTo: chartId
         },
         title: {
-            text: 'Android Pageviews'
+            text: 'Android App Pageviews'
         },
         xAxis: {
             categories: dates,
@@ -886,7 +889,7 @@ async function drawCharts(responseDataArr) {
             renderTo: chartId
         },
         title: {
-            text: 'Android Story Pageviews'
+            text: 'Android App Story Pageviews'
         },
         xAxis: {
             categories: dates,
@@ -925,7 +928,7 @@ async function drawCharts(responseDataArr) {
             renderTo: chartId
         },
         title: {
-            text: 'Android Launches'
+            text: 'Android App Launches'
         },
         xAxis: {
             categories: dates,
