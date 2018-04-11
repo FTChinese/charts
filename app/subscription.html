@@ -20,7 +20,7 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">iOS Subscription</h1>
+  <h1 class="page-title">iOS App Subscription</h1>
 </div>
 
 
@@ -42,8 +42,8 @@
 var VIEW_ID = '108134561';
 var VIEW_ID_1 = '10995661';
 // var startDate = '14daysago';
-//var startDate = '2017-08-02';
- var startDate = '30daysago';
+var startDate = '2018-04-04';
+// var startDate = '30daysago';
 var endDate = 'yesterday';
 
 function constructQuerryData(startDate, endDate) {
@@ -553,7 +553,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription'
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
               ],
               'caseSensitive': true
             },
@@ -561,7 +561,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                'premium/'
+                'ExclusiveContent/'
               ],
               'caseSensitive': true
             }
@@ -603,7 +603,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription'
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
               ],
               'caseSensitive': true
             },
@@ -611,7 +611,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                'EnglishText/'
+                'EnglishText/.+/en'
               ],
               'caseSensitive': true
             }
@@ -653,7 +653,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription'
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
               ],
               'caseSensitive': true
             },
@@ -703,7 +703,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription'
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
               ],
               'caseSensitive': true
             },
@@ -753,7 +753,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription'
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
               ],
               'caseSensitive': true
             },
@@ -803,7 +803,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription'
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
               ],
               'caseSensitive': true
             },
@@ -818,7 +818,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 16 iOS Buy Subscription from Editor's Choice
+    },// 16 iOS Buy Subscription from English Audio
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -853,7 +853,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription'
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
               ],
               'caseSensitive': true
             },
@@ -862,6 +862,456 @@ function constructQuerryData(startDate, endDate) {
               'operator': 'REGEXP',
               'expressions': [
                 'EnglishAudio/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 17 iOS Dispay Subscription from Exclusive Story
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Display'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'ExclusiveContent/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 18 iOS Display Subscription from English Text
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Display'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'EnglishText/.+/en'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 19 iOS Display Subscription from FT Radio
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Display'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Radio/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 20 iOS Display Subscription from Speed Read
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Display'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'SpeedReading/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 21 iOS Display Subscription from Archive
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Display'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Archive/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 22 iOS Display Subscription from Editor's Choice
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Display'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'EditorsChoice/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 23 iOS Display Subscription from Editor's Choice
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Display'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'EnglishAudio/'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 24 iOS Buy Subscription from Billigual Text
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'buy success: com.ft.ftchinese.mobile.subscription.member'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'EnglishText/.+/ce'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 25 iOS Display Subscription from Billigual Text
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Display'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'EnglishText/.+/ce'
               ],
               'caseSensitive': true
             }
@@ -907,22 +1357,22 @@ function drawChartsAll() {
     ]
   });
 
-  drawChartByKey({
-    title: 'Standard Subscription Triggers',
-    type: 'column',
-    percentage: false,
-    keys: keys,
-    data: [
-      {
-        index: 4,
-        name: 'Exclusive Story'
-      },
-      {
-        index: 7,
-        name: 'English Audio'
-      }
-    ]
-  });
+  // drawChartByKey({
+  //   title: 'Standard Subscription Triggers',
+  //   type: 'column',
+  //   percentage: false,
+  //   keys: keys,
+  //   data: [
+  //     {
+  //       index: 4,
+  //       name: 'Exclusive Story'
+  //     },
+  //     {
+  //       index: 7,
+  //       name: 'English Audio'
+  //     }
+  //   ]
+  // });
 
 
   // drawChartByKey({
@@ -1084,16 +1534,93 @@ function drawChartsAll() {
     ]
   });
 
+
+
+  drawBreakDownChart({
+    title: 'What Triggers Paywall? ',
+    type: 'pie',
+    data: [
+      {
+        index: 17,
+        name: 'Exclusive Story'
+      },
+      {
+        index: 25,
+        name: 'Billigual Text'
+      },
+      {
+        index: 18,
+        name: 'English Text'
+      },
+      {
+        index: 19,
+        name: 'FT Radio'
+      },
+      {
+        index: 20,
+        name: 'Speedread'
+      },
+      {
+        index: 21,
+        name: 'Archive'
+      },
+      {
+        index: 22,
+        name: 'Editors\'s Choice'
+      }
+    ]
+  });
+
   drawChartByKey({
     conversion: true,
-    title: 'Subscription Sources',
+    title: 'What Triggers Paywall Daily? ',
     type: 'column',
     percentage: false,
     keys: keys,
     data: [
       {
+        index: 17,
+        name: 'Exclusive Story'
+      },
+      {
+        index: 25,
+        name: 'Billigual Text'
+      },
+      {
+        index: 18,
+        name: 'English Text'
+      },
+      {
+        index: 19,
+        name: 'FT Radio'
+      },
+      {
+        index: 20,
+        name: 'Speedread'
+      },
+      {
+        index: 21,
+        name: 'Archive'
+      },
+      {
+        index: 22,
+        name: 'Editors\'s Choice'
+      }
+    ]
+  });
+
+
+  drawBreakDownChart({
+    title: 'What Drives Standard Subscription? ',
+    type: 'pie',
+    data: [
+      {
         index: 10,
         name: 'Exclusive Story'
+      },
+      {
+        index: 24,
+        name: 'Billigual Text'
       },
       {
         index: 11,
@@ -1121,6 +1648,100 @@ function drawChartsAll() {
       }
     ]
   });
+
+  drawChartByKey({
+    conversion: true,
+    title: 'What Drives Standard Subscription Daily? ',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 10,
+        name: 'Exclusive Story'
+      },
+      {
+        index: 24,
+        name: 'Billigual Text'
+      },
+      {
+        index: 11,
+        name: 'English Text'
+      },
+      {
+        index: 12,
+        name: 'FT Radio'
+      },
+      {
+        index: 13,
+        name: 'Speedread'
+      },
+      {
+        index: 14,
+        name: 'Archive'
+      },
+      {
+        index: 15,
+        name: 'Editors\'s Choice'
+      },
+      {
+        index: 16,
+        name: 'English Audio'
+      }
+    ]
+  });
+
+
+
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Standard subscription Conversion',
+    yAxisTitle: 'Percent',
+    type: 'column',
+    percentage: true,
+    keys: keys,
+    data: [
+      {
+        total: 17,
+        part: 10,
+        name: 'Exclusive Story'
+      },
+      {
+        total: 25,
+        part: 24,
+        name: 'Billigual Text'
+      },
+      {
+        total: 18,
+        part: 11,
+        name: 'English Text'
+      },
+      {
+        total: 19,
+        part: 12,
+        name: 'Radio'
+      },
+      {
+        total: 20,
+        part: 13,
+        name: 'Speedread'
+      },
+      {
+        total: 21,
+        part: 14,
+        name: 'Archive'
+      },
+      {
+        total: 22,
+        part: 15,
+        name: 'Editors\' Choice'
+      },
+    ]
+  });
+
+
+
 
 }
 </script>
