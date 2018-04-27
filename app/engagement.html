@@ -56,7 +56,7 @@ const  startDate = '90daysago';
 const endDate = 'today';
 
 const requestData0 = [
-  {
+  {//Web和Android App和iPhoneApp用户总量
     'viewId': VIEW_ID_All,
     'dateRanges': [
       {
@@ -72,7 +72,7 @@ const requestData0 = [
   }
 ];
 const requestData1 = [
-  {
+  {// iPhone App用户总量
     'viewId': VIEW_ID_iPhoneApp,
     'dateRanges': [
       {
@@ -278,6 +278,365 @@ const requestData1 = [
   }
 ];
 
+const requestData9 = [//Android App相关用户数据
+  {// Android用户总量
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:users'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:pagePath',
+            'operator': 'REGEXP',
+            'expressions': [
+              '/phone/|phoneapp.html|phone.html|androidapp.html|iphone-2014.html|bb-2014.html|ftcapp'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:operatingSystem',
+            'operator': 'EXACT',
+            'expressions': [
+              'Android'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  },
+  {// buy success standard总数
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+    {
+        'startDate': startDate,
+        'endDate': endDate
+    }
+    ],
+    'metrics': [
+        {
+            'expression': 'ga:totalEvents'
+        }
+    ],
+    'dimensionFilterClauses': [
+        {
+            'operator': 'AND',
+            'filters': [
+                {
+                    'dimensionName': 'ga:eventCategory',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'Android Privileges'
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                    'dimensionName': 'ga:eventAction',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'Buy success: ftc_standard'
+                    ],
+                    'caseSensitive': true
+                }
+            ]
+        }
+    ]
+  },
+  {// buy success premium总数
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+    {
+        'startDate': startDate,
+        'endDate': endDate
+    }
+    ],
+    'metrics': [
+    {
+        'expression': 'ga:totalEvents'
+    }
+    ],
+    'dimensionFilterClauses': [
+        {
+            'operator': 'AND',
+            'filters': [
+                {
+                    'dimensionName': 'ga:eventCategory',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'Android Privileges'
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                    'dimensionName': 'ga:eventAction',
+                    'operator': 'EXACT',
+                    'expressions': [
+                        'Buy success: ftc_premium'
+                    ],
+                    'caseSensitive': true
+                }
+            ]
+        }
+    ]
+  },
+  {// buy success standard daily
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+    {
+        'startDate': startDate,
+        'endDate': endDate
+    }
+    ],
+    'metrics': [
+        {
+            'expression': 'ga:totalEvents'
+        }
+    ],
+    'dimensions': [
+        {
+            'name': 'ga:date'
+        }
+    ],
+    'dimensionFilterClauses': [
+        {
+            'operator': 'AND',
+            'filters': [
+                {
+                    'dimensionName': 'ga:eventCategory',
+                    'operator': 'EXACT',
+                    'expressions': [
+                        'Android Privileges'
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                    'dimensionName': 'ga:eventAction',
+                    'operator': 'EXACT',
+                    'expressions': [
+                        'Buy success: ftc_standard'
+                    ],
+                    'caseSensitive': true
+                }
+            ]
+        }
+    ]
+  },
+  {// buy success premium daily
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+    {
+        'startDate': startDate,
+        'endDate': endDate
+    }
+    ],
+    'metrics': [
+        {
+            'expression': 'ga:totalEvents'
+        }
+    ],
+    'dimensions': [
+        {
+            'name': 'ga:date'
+        }
+    ],
+    'dimensionFilterClauses': [
+        {
+            'operator': 'AND',
+            'filters': [
+                {
+                    'dimensionName': 'ga:eventCategory',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'Android Privileges'
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                    'dimensionName': 'ga:eventAction',
+                    'operator': 'EXACT',
+                    'expressions': [
+                        'Buy success: ftc_premium'
+                    ],
+                    'caseSensitive': true
+                }
+            ]
+        }
+    ]
+  }
+];
+
+const requestData10 = [ //Web相关用户数据
+ //总量可以根据总量-AndroidApp总量-iPhoneApp总量
+  {// buy success standard总数
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+    {
+        'startDate': startDate,
+        'endDate': endDate
+    }
+    ],
+    'metrics': [
+        {
+            'expression': 'ga:totalEvents'
+        }
+    ],
+    'dimensionFilterClauses': [
+        {
+            'operator': 'AND',
+            'filters': [
+                {
+                    'dimensionName': 'ga:eventCategory',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'Web Privileges'
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                    'dimensionName': 'ga:eventAction',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'Buy: Standard'
+                    ],
+                    'caseSensitive': true
+                }
+            ]
+        }
+    ]
+  },
+  {// buy success premium总数
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+    {
+        'startDate': startDate,
+        'endDate': endDate
+    }
+    ],
+    'metrics': [
+    {
+        'expression': 'ga:totalEvents'
+    }
+    ],
+    'dimensionFilterClauses': [
+        {
+            'operator': 'AND',
+            'filters': [
+                {
+                    'dimensionName': 'ga:eventCategory',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'Web Privileges'
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                    'dimensionName': 'ga:eventAction',
+                    'operator': 'EXACT',
+                    'expressions': [
+                        'Buy: Premium'
+                    ],
+                    'caseSensitive': true
+                }
+            ]
+        }
+    ]
+  },
+  {// buy success standard daily
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+    {
+        'startDate': startDate,
+        'endDate': endDate
+    }
+    ],
+    'metrics': [
+        {
+            'expression': 'ga:totalEvents'
+        }
+    ],
+    'dimensions': [
+        {
+            'name': 'ga:date'
+        }
+    ],
+    'dimensionFilterClauses': [
+        {
+            'operator': 'AND',
+            'filters': [
+                {
+                    'dimensionName': 'ga:eventCategory',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'Web Privileges'
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                    'dimensionName': 'ga:eventAction',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'Buy: Standard'
+                    ],
+                    'caseSensitive': true
+                }
+            ]
+        }
+    ]
+  },
+  {// buy success premium daily
+    'viewId': VIEW_ID_All,
+    'dateRanges': [
+    {
+        'startDate': startDate,
+        'endDate': endDate
+    }
+    ],
+    'metrics': [
+        {
+            'expression': 'ga:totalEvents'
+        }
+    ],
+    'dimensions': [
+        {
+            'name': 'ga:date'
+        }
+    ],
+    'dimensionFilterClauses': [
+        {
+            'operator': 'AND',
+            'filters': [
+                {
+                    'dimensionName': 'ga:eventCategory',
+                    'operator': 'EXACT',
+                    'expressions': [
+                    'Web Privileges'
+                    ],
+                    'caseSensitive': true
+                },
+                {
+                    'dimensionName': 'ga:eventAction',
+                    'operator': 'EXACT',
+                    'expressions': [
+                        'Buy: Premium'
+                    ],
+                    'caseSensitive': true
+                }
+            ]
+        }
+    ]
+  }
+];
 const requestData2 = [//整体转换的相关行为数据
     {
         'viewId': VIEW_ID_iPhoneApp,
@@ -1708,7 +2067,9 @@ const requestData8 = [//以文章id划分的数据:story(编辑精选)线
       ]
     }
 ];
-const requestDataArr = [requestData0, requestData1, requestData2,requestData3, requestData4, requestData5, requestData6,requestData7, requestData8];
+
+
+const requestDataArr = [requestData0, requestData1, requestData2,requestData3, requestData4, requestData5, requestData6,requestData7, requestData8, requestData9, requestData10];
 const responseDataArr = [];
 
 
@@ -1717,18 +2078,17 @@ async function drawCharts(responseDataArr) {
    
   var chartId;
 
-  //MARK:1. 金字塔图
-    const resultData0 = responseDataArr[0].reports[0].data.rows[0].metrics[0].values[0];//总用户数
-    const resultData1 = responseDataArr[1].reports[0].data.rows[0].metrics[0].values[0];//iPhoneApp用户数
-    const resultData2 = responseDataArr[1].reports[1].data.rows[0].metrics[0].values[0];//standard会员数
-    const resultData3 = responseDataArr[1].reports[2].data.rows[0].metrics[0].values[0];//premium会员数
+  //MARK:1. 金字塔图 for iPhone
+  
+    const allUsers = Number(responseDataArr[0].reports[0].data.rows[0].metrics[0].values[0]);//总用户数
 
-    const restUsers = Number(resultData0-resultData1);//非iPhoneApp用户数，即金字塔第1级
-    const opportunityUsers = Number(resultData1-resultData2-resultData3);//iPhoneApp用户中还未订阅的用户数，即金字塔第2级
-    const standardUsers = Number(resultData2);//standard会员数，即金字塔第3级  
-    const premiumUsers = Number(resultData3);//premium会员数，即金字塔第4级
-    
+    const iPhoneAppAllUsers = Number(responseDataArr[1].reports[0].data.rows[0].metrics[0].values[0]);//iPhoneApp用户数
+    const iPhoneAppStandardUsers = Number(responseDataArr[1].reports[1].data.rows[0].metrics[0].values[0]);//standard会员数
+    const iPhoneAppPremiumUsers = Number(responseDataArr[1].reports[2].data.rows[0].metrics[0].values[0]);//premium会员数
 
+    const iPhoneAppRestUsers = iPhoneAppAllUsers-iPhoneAppStandardUsers-iPhoneAppPremiumUsers;//iPhoneApp用户中还未订阅的用户数，即金字塔第1级
+   // const standardUsers = Number(iPhoneAppStandardUsers);//standard会员数，即金字塔第2级  
+    //const premiumUsers = Number(iPhoneAppPremiumUsers);//premium会员数，即金字塔第3级
     
     chartId = createChart();
     const  pyramid = new Highcharts.Chart({
@@ -1737,7 +2097,7 @@ async function drawCharts(responseDataArr) {
             renderTo: chartId
         },
         title: {
-            text: 'Engagement pyramid'
+            text: 'Engagement pyramid for iPhoneApp'
         },
         plotOptions: {
             series: {
@@ -1757,15 +2117,145 @@ async function drawCharts(responseDataArr) {
         series: [{
         name: 'Unique users',
         data: [
-            ['Rest Users', restUsers], //9074799
-            ['Opportunity Users',  opportunityUsers], //247243
-            ['Standard Users', standardUsers],
-            ['Premium Users',  premiumUsers]
+            ['Rest Users', iPhoneAppRestUsers], //9074799
+            ['Standard Users', iPhoneAppStandardUsers],
+            ['Premium Users',  iPhoneAppPremiumUsers]
         ]
         }]
     });
+  
+  //MARK:1-2.金字塔图 for Android App
 
+    const androidAppAllUsers = Number(responseDataArr[9].reports[0].data.rows[0].metrics[0].values[0]);//总用户数
+    console.log('androidAppAllUsers:', androidAppAllUsers);
+    const androidAppStandardUsers = Number(responseDataArr[9].reports[1].data.rows[0].metrics[0].values[0]);//standard会员数。即金字塔第2级
+    console.log('androidAppStandardUsers:', androidAppStandardUsers);
+    const androidAppPremiumUsers = Number(responseDataArr[9].reports[2].data.rows[0].metrics[0].values[0]);//premium会员数。即金字塔第3级
+    console.log('androidAppPremiumUsers:',androidAppPremiumUsers);
+
+    const androidAppRestUsers = androidAppAllUsers - androidAppStandardUsers - androidAppPremiumUsers; //剩余用户数。即金字塔第1级
+
+    chartId = createChart();
+    var  pyramidForAndroidApp = new Highcharts.Chart({
+        chart: {
+            type: 'pyramid',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Engagement pyramid for AndroindApp'
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b> ({point.y:,.0f})',
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                    softConnector: true
+                },
+                center: ['40%', '50%'],
+                width: '80%'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        series: [{
+            name: 'Unique users',
+            data: [
+                ['Rest Users', androidAppRestUsers], 
+                ['Standard Users', androidAppStandardUsers],
+                ['Premium Users',  androidAppPremiumUsers]
+            ]
+        }]
+    });
+
+ //MARK:1-3.金字塔图 for Web
+
+    const webAllUsers = allUsers - androidAppAllUsers - iPhoneAppAllUsers ;//总用户数
+    console.log('webAllUsers:', webAllUsers);
+    const webStandardUsers = Number(responseDataArr[10].reports[0].data.rows[0].metrics[0].values[0]);//standard会员数。即金字塔第2级
+    console.log('webStandardUsers:', webStandardUsers);
+    console.log('responseDataArr[10]:');
+    console.log(JSON.stringify(responseDataArr[10]));
+    const webPremiumUsers = Number(responseDataArr[10].reports[1].data.rows[0].metrics[0].values[0]);//premium会员数。即金字塔第3级
+    console.log('webPremiumUsers:',webPremiumUsers);
+
+    const webRestUsers = webAllUsers - webStandardUsers - webPremiumUsers; //剩余用户数。即金字塔第1级
+
+    chartId = createChart();
+    var  pyramidForWeb = new Highcharts.Chart({
+        chart: {
+            type: 'pyramid',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Engagement pyramid for Web'
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b> ({point.y:,.0f})',
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                    softConnector: true
+                },
+                center: ['40%', '50%'],
+                width: '80%'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        series: [{
+            name: 'Unique users',
+            data: [
+                ['Rest Users', webRestUsers], 
+                ['Standard Users', webStandardUsers],
+                ['Premium Users', webPremiumUsers]
+            ]
+        }]
+    });
+
+  //MARK:1-4.金字塔图 for all
+    const allStandardUsers = iPhoneAppStandardUsers + androidAppStandardUsers + webStandardUsers;
+    const allPremiumUsers = iPhoneAppPremiumUsers + androidAppPremiumUsers + webPremiumUsers;
+    const allRestUsers = allUsers - allStandardUsers - allPremiumUsers;
+    
+    var  pyramidForAll = new Highcharts.Chart({
+        chart: {
+            type: 'pyramid',
+            renderTo: chartId
+        },
+        title: {
+            text: 'Engagement pyramid for All'
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b> ({point.y:,.0f})',
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                    softConnector: true
+                },
+                center: ['40%', '50%'],
+                width: '80%'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        series: [{
+            name: 'Unique users',
+            data: [
+                ['Rest Users', allRestUsers], 
+                ['Standard Users', allStandardUsers],
+                ['Premium Users',  allPremiumUsers]
+            ]
+        }]
+    });
   //MARK:2. New Subscriptions 条形图
+
+
     var keysNewSub = responseDataArr[1].reports[3].data.rows.map(row => row.dimensions[0]);
     var newSubStandard = extractDataFromGAAPI(responseDataArr[1].reports[3].data.rows, keysNewSub);
     var newSubPremium = extractDataFromGAAPI(responseDataArr[1].reports[4].data.rows, keysNewSub);
@@ -1781,7 +2271,7 @@ async function drawCharts(responseDataArr) {
             text: 'New Subscription'
         },
         xAxis: {
-            categories: keys,
+            categories: keysNewSub,
             tickmarkPlacement: 'on',
             title: {
                 enabled: false
