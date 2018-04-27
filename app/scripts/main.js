@@ -471,6 +471,9 @@ function medianOfAll(numArray) {
 // MARK: Calculate percentage between two sets of data
 function calculateRates(part, total) {
   var rates=[];
+  if (part == null || total == null) {
+    return rates;
+  }
   if (part.length>0 && part.length === total.length) {
     for (var i=0; i<part.length; i++) {
       var rate;
@@ -488,6 +491,9 @@ function calculateRates(part, total) {
 
 // MARK: Calculate percentage between two sets of data
 function calculateOverallRates(part, total) {
+  if (part == null || total == null) {
+    return 0;
+  }
   var partSum = part.reduce((a, b) => a + b, 0);
   var totalSum = total.reduce((a, b) => a + b, 0); 
   var rate = 0;
@@ -710,6 +716,18 @@ function drawChartByKey(obj) {
     }];
     percentageSign = '%';
     subtitle = 'Overall Conversion: ' + overallConversionRate + '%, Correlation: '+r + ' (' + rExplained + ')';
+  } else if (obj.conversion === true && obj.data.length > 0 && obj.data[0].part && obj.data[0].total) {
+      series = obj.data.map(function(x) {
+      var total = extractDataFromGAAPI(gaDataReports[x.total].data.rows, keys);
+      var part = extractDataFromGAAPI(gaDataReports[x.part].data.rows, keys);
+      var conversionRate = calculateRates(part, total);
+      var overallConversionRate = calculateOverallRates(part, total);
+      percentageSign = '%';
+      return {
+        name: x.name + ' (Average: ' + overallConversionRate + percentageSign + ')',
+        data: conversionRate
+      };
+    });
   } else {
     series = obj.data.map(function(x) {
       var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
@@ -747,7 +765,7 @@ function drawChartByKey(obj) {
       },
       yAxis: {
           title: {
-              text: 'Percent'
+              text: obj.yAxisTitle || ''
           }
       },
       tooltip: {
@@ -762,4 +780,60 @@ function drawChartByKey(obj) {
         enabled: true
       }
     });
+}
+
+
+function drawBreakDownChart(obj) {
+
+  var seriesData = obj.data.map(function(x, index) {
+    //console.log (gaDataReports[x.index].data);
+    //var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
+    var dataTotal = gaDataReports[x.index].data.totals[0].values[0];
+    dataTotal = parseInt(dataTotal, 10) || 0;
+    return  {
+      name: x.name,
+      y: dataTotal
+    }
+  });
+
+
+
+  var chartId = createChart();
+  var chart = new Highcharts.Chart({
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        renderTo: chartId,
+        type: obj.type
+    },
+    title: {
+        text: obj.title
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+            }
+        }
+    },
+    credits: {
+        enabled: false
+    },
+    series: [{
+        name: '',
+        colorByPoint: true,
+        data: seriesData
+    }]
+  });
+
 }
