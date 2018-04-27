@@ -620,7 +620,7 @@ const requestData10 = [ //Web相关用户数据
                     'dimensionName': 'ga:eventCategory',
                     'operator': 'EXACT',
                     'expressions': [
-                    'Web Privileges'
+                    'Web Privileges'
                     ],
                     'caseSensitive': true
                 },
@@ -2078,7 +2078,7 @@ async function drawCharts(responseDataArr) {
    
   var chartId;
 
-  //MARK:1. 金字塔图 for iPhone
+  //MARK:1. 金字塔图 for iPhoneApp
   
     const allUsers = Number(responseDataArr[0].reports[0].data.rows[0].metrics[0].values[0]);//总用户数
 
@@ -2091,7 +2091,7 @@ async function drawCharts(responseDataArr) {
     //const premiumUsers = Number(iPhoneAppPremiumUsers);//premium会员数，即金字塔第3级
     
     chartId = createChart();
-    const  pyramid = new Highcharts.Chart({
+    const  pyramidForIPhoneApp = new Highcharts.Chart({
         chart: {
             type: 'pyramid',
             renderTo: chartId
@@ -2124,7 +2124,7 @@ async function drawCharts(responseDataArr) {
         }]
     });
   
-  //MARK:1-2.金字塔图 for Android App
+  //MARK:1-2.金字塔图 for AndroidApp
 
     const androidAppAllUsers = Number(responseDataArr[9].reports[0].data.rows[0].metrics[0].values[0]);//总用户数
     console.log('androidAppAllUsers:', androidAppAllUsers);
@@ -2175,8 +2175,8 @@ async function drawCharts(responseDataArr) {
     console.log('webAllUsers:', webAllUsers);
     const webStandardUsers = Number(responseDataArr[10].reports[0].data.rows[0].metrics[0].values[0]);//standard会员数。即金字塔第2级
     console.log('webStandardUsers:', webStandardUsers);
-    console.log('responseDataArr[10]:');
-    console.log(JSON.stringify(responseDataArr[10]));
+    // console.log('responseDataArr[10]:');
+    // console.log(JSON.stringify(responseDataArr[10]));
     const webPremiumUsers = Number(responseDataArr[10].reports[1].data.rows[0].metrics[0].values[0]);//premium会员数。即金字塔第3级
     console.log('webPremiumUsers:',webPremiumUsers);
 
@@ -2253,12 +2253,19 @@ async function drawCharts(responseDataArr) {
             ]
         }]
     });
+
+
   //MARK:2. New Subscriptions 条形图
+    const keysNewSub = responseDataArr[1].reports[3].data.rows.map(row => row.dimensions[0]);
 
+    const iPhoneAppNewStandard = extractDataFromGAAPI(responseDataArr[1].reports[3].data.rows, keysNewSub);
+    const iPhoneAppNewPremium = extractDataFromGAAPI(responseDataArr[1].reports[4].data.rows, keysNewSub);
 
-    var keysNewSub = responseDataArr[1].reports[3].data.rows.map(row => row.dimensions[0]);
-    var newSubStandard = extractDataFromGAAPI(responseDataArr[1].reports[3].data.rows, keysNewSub);
-    var newSubPremium = extractDataFromGAAPI(responseDataArr[1].reports[4].data.rows, keysNewSub);
+    const andoridAppNewStandard = extractDataFromGAAPI(responseDataArr[9].reports[3].data.rows, keysNewSub);
+    const andoridAppNewPremium = extractDataFromGAAPI(responseDataArr[9].reports[4].data.rows, keysNewSub);
+
+    const webNewStandard = extractDataFromGAAPI(responseDataArr[10].reports[2].data.rows, keysNewSub);
+    const webNewPremium = extractDataFromGAAPI(responseDataArr[10].reports[3].data.rows, keysNewSub);
 
    
     chartId = createChart();
@@ -2289,11 +2296,23 @@ async function drawCharts(responseDataArr) {
             shared: true
         },
         series: [{
-            name: 'Standard'+' (Average: ' + meanOfAll(newSubStandard) +')',
-            data: newSubStandard
+            name: 'iPhoneAppStandard'+' (Average: ' + meanOfAll(iPhoneAppNewStandard) +')',
+            data: iPhoneAppNewStandard
         },{
-            name: 'Premium'+' (Average: ' + meanOfAll(newSubPremium) +')',
-            data: newSubPremium
+            name: 'iPhoneAppPremium'+' (Average: ' + meanOfAll(iPhoneAppNewPremium) +')',
+            data: iPhoneAppNewPremium
+        },{
+            name: 'andoridAppStandard'+' (Average: ' + meanOfAll(andoridAppNewStandard) +')',
+            data: andoridAppNewStandard
+        },{
+            name: 'andoridAppPremium'+' (Average: ' + meanOfAll(andoridAppNewPremium) +')',
+            data: andoridAppNewPremium
+        },{
+            name: 'webStandard'+' (Average: ' + meanOfAll(webNewStandard) +')',
+            data: webNewStandard
+        },{
+            name: 'webPremium'+' (Average: ' + meanOfAll(webNewPremium) +')',
+            data: webNewPremium
         }],
         credits: {
             enabled: false
