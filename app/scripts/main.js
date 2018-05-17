@@ -784,20 +784,21 @@ function drawChartByKey(obj) {
 
 
 function drawBreakDownChart(obj) {
-
-  var seriesData = obj.data.map(function(x, index) {
-    //console.log (gaDataReports[x.index].data);
-    //var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
-    var dataTotal = gaDataReports[x.index].data.totals[0].values[0];
-    dataTotal = parseInt(dataTotal, 10) || 0;
-    return  {
-      name: x.name,
-      y: dataTotal
-    }
-  });
-
-
-
+  var seriesData;
+  if (obj.data.length > 0 && obj.data[0].name && obj.data[0].y) {
+    seriesData = obj.data;
+  } else {
+    seriesData = obj.data.map(function(x, index) {
+      //console.log (gaDataReports[x.index].data);
+      //var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
+      var dataTotal = gaDataReports[x.index].data.totals[0].values[0];
+      dataTotal = parseInt(dataTotal, 10) || 0;
+      return  {
+        name: x.name,
+        y: dataTotal
+      }
+    });
+  }
   var chartId = createChart();
   var chart = new Highcharts.Chart({
     chart: {
@@ -836,4 +837,318 @@ function drawBreakDownChart(obj) {
     }]
   });
 
+}
+
+
+function drawRevenueChart(obj) {
+  var seriesData;
+  var total = [];
+  var categories;
+  if (obj.data.length > 0 && obj.data[0].name && obj.data[0].y) {
+    categories = obj.data.map(function(x, index) {
+      return x.name;
+    });
+    var priceLayers = obj.data[0].y.length;
+    //console.log (priceLayers);
+    seriesData = [];
+    for (var i=0; i<priceLayers; i++) {
+      var data = obj.data.map(function(x, index) {
+        return x.y[i];
+      });
+      var oneItem = {
+        name: priceTypes[i],
+        data: data
+      }
+      seriesData.push(oneItem);
+      var currentTotal;
+      const reducer = (accumulator, currentValue) => accumulator + currentValue;
+      currentTotal = data.reduce(reducer, 0);
+      currentTotal = number_format(currentTotal, 0, '.', ',');
+      total.push({
+        name: priceTypes[i],
+        value: currentTotal
+      });
+    }
+  }
+  const reducerForTotal = (accumulator, currentValue) => accumulator + ' ' + currentValue.name + ': ' + currentValue.value;
+  totalText = total.reduce(reducerForTotal, '');
+  const unitName = obj.unit || '';
+  var chartId = createChart(reducerForTotal, '');
+  var chart = new Highcharts.Chart({
+      chart: {
+          type: obj.type,
+          renderTo: chartId
+      },
+      title: {
+          text: obj.title
+      },
+      subtitle: {
+        text: totalText
+      },
+      xAxis: {
+          categories: categories,
+          crosshair: true
+      },
+      yAxis: {
+          min: 0,
+          title: {
+              text: unitName
+          }
+      },
+      tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+              '<td style="padding:0"><b>{point.y:,.0f} ' + unitName + '</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+      },
+      plotOptions: {
+          column: {
+              pointPadding: 0.2,
+              borderWidth: 0
+          }
+      },
+      series: seriesData
+  });
+}
+
+
+
+var pricing = {
+  "1000": {
+    "home": {
+      "0201": [490,245],
+      "0411": [510,255],
+      "0412": [420,0],
+      "0421": [350,0],
+      "0301": [420,0],
+      "0302": [350,0]
+    },
+    "ros": {
+      "0201": [400,200],
+      "0411": [470,235],
+      "0412": [350,0],
+      "0421": [450,225],
+      "0301": [320,0]
+    }
+  },
+  "2000": {
+    "home": {
+      "0101": [400,200],
+      "0301": [200,100],
+      "0801": [200,100],
+      "0401": [200,100],
+      "0402": [200,0],
+      "0302": [200,0]
+    },
+    "ros": {
+      "0301": [200,100],
+      "0401": [200,100],
+      "0402": [200,0],
+      "0302": [200,0]
+    }
+  },
+  "3000": {
+      "home": {
+      "0101": [400,200],
+      "0301": [200,100],
+      "0801": [200,100],
+      "0401": [200,100],
+      "0402": [200,0],
+      "0302": [200,0]
+    },
+    "ros": {
+      "0301": [200,100],
+      "0401": [200,100],
+      "0402": [200,0],
+      "0302": [200,0]
+    }
+  },
+  "4000": {
+    "home": {
+      "0101": [400,200],
+      "0301": [200,100],
+      "0801": [200,100],
+      "0401": [200,100],
+      "0402": [200,0],
+      "0302": [200,0]
+    },
+    "ros": {
+      "0301": [200,100],
+      "0401": [200,100],
+      "0402": [200,0],
+      "0302": [200,0]
+    }
+  },
+  "5000": {
+   "home": {
+      "0101": [400,200],
+      "0301": [200,100],
+      "0801": [200,100],
+      "0401": [200,100],
+      "0402": [200,0],
+      "0302": [200,0]
+    },
+    "ros": {
+      "0301": [200,100],
+      "0401": [200,100],
+      "0402": [200,0],
+      "0302": [200,0]
+    }
+  },
+  "6000": {
+    "home": {
+      "0101": [1000,500],
+      "0411": [500,250],
+      "0412": [500,0]
+    },
+    "ros": {
+      "0461": [500,250]
+    }
+  },
+  "7000": {
+    "home": {
+      "0101": [1000,500],
+      "0411": [500,250],
+      "0412": [500,0]
+    },
+    "ros": {
+      "0461": [500,250]
+    }
+  }
+};
+
+
+var devices = {
+  '1000': 'PC',
+  '2000': 'iPhone App',
+  '3000': 'iPhone Web',
+  '4000': 'Android App',
+  '5000': 'Android Web',
+  '6000': 'iPad App',
+  '7000': 'iPad Web'
+}
+
+var priceTypes = ['Rate Card', 'Actual'];
+
+
+function calculateAdValue(adInfo, adImpression) {
+  var pricePerImpression = 0;
+  var deviceId = adInfo.deviceId;
+  var channelId = adInfo.channelId;
+  var positionId = adInfo.positionId;
+  if (typeof deviceId !== 'string' || typeof channelId !== 'string' || typeof positionId !== 'string') {
+    return null;
+  }
+  var priceInfoForDevice = pricing[deviceId];
+  if (priceInfoForDevice === undefined) {
+    return null;
+  }
+  var priceInfoForChannel;
+  if (channelId === '1000') {
+    priceInfoForChannel = priceInfoForDevice.home;
+  } else {
+    priceInfoForChannel = priceInfoForDevice.ros;
+  }
+  var priceInfoForPosition = priceInfoForChannel[positionId];
+  if (priceInfoForPosition === undefined) {
+    return null;
+  }
+  //console.log (priceInfoForPosition);
+  //priceInfoForPosition = 0;
+  var finalPrice = priceInfoForPosition.map(onePrice => {
+    return onePrice * adImpression / 1000;
+  });
+
+  // pricePerImpression = priceInfoForPosition/1000;
+  // var finalPrice = pricePerImpression*adImpression;
+  // //console.log (finalPrice);
+  //console.log (finalPrice);
+  return finalPrice;
+}
+
+function calculateInventory() {
+  var text = document.getElementById('test').value;
+  text = text.replace(/[\n\r]+/g,'|');
+  textArray = text.split('|');
+  var deviceSubtotal = {};
+  var adValueByDevice = {};
+  for (var oneItem of textArray) {
+    var adid = oneItem.replace(/^([0-9]+)[\s]+([0-9]+)$/g, '$1');
+    var adImpression = oneItem.replace(/^([0-9]+)[\s]+([0-9]+)$/g, '$2');
+    adImpression = parseInt(adImpression, 10) || 0;
+    if (adid.length === 12) {
+      var deviceId = adid.substring(0,4);
+      var channelId = adid.substring(4,8);
+      var positionId = adid.substring(8, 12);
+      var adInfo = {
+        deviceId: deviceId,
+        channelId: channelId,
+        positionId: positionId
+      };
+      var adValue = calculateAdValue(adInfo, adImpression);
+      //console.log (adValue);
+      // if (deviceSubtotal[deviceId] === undefined) {
+      //   deviceSubtotal[deviceId] = adImpression;
+      // } else {
+      //   deviceSubtotal[deviceId] += adImpression;
+      // }
+      if (adValue && adValue.length > 0) {
+        if (adValueByDevice[deviceId] === undefined)  {
+          adValueByDevice[deviceId] = adValue;
+        } else {
+          adValueByDevice[deviceId] = adValueByDevice[deviceId].map(function (num, idx) {
+            return num + adValue[idx];
+          });;
+        }
+      }
+    }
+  }
+  //console.log (adValueByDevice);
+  var finalRevenue = convertToArray(adValueByDevice);
+  return finalRevenue;
+}
+
+function convertToArray(obj) {
+  console.log (obj);
+    var newArray = [];
+    for (var k in obj) {
+        if (obj.hasOwnProperty(k)) {
+          var name;
+          if (devices[k]) {
+            name = devices[k];
+          } else {
+            name = k;
+          }
+           newArray.push({
+            name: name,
+            y: obj[k]
+           });
+        }
+    }
+    console.log (newArray);
+    return newArray;
+}
+
+
+function number_format(number, decimals, dec_point, thousands_sep) {
+    var n = !isFinite(+number) ? 0 : +number, 
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        toFixedFix = function (n, prec) {
+            // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+            var k = Math.pow(10, prec);
+            return Math.round(n * k) / k;
+        },
+        s = (prec ? toFixedFix(n, prec) : Math.round(n)).toString().split('.');
+    if (s[0].length > 3) {
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    }
+    if ((s[1] || '').length < prec) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+    return s.join(dec);
 }
