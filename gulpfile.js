@@ -52,7 +52,7 @@ gulp.task('rollup', async () => {
   // TODO:关于rollup需要再认真学习一下
 
     const bundle = await rollup({
-      input:`app/es6/addFeatureToTable.js`,
+      input:`./es6/addFeatureToTable.js`,
       plugins:[
         babel({//这里需要配置文件.babelrc
           exclude:'node_modules/**'
@@ -74,10 +74,7 @@ gulp.task('rollup', async () => {
     browserSync.reload();
 });
 
-gulp.task('build:es6',['rollup'],() => {
-  return gulp.src('.tmp/scripts/addFeatureToTable.js')
-    .pipe(gulp.dest('dist/scripts'));
-})
+
 
 function lint(files) {
   return gulp.src(files)
@@ -99,7 +96,7 @@ gulp.task('lint:test', () => {
 gulp.task('html', ['styles', 'scripts'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
-    //.pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
+    .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
     .pipe($.if(/\.css$/, $.cssnano({safe: true, autoprefixer: false})))
     .pipe($.if(/\.html$/, $.htmlmin({
       collapseWhitespace: true,
@@ -209,7 +206,7 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
-gulp.task('build', ['lint', 'html', 'build:es6','images', 'fonts', 'extras'], () => {
+gulp.task('build', ['lint', 'html','images', 'fonts', 'extras'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 
