@@ -844,6 +844,7 @@ function drawRevenueChart(obj) {
   var seriesData;
   var total = [];
   var categories;
+  var totalText;
   if (obj.data.length > 0 && obj.data[0].name && obj.data[0].y) {
     categories = obj.data.map(function(x, index) {
       return x.name;
@@ -872,6 +873,8 @@ function drawRevenueChart(obj) {
   }
   const reducerForTotal = (accumulator, currentValue) => accumulator + ' ' + currentValue.name + ': ' + currentValue.value;
   totalText = total.reduce(reducerForTotal, '');
+
+  
   const unitName = obj.unit || '';
   var chartId = createChart(reducerForTotal, '');
   var chart = new Highcharts.Chart({
@@ -1111,7 +1114,6 @@ function calculateInventory() {
 }
 
 function convertToArray(obj) {
-  console.log (obj);
     var newArray = [];
     for (var k in obj) {
         if (obj.hasOwnProperty(k)) {
@@ -1127,7 +1129,6 @@ function convertToArray(obj) {
            });
         }
     }
-    console.log (newArray);
     return newArray;
 }
 
