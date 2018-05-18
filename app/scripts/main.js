@@ -1,7 +1,7 @@
 // import { CLIENT_RENEG_LIMIT } from "tls";
 
 /**
- *  Calculate the person correlation score between two items in a dataset.
+ *  Calculate the pearson correlation score between two items in a dataset.
  *
  *  @param  {object}  prefs The dataset containing data about both items that
  *                    are being compared.
@@ -52,7 +52,6 @@ function pearsonCorrelation(prefs, p1, p2) {
   return final;
 }
 
-
 /**
 Exactly –1. A perfect downhill (negative) linear relationship
 
@@ -100,7 +99,7 @@ function correlationExplained(r) {
 }
 
 function queryDifferentReports() {
-  //MARK:适用于ReportRequest对象的dateRange、viewId不同的情况
+  // MARK: - 适用于ReportRequest对象的dateRange、viewId不同的情况
   /**
    * @dest:发出数个ReportRequest对象不同的请求，所有请求都完成后得到响应数据，再处理响应数据并绘图。
    * @depend requestDataArr：TYPE Arr 用于存储数个ReportRequest对象,来自具体展示页面设置的全局常量。
@@ -136,8 +135,16 @@ function queryDifferentReports() {
 
     },console.error.bind(console));
   }
-   
    oneRequest();
+}
+
+function gup( name, url ) {
+    if (!url) url = location.href;
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( url );
+    return results == null ? null : results[1];
 }
 
 function getStoredDataFile(filePath) {
@@ -154,10 +161,10 @@ function getStoredDataFile(filePath) {
 }
 
 var gCurrentChartIndex = 0;
-// Query the API and print the results to the page.
+// MARK: - Query the API and print the results to the page.
 var gaDataReports = [];
 function queryReportsAll() {
-  //MARK:适用于ReportRequest对象的dateRange、viewId都相同，但ReportRequest对象的数量超过5个的情况。
+  //MARK: - 适用于ReportRequest对象的dateRange、viewId都相同，但ReportRequest对象的数量超过5个的情况。
 
   function requestBatch(index, reportRequests) {
     var startIndex = index * reportBatchLimit;
@@ -186,7 +193,6 @@ function queryReportsAll() {
       }
     );
   }
-
   const reportBatchLimit = 5;
   var reportRequests = constructQuerryData(startDate, endDate);
   var reportRequestLength = reportRequests.length;
@@ -194,7 +200,6 @@ function queryReportsAll() {
   var currentBatchIndex = 0;
   gaDataReports = [];
   requestBatch(currentBatchIndex, reportRequests);
-
 }
 
 
@@ -210,12 +215,10 @@ function queryReports() {
 }
 
 function displayResults(response) {
-  //console.log(response);
   drawCharts(response.result);
-  
 }
 
-// MARK:Append an div for drawing chart in it.
+// MARK: - Append an div for drawing chart in it.
 function createChart() {
   var chartContainer = document.createElement('div');
   var chartId = 'chart-container-' + gCurrentChartIndex;
@@ -240,7 +243,7 @@ function insertDiv(height) {
 }
 
 
-// MARK:Append an div for drawing table in it.
+// MARK: - Append an div for drawing table in it.
 function createTable() {
   var chartContainer = document.createElement('div');
   var chartId = 'chart-container-' + gCurrentChartIndex;
@@ -253,7 +256,7 @@ function createTable() {
   return chartId;
 }
 
-// MARK: Extract data from Google Analytics API
+// MARK: - Extract data from Google Analytics API
 function extractDataFromGAAPI(dataSource, baseKeys) {
   var resultData = {};
   if (dataSource === undefined) {
@@ -277,7 +280,7 @@ function extractDataFromGAAPI(dataSource, baseKeys) {
   return dimensions;
 }
 
-//MARK:By wangyichen, 根据ga响应原始数据集，得到想要的obj数据,一般用于给table用作数据集
+//MARK: - By wangyichen, 根据ga响应原始数据集，得到想要的obj数据,一般用于给table用作数据集
 /**
  * 
  * @param {Array} gaResponseReports: ga响应原始数据集的reports字段值，即含有至多五个Obj的数组
@@ -313,7 +316,8 @@ function extractObjData(gaResponseReports, propsArr, keys, orderBy) {
   if (!orderBy) {
     return resultData;
   }
-  resultData.sort((a,b) => { //Note:sort方法是会改变原数组的
+  resultData.sort((a,b) => {
+    // MARK - :sort方法是会改变原数组的
     if(a[orderBy] > b[orderBy]) {
       return -1;
     } else {
@@ -394,6 +398,7 @@ function addStatisRowToData(data, addStatisRowArr) {
 function divide(a,b) {
   return Math.round(a/b * 10000)/100;
 }
+
 /**
  * By wangyichen:计算一系列数之和
  * @param {Array:[Number,Number..]} numArray 
@@ -466,8 +471,6 @@ function medianOfAll(numArray) {
 }
 /*** 一系列数据计算方法：End ***/
 
-
-
 // MARK: Calculate percentage between two sets of data
 function calculateRates(part, total) {
   var rates=[];
@@ -523,7 +526,6 @@ function averageOfArray(arrayObject) {
   avg = sum/arrayObject.length;
   avg = Math.round(avg * 100)/100;
   } catch (ignore) {
-
   }
   return avg;
 }
@@ -538,10 +540,7 @@ function createTable(data) {
   const tableContainer = document.createElement('table');
   const tableThead = document.createElement('thead');
   const tableTbody = document.createElement('tbody');
-
   tableContainer.className = 'o-table o-table--row-stripes';
-  
-  
   const heads = ['Ad','SuccessRate','FailRate','successOnRetryRate','Request','Success','Fail','SuccessOnRetry'];
   let ths = '';
   for(const item of heads) {
@@ -549,7 +548,6 @@ function createTable(data) {
   }
   tableThead.innerHTML = ths;
   tableContainer.appendChild(tableThead);
-
   for(const item of data) {
     const adid = item.ad.replace(/.*\(([0-9]+)\)/,'$1');//该方法并不改变调用它的字符串本身，而只是返回一个新的替换后的字符串
     const successRate = item.successRate;
@@ -588,7 +586,6 @@ function createNormalTable(data, fields,statisticFields) {
   const tableContainer = document.createElement('table');
   const tableThead = document.createElement('thead');
   const tableTbody = document.createElement('tbody');
-
   tableContainer.className = 'ftc-table ftc-table--responsive-overflow ftc-table--row-stripes ftc-table--vertical-lines';
   tableContainer.setAttribute('data-ftc-component','ftc-table');
   tableContainer.setAttribute('data-ftc-table--no-js','');
@@ -597,7 +594,6 @@ function createNormalTable(data, fields,statisticFields) {
   tableContainer.setAttribute('data-ftc-table--wrapper-width','100%');
   tableContainer.setAttribute('data-ftc-table--wrapper-height','500px');
   //TODO:将class和attribute作为函数参数
-
   //data-ftc-table--wrapped data-ftc-table--wrapper-width="100%" data-ftc-table--wrapper-height="180px"
   let ths = '';
   for(const item of fields) {
@@ -614,7 +610,6 @@ function createNormalTable(data, fields,statisticFields) {
   }
   tableThead.innerHTML = ths;
   tableContainer.appendChild(tableThead);
-
   for(const item of data) {
      let tds = '';
      for(const field of fields) {
@@ -623,7 +618,6 @@ function createNormalTable(data, fields,statisticFields) {
        } else {
          tds += `<td>${item[field]}</td>`;
        }
-      
      };
     const tableTr = document.createElement('tr');
     tableTr.innerHTML = tds;
@@ -661,6 +655,7 @@ function getKeysByOder(keys,n) {
 
   const ads = [];
 }
+
 // MARK: A quick way to draw just one chart with just enought information
 function drawChartByKey(obj) {
   var percentageSign = (obj.percentage === true) ? '%': '';
@@ -690,8 +685,6 @@ function drawChartByKey(obj) {
           dataDetail = '('+  dataTotal  +')';
         }
       }
-
-      
       return [
         x.name + dataDetail, dataTotal
       ];
@@ -782,7 +775,6 @@ function drawChartByKey(obj) {
     });
 }
 
-
 function drawBreakDownChart(obj) {
   var seriesData;
   if (obj.data.length > 0 && obj.data[0].name && obj.data[0].y) {
@@ -836,28 +828,26 @@ function drawBreakDownChart(obj) {
         data: seriesData
     }]
   });
-
 }
-
 
 function drawRevenueChart(obj) {
   var seriesData;
   var total = [];
   var categories;
-  var totalText;
+  var subtitle;
   if (obj.data.length > 0 && obj.data[0].name && obj.data[0].y) {
     categories = obj.data.map(function(x, index) {
       return x.name;
     });
-    var priceLayers = obj.data[0].y.length;
-    //console.log (priceLayers);
+    var arrayCount = obj.data[0].y.length;
     seriesData = [];
-    for (var i=0; i<priceLayers; i++) {
+    for (var i=0; i<arrayCount; i++) {
       var data = obj.data.map(function(x, index) {
         return x.y[i];
       });
+      var dataSetName = obj.dataSets[i] || i;
       var oneItem = {
-        name: priceTypes[i],
+        name: dataSetName,
         data: data
       }
       seriesData.push(oneItem);
@@ -866,15 +856,13 @@ function drawRevenueChart(obj) {
       currentTotal = data.reduce(reducer, 0);
       currentTotal = number_format(currentTotal, 0, '.', ',');
       total.push({
-        name: priceTypes[i],
+        name: dataSetName,
         value: currentTotal
       });
     }
   }
   const reducerForTotal = (accumulator, currentValue) => accumulator + ' ' + currentValue.name + ': ' + currentValue.value;
-  totalText = total.reduce(reducerForTotal, '');
-
-  
+  subtitle = total.reduce(reducerForTotal, '');
   const unitName = obj.unit || '';
   var chartId = createChart(reducerForTotal, '');
   var chart = new Highcharts.Chart({
@@ -886,7 +874,7 @@ function drawRevenueChart(obj) {
           text: obj.title
       },
       subtitle: {
-        text: totalText
+        text: subtitle
       },
       xAxis: {
           categories: categories,
@@ -912,116 +900,121 @@ function drawRevenueChart(obj) {
               borderWidth: 0
           }
       },
+      credits: {
+        enabled: false
+      },
       series: seriesData
   });
 }
 
-
-
-var pricing = {
-  "1000": {
-    "home": {
-      "0201": [490,245],
-      "0411": [510,255],
-      "0412": [420,0],
-      "0421": [350,0],
-      "0301": [420,0],
-      "0302": [350,0]
+var pricing = {'1000': {
+    'home': {
+      '0201': [490,245],
+      '0411': [510,255],
+      '0412': [420,0],
+      '0421': [350,0],
+      '0301': [420,0],
+      '0302': [350,0]
     },
-    "ros": {
-      "0201": [400,200],
-      "0411": [470,235],
-      "0412": [350,0],
-      "0421": [450,225],
-      "0301": [320,0]
+    'ros': {
+      '0201': [400,200],
+      '0411': [470,235],
+      '0412': [350,0],
+      '0421': [450,225],
+      '0301': [320,0]
     }
   },
-  "2000": {
-    "home": {
-      "0101": [400,200],
-      "0301": [200,100],
-      "0801": [200,100],
-      "0401": [200,100],
-      "0402": [200,0],
-      "0302": [200,0]
+  '2000': {
+    'home': {
+      '0101': [400,200],
+      '0102': [400,200],
+      '0301': [200,100],
+      '0801': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
     },
-    "ros": {
-      "0301": [200,100],
-      "0401": [200,100],
-      "0402": [200,0],
-      "0302": [200,0]
+    'ros': {
+      '0301': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
     }
   },
-  "3000": {
-      "home": {
-      "0101": [400,200],
-      "0301": [200,100],
-      "0801": [200,100],
-      "0401": [200,100],
-      "0402": [200,0],
-      "0302": [200,0]
+  '3000': {
+      'home': {
+      '0101': [400,200],
+      '0102': [400,200],
+      '0301': [200,100],
+      '0801': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
     },
-    "ros": {
-      "0301": [200,100],
-      "0401": [200,100],
-      "0402": [200,0],
-      "0302": [200,0]
+    'ros': {
+      '0301': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
     }
   },
-  "4000": {
-    "home": {
-      "0101": [400,200],
-      "0301": [200,100],
-      "0801": [200,100],
-      "0401": [200,100],
-      "0402": [200,0],
-      "0302": [200,0]
+  '4000': {
+    'home': {
+      '0101': [400,200],
+      '0102': [400,200],
+      '0301': [200,100],
+      '0801': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
     },
-    "ros": {
-      "0301": [200,100],
-      "0401": [200,100],
-      "0402": [200,0],
-      "0302": [200,0]
+    'ros': {
+      '0301': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
     }
   },
-  "5000": {
-   "home": {
-      "0101": [400,200],
-      "0301": [200,100],
-      "0801": [200,100],
-      "0401": [200,100],
-      "0402": [200,0],
-      "0302": [200,0]
+  '5000': {
+   'home': {
+      '0101': [400,200],
+      '0102': [400,200],
+      '0301': [200,100],
+      '0801': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
     },
-    "ros": {
-      "0301": [200,100],
-      "0401": [200,100],
-      "0402": [200,0],
-      "0302": [200,0]
+    'ros': {
+      '0301': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
     }
   },
-  "6000": {
-    "home": {
-      "0101": [1000,500],
-      "0411": [500,250],
-      "0412": [500,0]
+  '6000': {
+    'home': {
+      '0101': [1000,500],
+      '0102': [1000,500],
+      '0411': [500,250],
+      '0412': [500,0]
     },
-    "ros": {
-      "0461": [500,250]
+    'ros': {
+      '0461': [500,250]
     }
   },
-  "7000": {
-    "home": {
-      "0101": [1000,500],
-      "0411": [500,250],
-      "0412": [500,0]
+  '7000': {
+    'home': {
+      '0101': [1000,500],
+      '0102': [1000,500],
+      '0411': [500,250],
+      '0412': [500,0]
     },
-    "ros": {
-      "0461": [500,250]
+    'ros': {
+      '0461': [500,250]
     }
   }
 };
-
 
 var devices = {
   '1000': 'PC',
@@ -1031,16 +1024,66 @@ var devices = {
   '5000': 'Android Web',
   '6000': 'iPad App',
   '7000': 'iPad Web'
+};
+
+var deviceTypes = {
+  '1000': 'DeskTop',
+  '2000': 'Mobile',
+  '3000': 'Mobile',
+  '4000': 'Mobile',
+  '5000': 'Mobile',
+  '6000': 'Mobile',
+  '7000': 'Mobile'
+};
+
+
+function lookUpAdPosition(adInfo) {
+  var deviceId = adInfo.deviceId;
+  var channelId = adInfo.channelId;
+  var positionId = adInfo.positionId;
+  var adName;
+  var finalPosition;
+  Object.keys(adDevices).map(function(key, index) {
+    if (adDevices[key].id === deviceId) {
+      var adPattern = window[adDevices[key].patterns];
+      var adSizeId = positionId.substring(0,2);
+      var adPositionId = positionId.substring(2,4);
+      Object.keys(adPattern).map(function(key, index) {
+        if (adPattern[key].id === adSizeId) {
+          var adName = key;
+          //console.log (adName);
+          var adPositionObj = adPattern[key].position;
+          //console.log (adPositionObj);
+          Object.keys(adPositionObj).map(function(key, index) {
+            if (adPositionObj[key].id === adPositionId) {
+              //console.log (key);
+              finalPosition = {
+                name: adName,
+                position: key
+              };
+              //console.log (finalPosition);
+            }
+          });
+        }
+      });
+    }
+  });
+  return finalPosition;
 }
-
-var priceTypes = ['Rate Card', 'Actual'];
-
 
 function calculateAdValue(adInfo, adImpression) {
   var pricePerImpression = 0;
   var deviceId = adInfo.deviceId;
   var channelId = adInfo.channelId;
   var positionId = adInfo.positionId;
+  var deviceBreakDown;
+  var deviceType;
+  var pageType;
+  var adSize;
+  var adPosition;
+
+  deviceBreakDown = devices[deviceId] || deviceId;
+  deviceType = deviceTypes[deviceId] || deviceId;
   if (typeof deviceId !== 'string' || typeof channelId !== 'string' || typeof positionId !== 'string') {
     return null;
   }
@@ -1051,31 +1094,37 @@ function calculateAdValue(adInfo, adImpression) {
   var priceInfoForChannel;
   if (channelId === '1000') {
     priceInfoForChannel = priceInfoForDevice.home;
+    pageType = 'Home';
   } else {
     priceInfoForChannel = priceInfoForDevice.ros;
+    pageType = 'Run of Site';
   }
+  adPosition = lookUpAdPosition(adInfo);
+  //console.log (adPosition);
   var priceInfoForPosition = priceInfoForChannel[positionId];
   if (priceInfoForPosition === undefined) {
     return null;
   }
-  //console.log (priceInfoForPosition);
-  //priceInfoForPosition = 0;
   var finalPrice = priceInfoForPosition.map(onePrice => {
     return onePrice * adImpression / 1000;
   });
-
-  // pricePerImpression = priceInfoForPosition/1000;
-  // var finalPrice = pricePerImpression*adImpression;
-  // //console.log (finalPrice);
-  //console.log (finalPrice);
-  return finalPrice;
+  var adInformation = {
+    'value': finalPrice,
+    'deviceType': deviceType,
+    'deviceBreakDown': deviceBreakDown,
+    'pageType': pageType,
+    'name': adPosition.name,
+    'position': adPosition.position
+  };
+  //console.log (adInformation);
+  return adInformation;
 }
 
 function calculateInventory() {
   var text = document.getElementById('test').value;
   text = text.replace(/[\n\r]+/g,'|');
   textArray = text.split('|');
-  var deviceSubtotal = {};
+  var adValueBy = {};
   var adValueByDevice = {};
   for (var oneItem of textArray) {
     var adid = oneItem.replace(/^([0-9]+)[\s]+([0-9]+)$/g, '$1');
@@ -1090,48 +1139,67 @@ function calculateInventory() {
         channelId: channelId,
         positionId: positionId
       };
-      var adValue = calculateAdValue(adInfo, adImpression);
-      //console.log (adValue);
-      // if (deviceSubtotal[deviceId] === undefined) {
-      //   deviceSubtotal[deviceId] = adImpression;
-      // } else {
-      //   deviceSubtotal[deviceId] += adImpression;
-      // }
-      if (adValue && adValue.length > 0) {
-        if (adValueByDevice[deviceId] === undefined)  {
-          adValueByDevice[deviceId] = adValue;
-        } else {
-          adValueByDevice[deviceId] = adValueByDevice[deviceId].map(function (num, idx) {
-            return num + adValue[idx];
-          });;
-        }
+      var adInformation = calculateAdValue(adInfo, adImpression);
+      var adValue;
+      var adPageType;
+      var adDeviceType;
+      var adDeviceBreakdown;
+      var adName;
+      var adPosition;
+      if (adInformation) {
+        adValue = adInformation.value || 0;
+        adPageType = adInformation.pageType;
+        adDeviceType = adInformation.deviceType;
+        adDeviceBreakdown = adInformation.deviceBreakDown;
+        adName = adInformation.name;
+        adPosition = adInformation.position;
+      } else {
+        continue;
       }
+      adInfo = {
+        deviceType: adDeviceType,
+        deviceBreakDown: adDeviceBreakdown,
+        pageType: adPageType,
+        name: adName,
+        position: adPosition,
+        fullname: adName + ': ' + adPosition
+      }
+      Object.keys(adInfo).map(function(key, index) {
+        if (adValue && adValue.length > 0) {
+          if (adValueBy[key] === undefined) {
+            adValueBy[key] = {}
+          }
+          var value = adInfo[key];
+          //console.log (value);
+          if (adValueBy[key][value] === undefined)  {
+            adValueBy[key][value] = adValue;
+          } else {
+            adValueBy[key][value] = adValueBy[key][value].map(function (num, idx) {
+              return num + adValue[idx];
+            });
+          }
+        }
+      });
     }
   }
-  //console.log (adValueByDevice);
-  var finalRevenue = convertToArray(adValueByDevice);
-  return finalRevenue;
+  Object.keys(adValueBy).map(function(key, index) {
+    adValueBy[key] = convertToArray(adValueBy[key]);
+  });
+  return adValueBy;
 }
 
 function convertToArray(obj) {
     var newArray = [];
     for (var k in obj) {
         if (obj.hasOwnProperty(k)) {
-          var name;
-          if (devices[k]) {
-            name = devices[k];
-          } else {
-            name = k;
-          }
            newArray.push({
-            name: name,
+            name: k,
             y: obj[k]
            });
         }
     }
     return newArray;
 }
-
 
 function number_format(number, decimals, dec_point, thousands_sep) {
     var n = !isFinite(+number) ? 0 : +number, 

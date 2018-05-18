@@ -43,8 +43,44 @@ document.addEventListener("DOMContentLoaded", function(event) {
   drawRevenueChart({
     title: 'Inventory By Device Type',
     type: 'column',
-    data: revenueByDevice,
-    unit: 'RMB'
+    data: revenueByDevice.deviceType,
+    unit: 'RMB',
+    dataSets: ['Rate Card', 'Actual']
+  });
+  drawRevenueChart({
+    title: 'Inventory By Device Breakdown',
+    type: 'column',
+    data: revenueByDevice.deviceBreakDown,
+    unit: 'RMB',
+    dataSets: ['Rate Card', 'Actual']
+  });
+  drawRevenueChart({
+    title: 'Inventory By Page Type',
+    type: 'column',
+    data: revenueByDevice.pageType,
+    unit: 'RMB',
+    dataSets: ['Rate Card', 'Actual']
+  });
+  drawRevenueChart({
+    title: 'Inventory By Name',
+    type: 'column',
+    data: revenueByDevice.name,
+    unit: 'RMB',
+    dataSets: ['Rate Card', 'Actual']
+  });
+  drawRevenueChart({
+    title: 'Inventory By Position',
+    type: 'column',
+    data: revenueByDevice.position,
+    unit: 'RMB',
+    dataSets: ['Rate Card', 'Actual']
+  });
+  drawRevenueChart({
+    title: 'Inventory By Name and Position',
+    type: 'column',
+    data: revenueByDevice.fullname,
+    unit: 'RMB',
+    dataSets: ['Rate Card', 'Actual']
   });
 });
 </script>
@@ -27072,6 +27108,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 <!-- Load the JavaScript API client and Sign-in library. -->
 <script src="https://apis.google.com/js/client:platform.js"></script>
+
+
+<!-- build:js scripts/ad-explain.js -->
+<script src="../bower_components/ftcnext/app/scripts/adChannel.js"></script>
+<script src="../bower_components/ftcnext/app/scripts/adDevice.js"></script>
+<script src="../bower_components/ftcnext/app/scripts/adPatternsPad.js"></script>
+<script src="../bower_components/ftcnext/app/scripts/adPatternsPC.js"></script>
+<script src="../bower_components/ftcnext/app/scripts/adPatternsPhone.js"></script>
+<!-- endbuild -->
 
 
 </body>

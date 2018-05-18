@@ -37,10 +37,31 @@
 
 <script>
 // MARK: - These are different in every page. 
+var product = gup('product', window.location.href);
+// Replace with your view ID.
+var VIEW_ID;// = '108134561'; 
+//var VIEW_ID_1 = '10995661';
+var eventCategory;
+
+if (product === 'ios') {
+  VIEW_ID = '108134561';
+} else {
+  VIEW_ID = '10995661';
+}
+
+if (product == 'ios') {
+  eventCategory = 'Privileges';
+} else if (product == 'web') {
+  eventCategory = 'Web Privileges';
+} else if (product == 'android') {
+  eventCategory = 'Android Privileges';
+} else {
+  eventCategory = 'Privileges';
+}
 
 // Replace with your view ID.
-var VIEW_ID = '108134561';
-var VIEW_ID_1 = '10995661';
+// var VIEW_ID = '108134561'; 
+// var VIEW_ID_1 = '10995661';
 // var startDate = '14daysago';
 var startDate = '2018-04-04';
 // var startDate = '30daysago';
@@ -98,7 +119,6 @@ function constructQuerryData(startDate, endDate) {
             
           ]
         }
-
       ]
     },// 1 iOS Buy Premium Subscription
     {
@@ -177,7 +197,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -227,7 +247,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -277,7 +297,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -327,7 +347,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -411,7 +431,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -461,7 +481,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -545,7 +565,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -595,7 +615,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -645,7 +665,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -695,7 +715,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -745,7 +765,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -795,7 +815,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -845,7 +865,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -895,7 +915,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -945,7 +965,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -995,7 +1015,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -1045,7 +1065,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -1095,7 +1115,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -1145,7 +1165,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -1195,7 +1215,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -1245,7 +1265,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -1295,7 +1315,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'Privileges'
+                eventCategory
               ],
               'caseSensitive': true
             },
