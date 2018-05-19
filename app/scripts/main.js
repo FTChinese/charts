@@ -128,8 +128,8 @@ function queryDifferentReports() {
 
 function gup( name, url ) {
     if (!url) url = location.href;
-    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    name = name.replace(/[\[]/,'\\\[').replace(/[\]]/,'\\\]');
+    var regexS = '[\\?&]'+name+'=([^&#]*)';
     var regex = new RegExp( regexS );
     var results = regex.exec( url );
     return results == null ? null : results[1];
@@ -1131,7 +1131,7 @@ function calculateAdValue(adInfo, adImpression) {
 function calculateInventory() {
   var text = document.getElementById('test').value;
   text = text.replace(/[\n\r]+/g,'|');
-  textArray = text.split('|');
+  var textArray = text.split('|');
   var adValueBy = {};
   var adValueByDevice = {};
   for (var oneItem of textArray) {

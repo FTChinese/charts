@@ -9,11 +9,9 @@ const fs = require('fs-jetpack');
 const path = require('path');
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
-
 const rollup = require('rollup').rollup;
 const babel = require('rollup-plugin-babel');
 const nodeResolve = require('rollup-plugin-node-resolve');
-
 
 var dev = true;
 
@@ -93,10 +91,28 @@ gulp.task('lint:test', () => {
     .pipe(gulp.dest('test/spec'));
 });
 
+
+
 gulp.task('html', ['styles', 'scripts'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
+    // MARK: uglify doesn't understand ES6
+    // .pipe($.if(/\.js$/, $.babel({
+    //     presets: [
+    //       ["env", {
+    //         targets: {
+    //           chrome: 59,
+    //           edge: 13,
+    //           firefox: 50,
+    //         },
+    //         // for uglifyjs...
+    //         forceAllTransforms: process.env === "production"
+    //       }],
+    //     ]
+    // })))
+    // MARK: uglify after bebel
     //.pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
+    //.pipe($.if(/\.js$/, $.minifyes({compress: {drop_console: true}})))
     .pipe($.if(/\.css$/, $.cssnano({safe: true, autoprefixer: false})))
     .pipe($.if(/\.html$/, $.htmlmin({
       collapseWhitespace: true,
