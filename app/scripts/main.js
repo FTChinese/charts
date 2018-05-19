@@ -11,44 +11,32 @@
  */
 function pearsonCorrelation(prefs, p1, p2) {
   var si = [];
-
   for (var key in prefs[p1]) {
     if (prefs[p2][key]) si.push(key);
   }
-
   var n = si.length;
-
   if (n == 0) return 0;
-
   var sum1 = 0;
   for (var i = 0; i < si.length; i++) sum1 += prefs[p1][si[i]];
-
   var sum2 = 0;
   for (var i = 0; i < si.length; i++) sum2 += prefs[p2][si[i]];
-
   var sum1Sq = 0;
   for (var i = 0; i < si.length; i++) {
     sum1Sq += Math.pow(prefs[p1][si[i]], 2);
   }
-
   var sum2Sq = 0;
   for (var i = 0; i < si.length; i++) {
     sum2Sq += Math.pow(prefs[p2][si[i]], 2);
   }
-
   var pSum = 0;
   for (var i = 0; i < si.length; i++) {
     pSum += prefs[p1][si[i]] * prefs[p2][si[i]];
   }
-
   var num = pSum - (sum1 * sum2 / n);
   var den = Math.sqrt((sum1Sq - Math.pow(sum1, 2) / n) *
       (sum2Sq - Math.pow(sum2, 2) / n));
-
   if (den == 0) return 0;
-
   var final = Math.round(100 * (num / den))/100;
-
   return final;
 }
 
@@ -1071,6 +1059,30 @@ function lookUpAdPosition(adInfo) {
   return finalPosition;
 }
 
+function lookUpAdChannel(adInfo) {
+  var deviceId = adInfo.deviceId;
+  var channelId = adInfo.channelId;
+  var positionId = adInfo.positionId;
+  var adName;
+  var finalChannel;
+  Object.keys(adDevices).map(function(key, index) {
+    if (adDevices[key].id === deviceId) {
+      var adChannelObj = window[adDevices[key].channels];
+      var mainChannelId = channelId.substring(0,2);
+      Object.keys(adChannelObj).map(function(key, index) {
+        if (adChannelObj[key].id === mainChannelId) {
+          finalChannel = key;
+        }
+      });
+    }
+  });
+  //console.log (finalChannel);
+  // if (finalChannel === undefined) {
+  //   console.log (adInfo);
+  // }
+  return finalChannel;
+}
+
 function calculateAdValue(adInfo, adImpression) {
   var pricePerImpression = 0;
   var deviceId = adInfo.deviceId;
@@ -1081,7 +1093,7 @@ function calculateAdValue(adInfo, adImpression) {
   var pageType;
   var adSize;
   var adPosition;
-
+  var adChannel;
   deviceBreakDown = devices[deviceId] || deviceId;
   deviceType = deviceTypes[deviceId] || deviceId;
   if (typeof deviceId !== 'string' || typeof channelId !== 'string' || typeof positionId !== 'string') {
@@ -1100,7 +1112,7 @@ function calculateAdValue(adInfo, adImpression) {
     pageType = 'Run of Site';
   }
   adPosition = lookUpAdPosition(adInfo);
-  //console.log (adPosition);
+  adChannel = lookUpAdChannel(adInfo);
   var priceInfoForPosition = priceInfoForChannel[positionId];
   if (priceInfoForPosition === undefined) {
     return null;
@@ -1114,9 +1126,9 @@ function calculateAdValue(adInfo, adImpression) {
     'deviceBreakDown': deviceBreakDown,
     'pageType': pageType,
     'name': adPosition.name,
-    'position': adPosition.position
+    'position': adPosition.position,
+    'channel': adChannel
   };
-  //console.log (adInformation);
   return adInformation;
 }
 
@@ -1146,6 +1158,7 @@ function calculateInventory() {
       var adDeviceBreakdown;
       var adName;
       var adPosition;
+      var adChannel;
       if (adInformation) {
         adValue = adInformation.value || 0;
         adPageType = adInformation.pageType;
@@ -1153,6 +1166,7 @@ function calculateInventory() {
         adDeviceBreakdown = adInformation.deviceBreakDown;
         adName = adInformation.name;
         adPosition = adInformation.position;
+        adChannel = adInformation.channel;
       } else {
         continue;
       }
@@ -1162,7 +1176,8 @@ function calculateInventory() {
         pageType: adPageType,
         name: adName,
         position: adPosition,
-        fullname: adName + ': ' + adPosition
+        fullname: adName + ': ' + adPosition,
+        channel: adChannel
       }
       Object.keys(adInfo).map(function(key, index) {
         if (adValue && adValue.length > 0) {

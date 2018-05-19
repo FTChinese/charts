@@ -82,6 +82,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
     unit: 'RMB',
     dataSets: ['Rate Card', 'Actual']
   });
+  drawRevenueChart({
+    title: 'Inventory By Channel',
+    type: 'column',
+    data: revenueByDevice.channel,
+    unit: 'RMB',
+    dataSets: ['Rate Card', 'Actual']
+  });
 });
 </script>
 
@@ -27107,7 +27114,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
 <!-- Load the JavaScript API client and Sign-in library. -->
-<script src="https://apis.google.com/js/client:platform.js"></script>
+<!---script src="https://apis.google.com/js/client:platform.js"></script-->
 
 
 <!-- build:js scripts/ad-explain.js -->
