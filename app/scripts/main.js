@@ -1,7 +1,7 @@
 // import { CLIENT_RENEG_LIMIT } from "tls";
 
 /**
- *  Calculate the person correlation score between two items in a dataset.
+ *  Calculate the pearson correlation score between two items in a dataset.
  *
  *  @param  {object}  prefs The dataset containing data about both items that
  *                    are being compared.
@@ -52,7 +52,6 @@ function pearsonCorrelation(prefs, p1, p2) {
   return final;
 }
 
-
 /**
 Exactly –1. A perfect downhill (negative) linear relationship
 
@@ -100,7 +99,7 @@ function correlationExplained(r) {
 }
 
 function queryDifferentReports() {
-  //MARK:适用于ReportRequest对象的dateRange、viewId不同的情况
+  // MARK: - 适用于ReportRequest对象的dateRange、viewId不同的情况
   /**
    * @dest:发出数个ReportRequest对象不同的请求，所有请求都完成后得到响应数据，再处理响应数据并绘图。
    * @depend requestDataArr：TYPE Arr 用于存储数个ReportRequest对象,来自具体展示页面设置的全局常量。
@@ -136,8 +135,16 @@ function queryDifferentReports() {
 
     },console.error.bind(console));
   }
-   
    oneRequest();
+}
+
+function gup( name, url ) {
+    if (!url) url = location.href;
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( url );
+    return results == null ? null : results[1];
 }
 
 function getStoredDataFile(filePath) {
@@ -154,10 +161,10 @@ function getStoredDataFile(filePath) {
 }
 
 var gCurrentChartIndex = 0;
-// Query the API and print the results to the page.
+// MARK: - Query the API and print the results to the page.
 var gaDataReports = [];
 function queryReportsAll() {
-  //MARK:适用于ReportRequest对象的dateRange、viewId都相同，但ReportRequest对象的数量超过5个的情况。
+  //MARK: - 适用于ReportRequest对象的dateRange、viewId都相同，但ReportRequest对象的数量超过5个的情况。
 
   function requestBatch(index, reportRequests) {
     var startIndex = index * reportBatchLimit;
@@ -186,7 +193,6 @@ function queryReportsAll() {
       }
     );
   }
-
   const reportBatchLimit = 5;
   var reportRequests = constructQuerryData(startDate, endDate);
   var reportRequestLength = reportRequests.length;
@@ -194,7 +200,6 @@ function queryReportsAll() {
   var currentBatchIndex = 0;
   gaDataReports = [];
   requestBatch(currentBatchIndex, reportRequests);
-
 }
 
 
@@ -210,12 +215,10 @@ function queryReports() {
 }
 
 function displayResults(response) {
-  //console.log(response);
   drawCharts(response.result);
-  
 }
 
-// MARK:Append an div for drawing chart in it.
+// MARK: - Append an div for drawing chart in it.
 function createChart() {
   var chartContainer = document.createElement('div');
   var chartId = 'chart-container-' + gCurrentChartIndex;
@@ -233,7 +236,14 @@ function insertPicture(title, src) {
   document.getElementById('charts-container').appendChild(imgContainer);
 }
 
-// MARK:Append an div for drawing table in it.
+function insertDiv(height) {
+  var divContainer = document.createElement('div');
+  divContainer.innerHTML = '<div style="height:'+height+'px;"></div>';
+  document.getElementById('charts-container').appendChild(divContainer);
+}
+
+
+// MARK: - Append an div for drawing table in it.
 function createTable() {
   var chartContainer = document.createElement('div');
   var chartId = 'chart-container-' + gCurrentChartIndex;
@@ -246,7 +256,7 @@ function createTable() {
   return chartId;
 }
 
-// MARK: Extract data from Google Analytics API
+// MARK: - Extract data from Google Analytics API
 function extractDataFromGAAPI(dataSource, baseKeys) {
   var resultData = {};
   if (dataSource === undefined) {
@@ -270,7 +280,7 @@ function extractDataFromGAAPI(dataSource, baseKeys) {
   return dimensions;
 }
 
-//MARK:By wangyichen, 根据ga响应原始数据集，得到想要的obj数据,一般用于给table用作数据集
+//MARK: - By wangyichen, 根据ga响应原始数据集，得到想要的obj数据,一般用于给table用作数据集
 /**
  * 
  * @param {Array} gaResponseReports: ga响应原始数据集的reports字段值，即含有至多五个Obj的数组
@@ -281,11 +291,11 @@ function extractDataFromGAAPI(dataSource, baseKeys) {
 function extractObjData(gaResponseReports, propsArr, keys, orderBy) {
   console.log('exect');
   const resultData = [];
-  console.log(keys);
+  //console.log(keys);
   keys.forEach(function(onekey) { //处理每个key,一个key对应一个最后数组数组的一项obj
     const oneObj = {};
     oneObj[propsArr[0]] = onekey; //该obj的第一个属性键为propsArr[0],值为key本身的值
-    console.log(onekey);
+    //console.log(onekey);
     for (const [index, elem] of gaResponseReports.entries()) {//该obj剩下的属性值分别从这几个reports中获取
     //for(var index = 0, len = gaResponseReports.length; index<len;index++) {
       //const elem = gaResponseReports[index];
@@ -306,7 +316,8 @@ function extractObjData(gaResponseReports, propsArr, keys, orderBy) {
   if (!orderBy) {
     return resultData;
   }
-  resultData.sort((a,b) => { //Note:sort方法是会改变原数组的
+  resultData.sort((a,b) => {
+    // MARK - :sort方法是会改变原数组的
     if(a[orderBy] > b[orderBy]) {
       return -1;
     } else {
@@ -360,7 +371,7 @@ function addStatisRowToData(data, addStatisRowArr) {
       if (!dataItemPropArr.includes(prop)) {
         continue;
       }
-      console.log(prop);
+      //console.log(prop);
       const numArr = data.map(datum => {
         return datum[prop];
       });
@@ -372,7 +383,7 @@ function addStatisRowToData(data, addStatisRowArr) {
         newObj[prop] = '--';
       }
     }
-    console.log(newObj);
+    //console.log(newObj);
     data.push(newObj);
   }
   return data;
@@ -387,6 +398,7 @@ function addStatisRowToData(data, addStatisRowArr) {
 function divide(a,b) {
   return Math.round(a/b * 10000)/100;
 }
+
 /**
  * By wangyichen:计算一系列数之和
  * @param {Array:[Number,Number..]} numArray 
@@ -459,11 +471,12 @@ function medianOfAll(numArray) {
 }
 /*** 一系列数据计算方法：End ***/
 
-
-
 // MARK: Calculate percentage between two sets of data
 function calculateRates(part, total) {
   var rates=[];
+  if (part == null || total == null) {
+    return rates;
+  }
   if (part.length>0 && part.length === total.length) {
     for (var i=0; i<part.length; i++) {
       var rate;
@@ -481,6 +494,9 @@ function calculateRates(part, total) {
 
 // MARK: Calculate percentage between two sets of data
 function calculateOverallRates(part, total) {
+  if (part == null || total == null) {
+    return 0;
+  }
   var partSum = part.reduce((a, b) => a + b, 0);
   var totalSum = total.reduce((a, b) => a + b, 0); 
   var rate = 0;
@@ -510,7 +526,6 @@ function averageOfArray(arrayObject) {
   avg = sum/arrayObject.length;
   avg = Math.round(avg * 100)/100;
   } catch (ignore) {
-
   }
   return avg;
 }
@@ -525,10 +540,7 @@ function createTable(data) {
   const tableContainer = document.createElement('table');
   const tableThead = document.createElement('thead');
   const tableTbody = document.createElement('tbody');
-
   tableContainer.className = 'o-table o-table--row-stripes';
-  
-  
   const heads = ['Ad','SuccessRate','FailRate','successOnRetryRate','Request','Success','Fail','SuccessOnRetry'];
   let ths = '';
   for(const item of heads) {
@@ -536,7 +548,6 @@ function createTable(data) {
   }
   tableThead.innerHTML = ths;
   tableContainer.appendChild(tableThead);
-
   for(const item of data) {
     const adid = item.ad.replace(/.*\(([0-9]+)\)/,'$1');//该方法并不改变调用它的字符串本身，而只是返回一个新的替换后的字符串
     const successRate = item.successRate;
@@ -564,8 +575,9 @@ function createTable(data) {
  * 
  * @param {Array} data:绘制table所用的数据集，最后得到的数据呈现方式完全是和数据集对应的，一行是数据集的一项，字段就是每一项的props
  * @param {Array} fields:数据集每一项的属性组成的数组，其顺序决定了呈现在表格中从左到右的顺序
+ * @param {Array} statistcFields:需要进行统计信息计算的fields，应该是fields中的若干项
  */
-function createNormalTable(data, fields) {
+function createNormalTable(data, fields,statisticFields) {
   const chartContainer = document.createElement('div');
   const chartId = 'chart-container-' + gCurrentChartIndex;
   chartContainer.id = chartId;
@@ -574,21 +586,30 @@ function createNormalTable(data, fields) {
   const tableContainer = document.createElement('table');
   const tableThead = document.createElement('thead');
   const tableTbody = document.createElement('tbody');
-
   tableContainer.className = 'ftc-table ftc-table--responsive-overflow ftc-table--row-stripes ftc-table--vertical-lines';
   tableContainer.setAttribute('data-ftc-component','ftc-table');
   tableContainer.setAttribute('data-ftc-table--no-js','');
+  tableContainer.setAttribute('data-ftc-table--statistic','');
+  tableContainer.setAttribute('data-ftc-table--wrapped','');
+  tableContainer.setAttribute('data-ftc-table--wrapper-width','100%');
+  tableContainer.setAttribute('data-ftc-table--wrapper-height','500px');
+  //TODO:将class和attribute作为函数参数
+  //data-ftc-table--wrapped data-ftc-table--wrapper-width="100%" data-ftc-table--wrapper-height="180px"
   let ths = '';
   for(const item of fields) {
     if(typeof data[0][item] == 'number') {
-      ths+=`<th aria-sort='none' data-ftc-table--datatype="numeric" class="ftc-table__cell--numeric">${item}</th>`;
+      if(statisticFields.includes(item)) {
+        ths+=`<th aria-sort='none' data-ftc-table--datatype="numeric" data-ftc-table--tostatistic class="ftc-table__cell--numeric">${item}</th>`;
+      } else {
+        ths+=`<th aria-sort='none' data-ftc-table--datatype="numeric" class="ftc-table__cell--numeric">${item}</th>`;
+      }
+    
     } else {
       ths+=`<th aria-sort='none'>${item}</th>`;
     }
   }
   tableThead.innerHTML = ths;
   tableContainer.appendChild(tableThead);
-
   for(const item of data) {
      let tds = '';
      for(const field of fields) {
@@ -597,7 +618,6 @@ function createNormalTable(data, fields) {
        } else {
          tds += `<td>${item[field]}</td>`;
        }
-      
      };
     const tableTr = document.createElement('tr');
     tableTr.innerHTML = tds;
@@ -635,6 +655,7 @@ function getKeysByOder(keys,n) {
 
   const ads = [];
 }
+
 // MARK: A quick way to draw just one chart with just enought information
 function drawChartByKey(obj) {
   var percentageSign = (obj.percentage === true) ? '%': '';
@@ -664,8 +685,6 @@ function drawChartByKey(obj) {
           dataDetail = '('+  dataTotal  +')';
         }
       }
-
-      
       return [
         x.name + dataDetail, dataTotal
       ];
@@ -685,11 +704,23 @@ function drawChartByKey(obj) {
     var r = pearsonCorrelation(correlationDataSet, 0, 1);
     var rExplained = correlationExplained(r);
     series = [{
-      name: obj.data[1].name + " vs " + obj.data[0].name,
+      name: obj.data[1].name + ' vs ' + obj.data[0].name,
       data: conversionRate
     }];
     percentageSign = '%';
     subtitle = 'Overall Conversion: ' + overallConversionRate + '%, Correlation: '+r + ' (' + rExplained + ')';
+  } else if (obj.conversion === true && obj.data.length > 0 && obj.data[0].part && obj.data[0].total) {
+      series = obj.data.map(function(x) {
+      var total = extractDataFromGAAPI(gaDataReports[x.total].data.rows, keys);
+      var part = extractDataFromGAAPI(gaDataReports[x.part].data.rows, keys);
+      var conversionRate = calculateRates(part, total);
+      var overallConversionRate = calculateOverallRates(part, total);
+      percentageSign = '%';
+      return {
+        name: x.name + ' (Average: ' + overallConversionRate + percentageSign + ')',
+        data: conversionRate
+      };
+    });
   } else {
     series = obj.data.map(function(x) {
       var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
@@ -727,7 +758,7 @@ function drawChartByKey(obj) {
       },
       yAxis: {
           title: {
-              text: 'Percent'
+              text: obj.yAxisTitle || ''
           }
       },
       tooltip: {
@@ -742,4 +773,451 @@ function drawChartByKey(obj) {
         enabled: true
       }
     });
+}
+
+function drawBreakDownChart(obj) {
+  var seriesData;
+  if (obj.data.length > 0 && obj.data[0].name && obj.data[0].y) {
+    seriesData = obj.data;
+  } else {
+    seriesData = obj.data.map(function(x, index) {
+      //console.log (gaDataReports[x.index].data);
+      //var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
+      var dataTotal = gaDataReports[x.index].data.totals[0].values[0];
+      dataTotal = parseInt(dataTotal, 10) || 0;
+      return  {
+        name: x.name,
+        y: dataTotal
+      }
+    });
+  }
+  var chartId = createChart();
+  var chart = new Highcharts.Chart({
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        renderTo: chartId,
+        type: obj.type
+    },
+    title: {
+        text: obj.title
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+            }
+        }
+    },
+    credits: {
+        enabled: false
+    },
+    series: [{
+        name: '',
+        colorByPoint: true,
+        data: seriesData
+    }]
+  });
+}
+
+function drawRevenueChart(obj) {
+  var seriesData;
+  var total = [];
+  var categories;
+  var subtitle;
+  if (obj.data.length > 0 && obj.data[0].name && obj.data[0].y) {
+    categories = obj.data.map(function(x, index) {
+      return x.name;
+    });
+    var arrayCount = obj.data[0].y.length;
+    seriesData = [];
+    for (var i=0; i<arrayCount; i++) {
+      var data = obj.data.map(function(x, index) {
+        return x.y[i];
+      });
+      var dataSetName = obj.dataSets[i] || i;
+      var oneItem = {
+        name: dataSetName,
+        data: data
+      }
+      seriesData.push(oneItem);
+      var currentTotal;
+      const reducer = (accumulator, currentValue) => accumulator + currentValue;
+      currentTotal = data.reduce(reducer, 0);
+      currentTotal = number_format(currentTotal, 0, '.', ',');
+      total.push({
+        name: dataSetName,
+        value: currentTotal
+      });
+    }
+  }
+  const reducerForTotal = (accumulator, currentValue) => accumulator + ' ' + currentValue.name + ': ' + currentValue.value;
+  subtitle = total.reduce(reducerForTotal, '');
+  const unitName = obj.unit || '';
+  var chartId = createChart(reducerForTotal, '');
+  var chart = new Highcharts.Chart({
+      chart: {
+          type: obj.type,
+          renderTo: chartId
+      },
+      title: {
+          text: obj.title
+      },
+      subtitle: {
+        text: subtitle
+      },
+      xAxis: {
+          categories: categories,
+          crosshair: true
+      },
+      yAxis: {
+          min: 0,
+          title: {
+              text: unitName
+          }
+      },
+      tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+              '<td style="padding:0"><b>{point.y:,.0f} ' + unitName + '</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+      },
+      plotOptions: {
+          column: {
+              pointPadding: 0.2,
+              borderWidth: 0
+          }
+      },
+      credits: {
+        enabled: false
+      },
+      series: seriesData
+  });
+}
+
+var pricing = {'1000': {
+    'home': {
+      '0201': [490,245],
+      '0411': [510,255],
+      '0412': [420,0],
+      '0421': [350,0],
+      '0301': [420,0],
+      '0302': [350,0]
+    },
+    'ros': {
+      '0201': [400,200],
+      '0411': [470,235],
+      '0412': [350,0],
+      '0421': [450,225],
+      '0301': [320,0]
+    }
+  },
+  '2000': {
+    'home': {
+      '0101': [400,200],
+      '0102': [400,200],
+      '0301': [200,100],
+      '0801': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
+    },
+    'ros': {
+      '0301': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
+    }
+  },
+  '3000': {
+      'home': {
+      '0101': [400,200],
+      '0102': [400,200],
+      '0301': [200,100],
+      '0801': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
+    },
+    'ros': {
+      '0301': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
+    }
+  },
+  '4000': {
+    'home': {
+      '0101': [400,200],
+      '0102': [400,200],
+      '0301': [200,100],
+      '0801': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
+    },
+    'ros': {
+      '0301': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
+    }
+  },
+  '5000': {
+   'home': {
+      '0101': [400,200],
+      '0102': [400,200],
+      '0301': [200,100],
+      '0801': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
+    },
+    'ros': {
+      '0301': [200,100],
+      '0401': [200,100],
+      '0402': [200,0],
+      '0302': [200,0]
+    }
+  },
+  '6000': {
+    'home': {
+      '0101': [1000,500],
+      '0102': [1000,500],
+      '0411': [500,250],
+      '0412': [500,0]
+    },
+    'ros': {
+      '0461': [500,250]
+    }
+  },
+  '7000': {
+    'home': {
+      '0101': [1000,500],
+      '0102': [1000,500],
+      '0411': [500,250],
+      '0412': [500,0]
+    },
+    'ros': {
+      '0461': [500,250]
+    }
+  }
+};
+
+var devices = {
+  '1000': 'PC',
+  '2000': 'iPhone App',
+  '3000': 'iPhone Web',
+  '4000': 'Android App',
+  '5000': 'Android Web',
+  '6000': 'iPad App',
+  '7000': 'iPad Web'
+};
+
+var deviceTypes = {
+  '1000': 'DeskTop',
+  '2000': 'Mobile',
+  '3000': 'Mobile',
+  '4000': 'Mobile',
+  '5000': 'Mobile',
+  '6000': 'Mobile',
+  '7000': 'Mobile'
+};
+
+
+function lookUpAdPosition(adInfo) {
+  var deviceId = adInfo.deviceId;
+  var channelId = adInfo.channelId;
+  var positionId = adInfo.positionId;
+  var adName;
+  var finalPosition;
+  Object.keys(adDevices).map(function(key, index) {
+    if (adDevices[key].id === deviceId) {
+      var adPattern = window[adDevices[key].patterns];
+      var adSizeId = positionId.substring(0,2);
+      var adPositionId = positionId.substring(2,4);
+      Object.keys(adPattern).map(function(key, index) {
+        if (adPattern[key].id === adSizeId) {
+          var adName = key;
+          //console.log (adName);
+          var adPositionObj = adPattern[key].position;
+          //console.log (adPositionObj);
+          Object.keys(adPositionObj).map(function(key, index) {
+            if (adPositionObj[key].id === adPositionId) {
+              //console.log (key);
+              finalPosition = {
+                name: adName,
+                position: key
+              };
+              //console.log (finalPosition);
+            }
+          });
+        }
+      });
+    }
+  });
+  return finalPosition;
+}
+
+function calculateAdValue(adInfo, adImpression) {
+  var pricePerImpression = 0;
+  var deviceId = adInfo.deviceId;
+  var channelId = adInfo.channelId;
+  var positionId = adInfo.positionId;
+  var deviceBreakDown;
+  var deviceType;
+  var pageType;
+  var adSize;
+  var adPosition;
+
+  deviceBreakDown = devices[deviceId] || deviceId;
+  deviceType = deviceTypes[deviceId] || deviceId;
+  if (typeof deviceId !== 'string' || typeof channelId !== 'string' || typeof positionId !== 'string') {
+    return null;
+  }
+  var priceInfoForDevice = pricing[deviceId];
+  if (priceInfoForDevice === undefined) {
+    return null;
+  }
+  var priceInfoForChannel;
+  if (channelId === '1000') {
+    priceInfoForChannel = priceInfoForDevice.home;
+    pageType = 'Home';
+  } else {
+    priceInfoForChannel = priceInfoForDevice.ros;
+    pageType = 'Run of Site';
+  }
+  adPosition = lookUpAdPosition(adInfo);
+  //console.log (adPosition);
+  var priceInfoForPosition = priceInfoForChannel[positionId];
+  if (priceInfoForPosition === undefined) {
+    return null;
+  }
+  var finalPrice = priceInfoForPosition.map(onePrice => {
+    return onePrice * adImpression / 1000;
+  });
+  var adInformation = {
+    'value': finalPrice,
+    'deviceType': deviceType,
+    'deviceBreakDown': deviceBreakDown,
+    'pageType': pageType,
+    'name': adPosition.name,
+    'position': adPosition.position
+  };
+  //console.log (adInformation);
+  return adInformation;
+}
+
+function calculateInventory() {
+  var text = document.getElementById('test').value;
+  text = text.replace(/[\n\r]+/g,'|');
+  textArray = text.split('|');
+  var adValueBy = {};
+  var adValueByDevice = {};
+  for (var oneItem of textArray) {
+    var adid = oneItem.replace(/^([0-9]+)[\s]+([0-9]+)$/g, '$1');
+    var adImpression = oneItem.replace(/^([0-9]+)[\s]+([0-9]+)$/g, '$2');
+    adImpression = parseInt(adImpression, 10) || 0;
+    if (adid.length === 12) {
+      var deviceId = adid.substring(0,4);
+      var channelId = adid.substring(4,8);
+      var positionId = adid.substring(8, 12);
+      var adInfo = {
+        deviceId: deviceId,
+        channelId: channelId,
+        positionId: positionId
+      };
+      var adInformation = calculateAdValue(adInfo, adImpression);
+      var adValue;
+      var adPageType;
+      var adDeviceType;
+      var adDeviceBreakdown;
+      var adName;
+      var adPosition;
+      if (adInformation) {
+        adValue = adInformation.value || 0;
+        adPageType = adInformation.pageType;
+        adDeviceType = adInformation.deviceType;
+        adDeviceBreakdown = adInformation.deviceBreakDown;
+        adName = adInformation.name;
+        adPosition = adInformation.position;
+      } else {
+        continue;
+      }
+      adInfo = {
+        deviceType: adDeviceType,
+        deviceBreakDown: adDeviceBreakdown,
+        pageType: adPageType,
+        name: adName,
+        position: adPosition,
+        fullname: adName + ': ' + adPosition
+      }
+      Object.keys(adInfo).map(function(key, index) {
+        if (adValue && adValue.length > 0) {
+          if (adValueBy[key] === undefined) {
+            adValueBy[key] = {}
+          }
+          var value = adInfo[key];
+          //console.log (value);
+          if (adValueBy[key][value] === undefined)  {
+            adValueBy[key][value] = adValue;
+          } else {
+            adValueBy[key][value] = adValueBy[key][value].map(function (num, idx) {
+              return num + adValue[idx];
+            });
+          }
+        }
+      });
+    }
+  }
+  Object.keys(adValueBy).map(function(key, index) {
+    adValueBy[key] = convertToArray(adValueBy[key]);
+  });
+  return adValueBy;
+}
+
+function convertToArray(obj) {
+    var newArray = [];
+    for (var k in obj) {
+        if (obj.hasOwnProperty(k)) {
+           newArray.push({
+            name: k,
+            y: obj[k]
+           });
+        }
+    }
+    return newArray;
+}
+
+function number_format(number, decimals, dec_point, thousands_sep) {
+    var n = !isFinite(+number) ? 0 : +number, 
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        toFixedFix = function (n, prec) {
+            // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+            var k = Math.pow(10, prec);
+            return Math.round(n * k) / k;
+        },
+        s = (prec ? toFixedFix(n, prec) : Math.round(n)).toString().split('.');
+    if (s[0].length > 3) {
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    }
+    if ((s[1] || '').length < prec) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+    return s.join(dec);
 }

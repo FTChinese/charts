@@ -166,6 +166,9 @@ function setHighChartsStyle() {
             },
             borderRadius: 0,
             shadow:false
+        },
+        lang: {
+            thousandsSep: ','
         }
     };
     highchartsOptions = Highcharts.setOptions(FTChartStyle);

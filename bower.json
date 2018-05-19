@@ -7,10 +7,11 @@
     "highmaps-beta": "highmaps#^1.0.1",
     "o-forms": "^4.0.2",
     "o-table": "^6.0.0",
-    "ftc-table": "^1.2.1"
+    "ftc-table": "1.4.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.4.1"
+    "mocha": "^3.4.1",
+    "ftcnext": "https://github.com/FTChinese/NEXT.git"
   }
 }
