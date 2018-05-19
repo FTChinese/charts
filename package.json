@@ -37,7 +37,6 @@
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-node-resolve": "^3.0.3",
     "run-sequence": "^1.2.2",
-    "uglify-es": "^3.3.9",
     "wiredep": "^4.0.0"
   },
   "eslintConfig": {
