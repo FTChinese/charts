@@ -62,6 +62,7 @@ if (product === 'ios') {
 var tapAction;
 var buySuccessStandard;
 var buySuccessPremium;
+var homePagePV;
 if (product == 'ios') {
   eventCategory = 'Privileges';
   tapAction = 'Tap Subscription';
@@ -69,6 +70,40 @@ if (product == 'ios') {
   buySuccessPremium = 'buy success: com.ft.ftchinese.mobile.subscription.vip';
   startDate = '2018-04-04';
   pageTitle = 'iOS Subscription';
+  homePagePV = {
+    'viewId': VIEW_ID,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:screenviews'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:screenName',
+            'operator': 'REGEXP',
+            'expressions': [
+              'homepage'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  };
 } else if (product == 'web') {
   eventCategory = 'Web Privileges';
   tapAction = 'Tap';
@@ -76,6 +111,43 @@ if (product == 'ios') {
   buySuccessPremium = 'Buy Success:Premium';
   startDate = '2018-05-10';
   pageTitle = 'Web Subscription';
+  homePagePV = {//pv
+    //1. /phone/|phoneapp.html|phone.html|androidapp.html|iphone-2014.html|bb-2014.html|ftcapp
+    // 2. android system
+    // 3. storypage
+    'viewId': VIEW_ID,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:pageviews'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:pagePath',
+            'operator': 'REGEXP',
+            'expressions': [
+              '^/$'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  };
 } else if (product == 'android') {
   eventCategory = 'Android Privileges';
   tapAction = 'Tap';
@@ -83,6 +155,51 @@ if (product == 'ios') {
   buySuccessPremium = 'Buy success: ftc_premium';
   startDate = '2018-04-20';
   pageTitle = 'Android Subscription';
+  homePagePV = {//pv
+    //1. /phone/|phoneapp.html|phone.html|androidapp.html|iphone-2014.html|bb-2014.html|ftcapp
+    // 2. android system
+    // 3. storypage
+    'viewId': VIEW_ID,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:pageviews'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:pagePath',
+            'operator': 'REGEXP',
+            'expressions': [
+              '/phone/|phoneapp.html|phone.html|androidapp.html|iphone-2014.html|bb-2014.html|ftcapp'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:operatingSystem',
+            'operator': 'EXACT',
+            'expressions': [
+              'Android'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  };
 } else {
   eventCategory = 'Privileges';
   tapAction = 'Tap Subscription';
@@ -90,6 +207,40 @@ if (product == 'ios') {
   buySuccessPremium = 'buy success: com.ft.ftchinese.mobile.subscription.vip';
   startDate = '2018-04-04';
   pageTitle = 'Subscription';
+  homePagePV = {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:screenviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:screenName',
+              'operator': 'REGEXP',
+              'expressions': [
+                'homepage'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    };
 }
 
 document.title = pageTitle;
@@ -97,7 +248,7 @@ document.querySelector('.page-title').innerHTML = pageTitle;
 
 function constructQuerryData(startDate, endDate) {
   var queryData = [
-    // 0 iOS Standard Subscription Buying
+    // 0 Standard Subscription Buying
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -124,7 +275,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'In-App Purchase'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -132,15 +283,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'buy success'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'EXACT',
-              'expressions': [
-                'com.ft.ftchinese.mobile.subscription.member'
+                buySuccessStandard
               ],
               'caseSensitive': true
             }
@@ -148,7 +291,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 1 iOS Buy Premium Subscription
+    },// 1 Buy Premium Subscription
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -175,7 +318,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'In-App Purchase'
+                eventCategory
               ],
               'caseSensitive': true
             },
@@ -183,22 +326,14 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'buy success'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'EXACT',
-              'expressions': [
-                'com.ft.ftchinese.mobile.subscription.vip'
+                buySuccessPremium
               ],
               'caseSensitive': true
             }
           ]
         }
       ]
-    },// 2 iOS Paywall Displayed in Story Page
+    },// 2 Paywall Displayed in Story Page
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -241,14 +376,14 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                'premium|Exclusive|English'
+                '\/'
               ],
               'caseSensitive': true
             }
           ]
         }
       ]
-    },// 3 iOS Paywall Tap Subscription Page in Story Page
+    },// 3 Paywall Tap Subscription Page in Story Page
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -291,14 +426,14 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                'premium|Exclusive|English'
+                '\/'
               ],
               'caseSensitive': true
             }
           ]
         }
       ]
-    },// 4 iOS Buy Standard Subscription from Exclusive Story
+    },// 4 Buy Standard Subscription
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -336,19 +471,11 @@ function constructQuerryData(startDate, endDate) {
                 buySuccessStandard
               ],
               'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'premium|Exclusive|English'
-              ],
-              'caseSensitive': true
             }
           ]
         }
       ]
-    },// 5 iOS Buy Premium Subscription
+    },// 5 Buy Premium Subscription
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -386,53 +513,12 @@ function constructQuerryData(startDate, endDate) {
                 buySuccessPremium
               ],
               'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'premium|Exclusive|English'
-              ],
-              'caseSensitive': true
             }
           ]
         }
       ]
-    },// 6 iOS Home Page PV
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:screenviews'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:screenName',
-              'operator': 'REGEXP',
-              'expressions': [
-                'homepage'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 7 iOS Buy Standard Subscription from English Audio in Story
+    },// 6 Product Home Page PV
+    homePagePV,// 7 Buy Standard Subscription from English Audio in Story
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -482,7 +568,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 8 iOS Buy Premium Subscription from Editor's Choice
+    },// 8 Buy Premium Subscription from Editor's Choice
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -532,7 +618,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 9 iOS Expired User Visit
+    },// 9 Expired User Visit
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -566,7 +652,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 10 iOS Buy Subscription from Exclusive Story
+    },// 10 Buy Subscription from Exclusive Story
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -616,7 +702,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 11 iOS Buy Subscription from English Text
+    },// 11 Buy Subscription from English Text
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -666,7 +752,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 12 iOS Buy Subscription from FT Radio
+    },// 12 Buy Subscription from FT Radio
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -716,7 +802,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 13 iOS Buy Subscription from Speed Read
+    },// 13 Buy Subscription from Speed Read
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -766,7 +852,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 14 iOS Buy Subscription from Archive
+    },// 14 Buy Subscription from Archive
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -816,7 +902,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 15 iOS Buy Subscription from Editor's Choice
+    },// 15 Buy Subscription from Editor's Choice
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -866,7 +952,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 16 iOS Buy Subscription from English Audio
+    },// 16 Buy Subscription from English Audio
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -916,7 +1002,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 17 iOS Dispay Subscription from Exclusive Story
+    },// 17 Dispay Subscription from Exclusive Story
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -966,7 +1052,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 18 iOS Display Subscription from English Text
+    },// 18 Display Subscription from English Text
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -1016,7 +1102,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 19 iOS Display Subscription from FT Radio
+    },// 19 Display Subscription from FT Radio
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -1066,7 +1152,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 20 iOS Display Subscription from Speed Read
+    },// 20 Display Subscription from Speed Read
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -1116,7 +1202,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 21 iOS Display Subscription from Archive
+    },// 21 Display Subscription from Archive
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -1166,7 +1252,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 22 iOS Display Subscription from Editor's Choice
+    },// 22 Display Subscription from Editor's Choice
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -1216,7 +1302,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 23 iOS Display Subscription from Editor's Choice
+    },// 23 Display Subscription from Editor's Choice
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -1266,7 +1352,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 24 iOS Buy Subscription from Billigual Text
+    },// iOS Buy Subscription from Billigual Text
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -1316,7 +1402,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// 25 iOS Display Subscription from Billigual Text
+    },// 25 Display Subscription from Billigual Text
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -1568,7 +1654,7 @@ function drawChartsAll() {
     data: [
       {
         index: 6,
-        name: 'iOS Home Page PV'
+        name: 'Home Page PV'
       },
       {
         index: 2,
