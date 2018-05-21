@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>iOS Subscription Report</title>
+  <title>Subscription</title>
   <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
   <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -20,7 +20,7 @@
 </p>
 
 <div class="page-container" id="charts-container">
-  <h1 class="page-title">iOS App Subscription</h1>
+  <h1 class="page-title">Subscription</h1>
 </div>
 
 
@@ -43,6 +43,15 @@ var product = gup('product', window.location.href);
 var VIEW_ID;// = '108134561'; 
 //var VIEW_ID_1 = '10995661';
 var eventCategory;
+var pageTitle;
+
+// Replace with your view ID.
+// var VIEW_ID = '108134561'; 
+// var VIEW_ID_1 = '10995661';
+// var startDate = '14daysago';
+var startDate;
+// var startDate = '30daysago';
+var endDate = 'yesterday';
 
 if (product === 'ios') {
   VIEW_ID = '108134561';
@@ -50,23 +59,41 @@ if (product === 'ios') {
   VIEW_ID = '10995661';
 }
 
+var tapAction;
+var buySuccessStandard;
+var buySuccessPremium;
 if (product == 'ios') {
   eventCategory = 'Privileges';
+  tapAction = 'Tap Subscription';
+  buySuccessStandard = 'buy success: com.ft.ftchinese.mobile.subscription.member';
+  buySuccessPremium = 'buy success: com.ft.ftchinese.mobile.subscription.vip';
+  startDate = '2018-04-04';
+  pageTitle = 'iOS Subscription';
 } else if (product == 'web') {
   eventCategory = 'Web Privileges';
+  tapAction = 'Tap';
+  buySuccessStandard = 'Buy Success:Standard';
+  buySuccessPremium = 'Buy Success:Premium';
+  startDate = '2018-05-10';
+  pageTitle = 'Web Subscription';
 } else if (product == 'android') {
   eventCategory = 'Android Privileges';
+  tapAction = 'Tap';
+  buySuccessStandard = 'Buy success: ftc_standard';
+  buySuccessPremium = 'Buy success: ftc_premium';
+  startDate = '2018-04-20';
+  pageTitle = 'Android Subscription';
 } else {
   eventCategory = 'Privileges';
+  tapAction = 'Tap Subscription';
+  buySuccessStandard = 'buy success: com.ft.ftchinese.mobile.subscription.member';
+  buySuccessPremium = 'buy success: com.ft.ftchinese.mobile.subscription.vip';
+  startDate = '2018-04-04';
+  pageTitle = 'Subscription';
 }
 
-// Replace with your view ID.
-// var VIEW_ID = '108134561'; 
-// var VIEW_ID_1 = '10995661';
-// var startDate = '14daysago';
-var startDate = '2018-04-04';
-// var startDate = '30daysago';
-var endDate = 'yesterday';
+document.title = pageTitle;
+document.querySelector('.page-title').innerHTML = pageTitle;
 
 function constructQuerryData(startDate, endDate) {
   var queryData = [
@@ -214,7 +241,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                'premium/'
+                'premium|Exclusive|English'
               ],
               'caseSensitive': true
             }
@@ -256,7 +283,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'Tap Subscription'
+                tapAction
               ],
               'caseSensitive': true
             },
@@ -264,7 +291,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                'premium/'
+                'premium|Exclusive|English'
               ],
               'caseSensitive': true
             }
@@ -306,7 +333,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.member'
+                buySuccessStandard
               ],
               'caseSensitive': true
             },
@@ -314,7 +341,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                'premium/'
+                'premium|Exclusive|English'
               ],
               'caseSensitive': true
             }
@@ -356,7 +383,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.vip'
+                buySuccessPremium
               ],
               'caseSensitive': true
             },
@@ -364,7 +391,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                'premium/'
+                'premium|Exclusive|English'
               ],
               'caseSensitive': true
             }
@@ -440,7 +467,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.member'
+                buySuccessStandard
               ],
               'caseSensitive': true
             },
@@ -490,7 +517,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.vip'
+                buySuccessPremium
               ],
               'caseSensitive': true
             },
@@ -574,7 +601,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.member'
+                buySuccessStandard
               ],
               'caseSensitive': true
             },
@@ -624,7 +651,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.member'
+                buySuccessStandard
               ],
               'caseSensitive': true
             },
@@ -674,7 +701,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.member'
+                buySuccessStandard
               ],
               'caseSensitive': true
             },
@@ -724,7 +751,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.member'
+                buySuccessStandard
               ],
               'caseSensitive': true
             },
@@ -774,7 +801,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.member'
+                buySuccessStandard
               ],
               'caseSensitive': true
             },
@@ -824,7 +851,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.member'
+                buySuccessStandard
               ],
               'caseSensitive': true
             },
@@ -874,7 +901,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.member'
+                buySuccessStandard
               ],
               'caseSensitive': true
             },
@@ -1274,7 +1301,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'buy success: com.ft.ftchinese.mobile.subscription.member'
+                buySuccessStandard
               ],
               'caseSensitive': true
             },
@@ -1466,6 +1493,8 @@ function drawChartsAll() {
   });
 
 
+
+
   drawChartByKey({
     conversion: true,
     title: 'Daily: Bought VS Displayed',
@@ -1483,6 +1512,8 @@ function drawChartsAll() {
       }
     ]
   });
+
+
 
 
   drawChartByKey({
@@ -1503,6 +1534,9 @@ function drawChartsAll() {
     ]
   });
 
+
+
+
   drawChartByKey({
     conversion: true,
     title: 'Daily: Bought VS Checked',
@@ -1522,6 +1556,9 @@ function drawChartsAll() {
   });
 
 
+
+
+
   drawChartByKey({
     conversion: true,
     title: 'Daily: Paywall Seen',
@@ -1539,6 +1576,7 @@ function drawChartsAll() {
       }
     ]
   });
+
 
 
   drawChartByKey({

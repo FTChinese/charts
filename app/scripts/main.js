@@ -490,7 +490,7 @@ function calculateOverallRates(part, total) {
   var rate = 0;
   if (partSum >= 0 && totalSum > 0) {
     rate = partSum / totalSum;
-    rate = parseInt(rate * 1000, 10)/10;
+    rate = parseInt(rate * 10000, 10)/100;
   }
   return rate;
 }
