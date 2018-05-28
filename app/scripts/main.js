@@ -473,7 +473,7 @@ function calculateRates(part, total) {
       } catch (ignore) {
         rate = 0; 
       }
-      rate = parseInt(rate * 1000, 10)/10;//保留1位小数
+      rate = parseInt(rate * 100000, 10)/1000;//保留3位小数
       rates.push(rate);
     }
   }
@@ -490,7 +490,7 @@ function calculateOverallRates(part, total) {
   var rate = 0;
   if (partSum >= 0 && totalSum > 0) {
     rate = partSum / totalSum;
-    rate = parseInt(rate * 10000, 10)/100;
+    rate = parseInt(rate * 1000000, 10)/10000;
   }
   return rate;
 }
@@ -512,7 +512,7 @@ function averageOfArray(arrayObject) {
       sum += parseInt(arrayObject[i], 10); //don't forget to add the base
   }
   avg = sum/arrayObject.length;
-  avg = Math.round(avg * 100)/100;
+  avg = Math.round(avg * 10000)/10000;
   } catch (ignore) {
   }
   return avg;
@@ -721,6 +721,12 @@ function drawChartByKey(obj) {
       };
     });
   }
+  var pointFormat;
+  if (percentageSign === '') {
+    pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.0f}' + percentageSign + '</b><br/>';
+  } else {
+    pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.3f}' + percentageSign + '</b><br/>';
+  }
   var chartId = createChart();
   var chart = new Highcharts.Chart({
       chart: {
@@ -750,7 +756,7 @@ function drawChartByKey(obj) {
           }
       },
       tooltip: {
-          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}' + percentageSign + '</b><br/>',
+          pointFormat: pointFormat,
           shared: true
       },
       series: series,

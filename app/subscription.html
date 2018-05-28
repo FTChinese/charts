@@ -1352,7 +1352,7 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    },// iOS Buy Subscription from Billigual Text
+    },// 24 Buy Subscription from Billigual Text
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -1452,6 +1452,106 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 26 Buy Subscription from Ad Blocker
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                eventCategory
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                buySuccessStandard
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'AdBlocker'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 27 Display Subscription from Ad Blocker
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                eventCategory
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Display'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventLabel',
+              'operator': 'REGEXP',
+              'expressions': [
+                'AdBlocker'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -1526,7 +1626,7 @@ function drawChartsAll() {
   //   ]
   // });
 
-  insertPicture('Subscription Acquisition Channel: Exclusive Story', 'http://i.ftimg.net/picture/0/000076060_piclink.jpg');
+  insertPicture('Subscription Acquisition Channel', 'http://i.ftimg.net/picture/0/000076060_piclink.jpg');
 
   drawChartByKey({
     title: 'Conversion Funnel',
@@ -1665,19 +1765,19 @@ function drawChartsAll() {
 
 
 
-  drawChartByKey({
-    conversion: true,
-    title: 'Subscription Expires',
-    type: 'area',
-    percentage: false,
-    keys: keys,
-    data: [
-      {
-        index: 9,
-        name: 'iOS'
-      }
-    ]
-  });
+  // drawChartByKey({
+  //   conversion: true,
+  //   title: 'Subscription Expires',
+  //   type: 'area',
+  //   percentage: false,
+  //   keys: keys,
+  //   data: [
+  //     {
+  //       index: 9,
+  //       name: 'iOS'
+  //     }
+  //   ]
+  // });
 
 
 
@@ -1712,6 +1812,10 @@ function drawChartsAll() {
       {
         index: 22,
         name: 'Editors\'s Choice'
+      },
+      {
+        index: 27,
+        name: 'Ad Blocker'
       }
     ]
   });
@@ -1750,6 +1854,10 @@ function drawChartsAll() {
       {
         index: 22,
         name: 'Editors\'s Choice'
+      },
+      {
+        index: 27,
+        name: 'Ad Blocker'
       }
     ]
   });
@@ -1790,6 +1898,10 @@ function drawChartsAll() {
       {
         index: 16,
         name: 'English Audio'
+      },
+      {
+        index: 26,
+        name: 'Ad Blocker'
       }
     ]
   });
@@ -1832,6 +1944,10 @@ function drawChartsAll() {
       {
         index: 16,
         name: 'English Audio'
+      },
+      {
+        index: 26,
+        name: 'Ad Blocker'
       }
     ]
   });
@@ -1882,6 +1998,11 @@ function drawChartsAll() {
         part: 15,
         name: 'Editors\' Choice'
       },
+      {
+        total: 27,
+        part: 26,
+        name: 'Ad Blocker'
+      }
     ]
   });
 
