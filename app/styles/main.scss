@@ -16,6 +16,9 @@
 //@include oTableBase;
 //@include oTableVerticalLines;
 //@include oTableRowStripes;
+$ftc-table-is-silent:false;
+
+@import "../../node_modules/@ftchinese/ftc-table/main.scss";
 
 $defaultPink: #FFF1E0;
 $borderColor: #cec6b9;
