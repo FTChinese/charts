@@ -38,1030 +38,955 @@
 
 <script>
 // MARK: - These are different in every page. 
-var product = gup('product', window.location.href);
-// Replace with your view ID.
-var VIEW_ID;// = '108134561'; 
-//var VIEW_ID_1 = '10995661';
+var VIEW_ID = '10995661';
 var eventCategory;
 var pageTitle;
-
-// Replace with your view ID.
-// var VIEW_ID = '108134561'; 
-// var VIEW_ID_1 = '10995661';
-// var startDate = '14daysago';
 var startDate;
-// var startDate = '30daysago';
 var endDate = 'yesterday';
-
-if (product === 'ios') {
-  VIEW_ID = '108134561';
-} else {
-  VIEW_ID = '10995661';
-}
-
 var tapAction;
 var buySuccessStandard;
 var buySuccessPremium;
-var homePagePV;
-if (product == 'ios') {
-  eventCategory = 'Privileges';
-  tapAction = 'Tap Subscription';
-  buySuccessStandard = 'buy success: com.ft.ftchinese.mobile.subscription.member';
-  buySuccessPremium = 'buy success: com.ft.ftchinese.mobile.subscription.vip';
-  startDate = '2018-04-04';
-  pageTitle = 'iOS Subscription';
-  homePagePV = {
-    'viewId': VIEW_ID,
-    'dateRanges': [
-      {
-        'startDate': startDate,
-        'endDate': endDate
-      }
-    ],
-    'metrics': [
-      {
-        'expression': 'ga:screenviews'
-      }
-    ],
-    'dimensions': [
-      {
-        'name': 'ga:date'
-      }
-    ],
-    'dimensionFilterClauses': [
-      {
-        'operator': 'AND',
-        'filters': [
-          {
-            'dimensionName': 'ga:screenName',
-            'operator': 'REGEXP',
-            'expressions': [
-              'homepage'
-            ],
-            'caseSensitive': true
-          }
-        ]
-      }
-    ]
-  };
-} else if (product == 'web') {
-  eventCategory = 'Web Privileges';
-  tapAction = 'Tap';
-  buySuccessStandard = 'Buy Success:Standard';
-  buySuccessPremium = 'Buy Success:Premium';
-  startDate = '2018-05-10';
-  pageTitle = 'Web Subscription';
-  homePagePV = {//pv
-    //1. /phone/|phoneapp.html|phone.html|androidapp.html|iphone-2014.html|bb-2014.html|ftcapp
-    // 2. android system
-    // 3. storypage
-    'viewId': VIEW_ID,
-    'dateRanges': [
-      {
-        'startDate': startDate,
-        'endDate': endDate
-      }
-    ],
-    'metrics': [
-      {
-        'expression': 'ga:pageviews'
-      }
-    ],
-    'dimensions': [
-      {
-        'name': 'ga:date'
-      }
-    ],
-    'dimensionFilterClauses': [
-      {
-        'operator': 'AND',
-        'filters': [
-          {
-            'dimensionName': 'ga:pagePath',
-            'operator': 'REGEXP',
-            'expressions': [
-              '^/$'
-            ],
-            'caseSensitive': true
-          }
-        ]
-      }
-    ]
-  };
-} else if (product == 'android') {
-  eventCategory = 'Android Privileges';
-  tapAction = 'Tap';
-  buySuccessStandard = 'Buy success: ftc_standard';
-  buySuccessPremium = 'Buy success: ftc_premium';
-  startDate = '2018-04-20';
-  pageTitle = 'Android Subscription';
-  homePagePV = {//pv
-    //1. /phone/|phoneapp.html|phone.html|androidapp.html|iphone-2014.html|bb-2014.html|ftcapp
-    // 2. android system
-    // 3. storypage
-    'viewId': VIEW_ID,
-    'dateRanges': [
-      {
-        'startDate': startDate,
-        'endDate': endDate
-      }
-    ],
-    'metrics': [
-      {
-        'expression': 'ga:pageviews'
-      }
-    ],
-    'dimensions': [
-      {
-        'name': 'ga:date'
-      }
-    ],
-    'dimensionFilterClauses': [
-      {
-        'operator': 'AND',
-        'filters': [
-          {
-            'dimensionName': 'ga:pagePath',
-            'operator': 'REGEXP',
-            'expressions': [
-              '/phone/|phoneapp.html|phone.html|androidapp.html|iphone-2014.html|bb-2014.html|ftcapp'
-            ],
-            'caseSensitive': true
-          },
-          {
-            'dimensionName': 'ga:operatingSystem',
-            'operator': 'EXACT',
-            'expressions': [
-              'Android'
-            ],
-            'caseSensitive': true
-          }
-        ]
-      }
-    ]
-  };
-} else {
-  eventCategory = 'Privileges';
-  tapAction = 'Tap Subscription';
-  buySuccessStandard = 'buy success: com.ft.ftchinese.mobile.subscription.member';
-  buySuccessPremium = 'buy success: com.ft.ftchinese.mobile.subscription.vip';
-  startDate = '2018-04-04';
-  pageTitle = 'Subscription';
-  homePagePV = {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:screenviews'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:screenName',
-              'operator': 'REGEXP',
-              'expressions': [
-                'homepage'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    };
-}
-
+var eventCategories = [
+  {name: 'iOS', eventCategory: 'Privileges', tapAction: 'Tap Subscription', buySuccessStandard: 'buy success: com.ft.ftchinese.mobile.subscription.member', buySuccessPremium: 'buy success: com.ft.ftchinese.mobile.subscription.vip'},
+  {'name': 'Android', eventCategory: 'Android Privileges', tapAction: 'Tap', buySuccessStandard: 'Buy success: ftc_standard', buySuccessPremium: 'Buy success: ftc_premium'},
+  {'name': 'Web Site', eventCategory: 'Web Privileges', tapAction: 'Tap', buySuccessStandard: 'Buy Success:Standard', buySuccessPremium: 'Buy Success:Premium'}
+];
+eventCategory = 'Privileges';
+tapAction = 'Tap Subscription';
+buySuccessStandard = 'buy success: com.ft.ftchinese.mobile.subscription.member';
+buySuccessPremium = 'buy success: com.ft.ftchinese.mobile.subscription.vip';
+startDate = '7daysago';
+pageTitle = 'Subscription';
 document.title = pageTitle;
 document.querySelector('.page-title').innerHTML = pageTitle;
 
 function constructQuerryData(startDate, endDate) {
-  var queryData = [
-    
-    // 0 Dispay Subscription from Exclusive Story
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                'Display'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'ExclusiveContent/'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 1 Display Subscription from English Text
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                'Display'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'EnglishText/.+/en'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 2 Display Subscription from FT Radio
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                'Display'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'Radio/'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 3 Display Subscription from Speed Read
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                'Display'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'SpeedReading/'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 4 Display Subscription from Archive
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                'Display'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'Archive/'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 5 Display Subscription from Editor's Choice
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                'Display'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'EditorsChoice/'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 6 Display Subscription from Billigual Text
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                'Display'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'EnglishText/.+/ce'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 7 Display Subscription from Ad Blocker
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                'Display'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'AdBlocker'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 8 Buy Subscription from Exclusive Story
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'REGEXP',
-              'expressions': [
-                buySuccessStandard
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'ExclusiveContent/'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 9 Buy Subscription from English Text
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'REGEXP',
-              'expressions': [
-                buySuccessStandard
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'EnglishText/.+/en'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 10 Buy Subscription from FT Radio
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'REGEXP',
-              'expressions': [
-                buySuccessStandard
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'Radio/'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 11 Buy Subscription from Speed Read
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'REGEXP',
-              'expressions': [
-                buySuccessStandard
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'SpeedReading/'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 12 Buy Subscription from Archive
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'REGEXP',
-              'expressions': [
-                buySuccessStandard
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'Archive/'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 13 Buy Subscription from Editor's Choice
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'REGEXP',
-              'expressions': [
-                buySuccessStandard
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'EditorsChoice/'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 14 Buy Subscription from Billigual Text
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'REGEXP',
-              'expressions': [
-                buySuccessStandard
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'EnglishText/.+/ce'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 15 Buy Subscription from Ad Blocker
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'REGEXP',
-              'expressions': [
-                buySuccessStandard
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventLabel',
-              'operator': 'REGEXP',
-              'expressions': [
-                'AdBlocker'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
+  var allQueryData = [];
+  for (const s of eventCategories) {
+    eventCategory = s.eventCategory;
+    tapAction = s.tapAction;
+    buySuccessStandard = s.buySuccessStandard;
+    buySuccessPremium = s.buySuccessPremium;
+    var queryData = [
+      
+      // 0 Dispay Subscription from Exclusive Story
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'EXACT',
+                'expressions': [
+                  'Display'
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'ExclusiveContent/'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 1 Display Subscription from English Text
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'EXACT',
+                'expressions': [
+                  'Display'
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'EnglishText/.+/en'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 2 Display Subscription from FT Radio
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'EXACT',
+                'expressions': [
+                  'Display'
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'Radio/'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 3 Display Subscription from Speed Read
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'EXACT',
+                'expressions': [
+                  'Display'
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'SpeedReading/'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 4 Display Subscription from Archive
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'EXACT',
+                'expressions': [
+                  'Display'
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'Archive/'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 5 Display Subscription from Editor's Choice
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'EXACT',
+                'expressions': [
+                  'Display'
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'EditorsChoice/'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 6 Display Subscription from Billigual Text
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'EXACT',
+                'expressions': [
+                  'Display'
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'EnglishText/.+/ce'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 7 Display Subscription from Ad Blocker
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'EXACT',
+                'expressions': [
+                  'Display'
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'AdBlocker'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 8 Buy Subscription from Exclusive Story
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'REGEXP',
+                'expressions': [
+                  buySuccessStandard
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'ExclusiveContent/'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 9 Buy Subscription from English Text
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'REGEXP',
+                'expressions': [
+                  buySuccessStandard
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'EnglishText/.+/en'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 10 Buy Subscription from FT Radio
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'REGEXP',
+                'expressions': [
+                  buySuccessStandard
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'Radio/'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 11 Buy Subscription from Speed Read
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'REGEXP',
+                'expressions': [
+                  buySuccessStandard
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'SpeedReading/'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 12 Buy Subscription from Archive
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'REGEXP',
+                'expressions': [
+                  buySuccessStandard
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'Archive/'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 13 Buy Subscription from Editor's Choice
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'REGEXP',
+                'expressions': [
+                  buySuccessStandard
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'EditorsChoice/'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 14 Buy Subscription from Billigual Text
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'REGEXP',
+                'expressions': [
+                  buySuccessStandard
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'EnglishText/.+/ce'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 15 Buy Subscription from Ad Blocker
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'REGEXP',
+                'expressions': [
+                  buySuccessStandard
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'AdBlocker'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      }
+    ];
+    for (const k of queryData) {
+      allQueryData.push(k);
     }
-  ];
-  return queryData;
+  }
+  //console.log (allQueryData);
+  return allQueryData;
 }
 
 function drawChartsAll() {
-
   var chartId;
   // MARK: - The base key which should have no gap in data
   var keys = gaDataReports[0].data.rows.map(function(row){
     return row.dimensions[0];
   });
 
+
+
+  // MARK: Buy Success Display
+  drawPivotChartFromKey({
+    conversion: true,
+    title: 'Standard Subscription Sources',
+    yAxisTitle: 'Percent',
+    type: 'column',
+    percentage: true,
+    keys: keys,
+    subtitle: ' ',
+    unitName: '',
+    decimalPoints: 4,
+    eventCategories: eventCategories,
+    originalData: [
+      {
+        index: 8,
+        name: 'Exclusive Story'
+      },
+      {
+        index: 14,
+        name: 'Billigual Text'
+      },
+      {
+        index: 9,
+        name: 'English Text'
+      },
+      {
+        index: 10,
+        name: 'Radio'
+      },
+      {
+        index: 11,
+        name: 'Speedread'
+      },
+      {
+        index: 12,
+        name: 'Archive'
+      },
+      {
+        index: 13,
+        name: 'Editors\' Choice'
+      },
+      {
+        index: 15,
+        name: 'Ad Blocker'
+      }
+    ]
+  });
+
+
+  // MARK: Draw Display
+  drawPivotChartFromKey({
+    conversion: true,
+    title: 'Subscription Paywall Display',
+    yAxisTitle: 'Percent',
+    type: 'column',
+    percentage: true,
+    keys: keys,
+    subtitle: ' ',
+    unitName: '',
+    decimalPoints: 4,
+    eventCategories: eventCategories,
+    originalData: [
+      {
+        index: 0,
+        name: 'Exclusive Story'
+      },
+      {
+        index: 6,
+        name: 'Billigual Text'
+      },
+      {
+        index: 1,
+        name: 'English Text'
+      },
+      {
+        index: 2,
+        name: 'Radio'
+      },
+      {
+        index: 3,
+        name: 'Speedread'
+      },
+      {
+        index: 4,
+        name: 'Archive'
+      },
+      {
+        index: 5,
+        name: 'Editors\' Choice'
+      },
+      {
+        index: 7,
+        name: 'Ad Blocker'
+      }
+    ]
+  });
+
+
+  // MARK: Draw Conversion
   drawPivotChartFromKey({
     conversion: true,
     title: 'Standard subscription Conversion',
@@ -1069,11 +994,11 @@ function drawChartsAll() {
     type: 'column',
     percentage: true,
     keys: keys,
-    dataSets: ['ios'],
     subtitle: ' ',
     unitName: '%',
     decimalPoints: 4,
-    data: [
+    eventCategories: eventCategories,
+    originalData: [
       {
         total: 0,
         part: 8,
@@ -1117,8 +1042,9 @@ function drawChartsAll() {
     ]
   });
 
-
 }
+
+
 </script>
 
 

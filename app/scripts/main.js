@@ -835,21 +835,67 @@ function drawPivotChartFromKey(obj) {
   var multiplier = obj.multiplier || 1;
   var series;
   var subtitle = '';
-  //console.log (obj);
-
-
-  if (obj.conversion === true && obj.data.length > 0 && obj.data[0].part !== undefined && obj.data[0].total !== undefined) {
-      series = obj.data.map(function(x) {
-        var total = extractDataFromGAAPI(gaDataReports[x.total].data.rows, keys);
-        var part = extractDataFromGAAPI(gaDataReports[x.part].data.rows, keys);
-        var overallConversionRate = calculateOverallRates(part, total);
-        percentageSign = '%';
-        return {
-          name: x.name,
-          y: [overallConversionRate]
-        };
-      });
+  if (obj.originalData && obj.eventCategories) {
+    obj.data = createAllData(obj.originalData, obj.eventCategories, gaDataReports.length);
   }
+  if (obj.eventCategories) {
+    obj.dataSets =  eventCategories.map(function(value){
+      return value.name;
+    });
+  }
+  if (obj.conversion === true && obj.data.length > 0 && obj.data[0].part !== undefined && obj.data[0].total !== undefined) {
+    series = obj.data.map(function(x) {
+      var total = extractDataFromGAAPI(gaDataReports[x.total].data.rows, keys);
+      var part = extractDataFromGAAPI(gaDataReports[x.part].data.rows, keys);
+      var overallConversionRate = calculateOverallRates(part, total);
+      percentageSign = '%';
+      return {
+        name: x.name,
+        y: [overallConversionRate]
+      };
+    });
+  } else if (obj.conversion === true && obj.data.length > 0 && obj.data[0].data.length > 0 && obj.data[0].data[0].total !== undefined && obj.data[0].data[0].total !== undefined) {
+    var dataLength = obj.data[0].data.length;
+    series = [];
+    for (var i=0; i<dataLength; i++) {
+      var name = obj.data[0].data[i].name;
+      var y = [];
+      for (var j=0; j<obj.data.length; j++) {
+        const totalIndex = obj.data[j].data[i].total;
+        const total = extractDataFromGAAPI(gaDataReports[totalIndex].data.rows, keys);
+        const partIndex = obj.data[j].data[i].part;
+        const part = extractDataFromGAAPI(gaDataReports[partIndex].data.rows, keys);
+        const overallConversionRate = calculateOverallRates(part, total);
+        y.push(overallConversionRate);
+      }
+      series.push({
+        name: name,
+        y: y
+      });
+    }
+  } else if (obj.data.length > 0 && obj.data[0].data.length > 0 && obj.data[0].data[0].index !== undefined && obj.data[0].data[0].name !== undefined) {
+    var dataLength = obj.data[0].data.length;
+    series = [];
+    for (var i=0; i<dataLength; i++) {
+      var name = obj.data[0].data[i].name;
+      var y = [];
+      for (var j=0; j<obj.data.length; j++) {
+        const index = obj.data[j].data[i].index;
+        const value = gaDataReports[index].data.totals[0].values[0];
+        const valueNumber = parseInt(value, 10) || 0;
+        y.push(valueNumber);
+      }
+      series.push({
+        name: name,
+        y: y
+      });
+    }
+  }
+
+
+  //console.log (gaDataReports);
+  //console.log (series);
+
   var pointFormat;
   if (percentageSign === '') {
     pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.0f}' + percentageSign + '</b><br/>';
@@ -1265,6 +1311,31 @@ function convertToArray(obj) {
     }
   }
   return newArray;
+}
+
+function createAllData(originalData, eventCategories, dataLength) {
+  var finalData = [];
+  const eventCategoriesLength = eventCategories.length
+  const oneDataLength = dataLength/eventCategoriesLength;
+  for (var i=0; i<eventCategoriesLength; i++) {
+    // MARK: - Copy by Value Not Referennce
+    var myOriginalData = JSON.parse(JSON.stringify(originalData));
+    var convertedData = myOriginalData.map(function(value){
+      var newValue = value;
+      for (var key in newValue) {
+        if (newValue.hasOwnProperty(key) && ['index', 'total', 'part'].includes(key)) {
+            newValue[key] += i*oneDataLength;
+        }
+      }
+      return newValue;
+    });
+    var currentCategory = {
+      name: eventCategories[i].name,
+      data: convertedData
+    }
+    finalData.push(currentCategory);
+  }
+  return finalData;
 }
 
 function number_format(number, decimals, dec_point, thousands_sep) {
