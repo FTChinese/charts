@@ -824,11 +824,60 @@ function drawBreakDownChart(obj) {
   });
 }
 
-function drawRevenueChart(obj) {
+
+
+// MARK: A quick way to draw pivot chart with just enought information
+function drawPivotChartFromKey(obj) {
+
+  var percentageSign = (obj.percentage === true) ? '%': '';
+  var keys = obj.keys;
+  var unitName = obj.unitName || '';
+  var multiplier = obj.multiplier || 1;
+  var series;
+  var subtitle = '';
+  //console.log (obj);
+
+
+  if (obj.conversion === true && obj.data.length > 0 && obj.data[0].part !== undefined && obj.data[0].total !== undefined) {
+      series = obj.data.map(function(x) {
+        var total = extractDataFromGAAPI(gaDataReports[x.total].data.rows, keys);
+        var part = extractDataFromGAAPI(gaDataReports[x.part].data.rows, keys);
+        var overallConversionRate = calculateOverallRates(part, total);
+        percentageSign = '%';
+        return {
+          name: x.name,
+          y: [overallConversionRate]
+        };
+      });
+  }
+  var pointFormat;
+  if (percentageSign === '') {
+    pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.0f}' + percentageSign + '</b><br/>';
+  } else {
+    pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.3f}' + percentageSign + '</b><br/>';
+  }
+  var chartId = createChart();
+  var chartObj = {
+    title: obj.title,
+    subtitle: obj.subtitle,
+    type: obj.type,
+    unit: obj.unitName,
+    data: series,
+    dataSets: obj.dataSets || [],
+    decimalPoints: obj.decimalPoints || 0
+  }
+  drawNormalChart(chartObj);
+}
+
+
+
+function drawNormalChart(obj) {
+  //console.log (obj);
   var seriesData;
   var total = [];
   var categories;
   var subtitle;
+  var decimalPoints = obj.decimalPoints || 0;
   if (obj.data.length > 0 && obj.data[0].name && obj.data[0].y) {
     categories = obj.data.map(function(x, index) {
       return x.name;
@@ -856,7 +905,7 @@ function drawRevenueChart(obj) {
     }
   }
   const reducerForTotal = (accumulator, currentValue) => accumulator + ' ' + currentValue.name + ': ' + currentValue.value;
-  subtitle = total.reduce(reducerForTotal, '');
+  subtitle = obj.subtitle || total.reduce(reducerForTotal, '');
   const unitName = obj.unit || '';
   var chartId = createChart(reducerForTotal, '');
   var chart = new Highcharts.Chart({
@@ -883,7 +932,7 @@ function drawRevenueChart(obj) {
       tooltip: {
           headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
           pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-              '<td style="padding:0"><b>{point.y:,.0f} ' + unitName + '</b></td></tr>',
+              '<td style="padding:0"><b>{point.y:,.' + decimalPoints +'f} ' + unitName + '</b></td></tr>',
           footerFormat: '</table>',
           shared: true,
           useHTML: true

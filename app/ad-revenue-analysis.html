@@ -48,49 +48,49 @@
 document.addEventListener("DOMContentLoaded", function(event) {
   var chartId;
   var revenueByDevice = calculateInventory();
-  drawRevenueChart({
+  drawNormalChart({
     title: 'Inventory By Device Type',
     type: 'column',
     data: revenueByDevice.deviceType,
     unit: 'RMB',
     dataSets: ['Rate Card', 'Actual']
   });
-  drawRevenueChart({
+  drawNormalChart({
     title: 'Inventory By Device Breakdown',
     type: 'column',
     data: revenueByDevice.deviceBreakDown,
     unit: 'RMB',
     dataSets: ['Rate Card', 'Actual']
   });
-  drawRevenueChart({
+  drawNormalChart({
     title: 'Inventory By Page Type',
     type: 'column',
     data: revenueByDevice.pageType,
     unit: 'RMB',
     dataSets: ['Rate Card', 'Actual']
   });
-  drawRevenueChart({
+  drawNormalChart({
     title: 'Inventory By Name',
     type: 'column',
     data: revenueByDevice.name,
     unit: 'RMB',
     dataSets: ['Rate Card', 'Actual']
   });
-  drawRevenueChart({
+  drawNormalChart({
     title: 'Inventory By Position',
     type: 'column',
     data: revenueByDevice.position,
     unit: 'RMB',
     dataSets: ['Rate Card', 'Actual']
   });
-  drawRevenueChart({
+  drawNormalChart({
     title: 'Inventory By Name and Position',
     type: 'column',
     data: revenueByDevice.fullname,
     unit: 'RMB',
     dataSets: ['Rate Card', 'Actual']
   });
-  drawRevenueChart({
+  drawNormalChart({
     title: 'Inventory By Channel',
     type: 'column',
     data: revenueByDevice.channel,
