@@ -25,14 +25,16 @@
 </div>
 
 
-<!-- build:js scripts/main-table.js -->
+<!-- build:remove -->
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/funnel.js"></script>
 <script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
 <script type="text/javascript" src="scripts/highcharts.js"></script>
+<!-- endbuild -->
+
 <script type="text/javascript" src="scripts/main.js"></script>
 <script src="scripts/addFeatureToTable.js"></script>
-<!-- endbuild -->
+
 
 
 <script>
@@ -499,7 +501,7 @@ const requestData10 = [ //Web相关用户数据
                     'dimensionName': 'ga:eventAction',
                     'operator': 'EXACT',
                     'expressions': [
-                    'Buy: Standard'
+                    'Buy Success:Standard'
                     ],
                     'caseSensitive': true
                 }
@@ -536,7 +538,7 @@ const requestData10 = [ //Web相关用户数据
                     'dimensionName': 'ga:eventAction',
                     'operator': 'EXACT',
                     'expressions': [
-                        'Buy: Premium'
+                        'Buy Success:Premium'
                     ],
                     'caseSensitive': true
                 }
@@ -578,7 +580,7 @@ const requestData10 = [ //Web相关用户数据
                     'dimensionName': 'ga:eventAction',
                     'operator': 'EXACT',
                     'expressions': [
-                    'Buy: Standard'
+                    'Buy Success:Standard'
                     ],
                     'caseSensitive': true
                 }
@@ -620,7 +622,7 @@ const requestData10 = [ //Web相关用户数据
                     'dimensionName': 'ga:eventAction',
                     'operator': 'EXACT',
                     'expressions': [
-                        'Buy: Premium'
+                        'Buy Success:Premium'
                     ],
                     'caseSensitive': true
                 }
@@ -2982,16 +2984,9 @@ async function drawCharts(responseDataArr) {
     });
 
   //MARK:5. label:premium的每篇文章数据表格
-        //console.log(responseDataArr[6].reports[0]);
+  /*
         var labelKeys =  responseDataArr[6].reports[0].data.rows.map(row => row.dimensions[0]);
-        //console.log(labelKeys);
-        /*
-            var displayedEachStory = extractDataFromGAAPI(responseDataArr[6].reports[0].data.rows, labelKeys);
-            var tapCheckedEachStory = extractDataFromGAAPI(responseDataArr[6].reports[1].data.rows, labelKeys);
-            var popCheckedEachStory = extractDataFromGAAPI(responseDataArr[6].reports[2].data.rows, labelKeys);
-            var buySuccessOfStandardEachStory = extractDataFromGAAPI(responseDataArr[6].reports[3].data.rows, labelKeys);
-            var buySuccessOfPremiumEachStory = extractDataFromGAAPI(responseDataArr[6].reports[4].data.rows, labelKeys);
-        */
+     
         var objData = extractObjData(responseDataArr[6].reports, ["story","disp","tap","pop","buySucS","buySucP"], labelKeys,"buySucS");
 
         var newObjData = addPropsToData(objData, [{
@@ -3016,29 +3011,9 @@ async function drawCharts(responseDataArr) {
             propNew:"buySucS/disp"
           }
         ]);
-        /* 
-        var newObjDataWithStatis = addStatisRowToData(newObjData,[
-            {
-                rowNameValue:"sum",
-                rowNameKey:"story",
-                operateFunc:sumOfAll,
-                propsArr:["disp","tap","pop","buySucS","buySucP"]
-            },{
-                rowNameValue:"mean",
-                rowNameKey:"story",
-                operateFunc:meanOfAll,
-                propsArr:["disp","tap","pop","buySucS","buySucP","tap/disp","pop/tap","buySucS/pop","buySucS/disp"]
-            },{
-                rowNameValue:"median",
-                rowNameKey:"story",
-                operateFunc:medianOfAll,
-                propsArr:["disp","tap","pop","buySucS","buySucP","tap/disp","pop/tap","buySucS/pop","buySucS/disp"]
-            }
-        ])
-        console.log(newObjDataWithStatis);
-        */
+        
         createNormalTable(newObjData, ["story","disp","tap","pop","buySucS","buySucP","tap/disp","pop/tap","buySucS/pop","buySucS/disp"],["disp","tap","pop","buySucS","buySucP"]);
-
+    */
 
   //MARK:6. 3个指标在label:EnglishAudio这条线的数据,即是从首页的付费文章点进去
  
@@ -3093,19 +3068,13 @@ async function drawCharts(responseDataArr) {
     });
   
   //MARK:7. label:EnglishAudio的每篇文章数据表格
+  /*
     var labelKeysForEnglishAudio =  responseDataArr[7].reports[0].data.rows.map(row => row.dimensions[0]);
-            //console.log(labelKeys);
-    /*
-        var popCheckedEachEnglishAudio = extractDataFromGAAPI(responseDataArr[7].reports[0].data.rows, labelKeysForEnglishAudio);
-        var buySuccessOfStandardEachEnglishAudio = extractDataFromGAAPI(responseDataArr[7].reports[1].data.rows, labelKeysForEnglishAudio);
-        var buySuccessOfPremiumEachEnglishAudio = extractDataFromGAAPI(responseDataArr[7].reports[2].data.rows, labelKeysForEnglishAudio);
-    */
-    //console.log(buySuccessOfStandardEachStory);
 
     var objDataForEnglishAudio = extractObjData(responseDataArr[7].reports, ["story","popChecked","buySuccessOfStandard","buySuccessOfPremium"], labelKeysForEnglishAudio,"buySuccessOfStandard");
 
     createNormalTable(objDataForEnglishAudio, ["story","popChecked","buySuccessOfStandard","buySuccessOfPremium"],["popChecked","buySuccessOfStandard","buySuccessOfPremium"]);
-  
+  */
   //MARK:8. label:story这条线的数据,即是从“编辑精选”点进去的。注意这里只有premium购买，没有standard购买
    
     var displayedFromEditSelect = extractDataFromGAAPI(responseDataArr[5].reports[0].data.rows, keys);
@@ -3163,130 +3132,124 @@ async function drawCharts(responseDataArr) {
     });
 
   //MARK:9. label:story的每篇文章数据表格
+  /*
     var labelKeysForEditSelect =  responseDataArr[8].reports[0].data.rows.map(row => row.dimensions[0]);
-    /*
-        var displayEachEditSelect = extractDataFromGAAPI(responseDataArr[8].reports[0].data.rows, labelKeysForEditSelect);
-        var tapCheckedEachEditSelect = extractDataFromGAAPI(responseDataArr[8].reports[1].data.rows, labelKeysForEditSelect);
-        var popCheckedEachEditSelect = extractDataFromGAAPI(responseDataArr[8].reports[2].data.rows, labelKeysForEditSelect);
-        var buySuccessOfPremiumEachEditSelect = extractDataFromGAAPI(responseDataArr[8].reports[3].data.rows, labelKeysForEditSelect);
-    */
-    //console.log(buySuccessOfStandardEachStory);
 
     var objDataForEditSelect = extractObjData(responseDataArr[8].reports, ["story","display","tapChecked","popChecked","buySuccessOfPremium"], labelKeysForEditSelect,"buySuccessOfPremium");
 
     createNormalTable(objDataForEditSelect, ["story","display","tapChecked","popChecked","buySuccessOfPremium"],["display","tapChecked","popChecked","buySuccessOfPremium"]);
-  
+   */
   //TODO：相关性分析等
 
  
  //MARK:9. 各级用户S/F/V/R指标分布图
- /*
-  const engagementData = await getStoredDataFile('../data/engagementData.json');
-  //console.log(engagementData);
-  //console.log(JSON.stringify(engagementData));
-  const SDataSet = [];
-  const FDataSet = [];
-  const VDataSet = [];
-  const RDataSet = [];
-  for(const oneDataItem of engagementData){
-    const S = oneDataItem.S;
-    const F = oneDataItem.F;
-    const V = oneDataItem.V;
-    const R = oneDataItem.R;
-    SDataSet.push(S);
-    FDataSet.push(F);
-    VDataSet.push(V);
-    RDataSet.push(R);
-  }
-  //S的分布图
-  //console.log(SDataSet);
-  chartId = createChart();
-  Highcharts.chart(chartId, {
-    title: {
-        text: 'Bell curve'
-    },
-
-    xAxis: [{
-        title: {
-            text: 'Data'
-        },
-        alignTicks: false
-    }, {
-        title: {
-            text: 'Bell curve'
-        },
-        alignTicks: false,
-        opposite: true
-    }],
-
-    yAxis: [{
-        title: { text: 'Data' }
-    }, {
-        title: { text: 'Bell curve' },
-        opposite: true
-    }],
-
-    series: [{
-        name: 'Bell curve',
-        type: 'bellcurve',
-        xAxis: 1,
-        yAxis: 1,
-        baseSeries: 1,
-        zIndex: -1
-    }, {
-        name: 'Data',
-        type: 'scatter',
-        data: SDataSet,
-        marker: {
-            radius: 1.5
+    /*
+        const engagementData = await getStoredDataFile('../data/engagementData.json');
+        //console.log(engagementData);
+        //console.log(JSON.stringify(engagementData));
+        const SDataSet = [];
+        const FDataSet = [];
+        const VDataSet = [];
+        const RDataSet = [];
+        for(const oneDataItem of engagementData){
+            const S = oneDataItem.S;
+            const F = oneDataItem.F;
+            const V = oneDataItem.V;
+            const R = oneDataItem.R;
+            SDataSet.push(S);
+            FDataSet.push(F);
+            VDataSet.push(V);
+            RDataSet.push(R);
         }
-    }]
-  });
+        //S的分布图
+        //console.log(SDataSet);
+        chartId = createChart();
+        Highcharts.chart(chartId, {
+            title: {
+                text: 'Bell curve'
+            },
 
-  //F的分布图
-  //console.log(FDataSet);
-  chartId = createChart();
-  Highcharts.chart(chartId, {
-    title: {
-        text: 'Bell curve'
-    },
+            xAxis: [{
+                title: {
+                    text: 'Data'
+                },
+                alignTicks: false
+            }, {
+                title: {
+                    text: 'Bell curve'
+                },
+                alignTicks: false,
+                opposite: true
+            }],
 
-    xAxis: [{
-        title: {
-            text: 'Data'
-        },
-        alignTicks: false
-    }, {
-        title: {
-            text: 'Bell curve'
-        },
-        alignTicks: false,
-        opposite: true
-    }],
+            yAxis: [{
+                title: { text: 'Data' }
+            }, {
+                title: { text: 'Bell curve' },
+                opposite: true
+            }],
 
-    yAxis: [{
-        title: { text: 'Data' }
-    }, {
-        title: { text: 'Bell curve' },
-        opposite: true
-    }],
+            series: [{
+                name: 'Bell curve',
+                type: 'bellcurve',
+                xAxis: 1,
+                yAxis: 1,
+                baseSeries: 1,
+                zIndex: -1
+            }, {
+                name: 'Data',
+                type: 'scatter',
+                data: SDataSet,
+                marker: {
+                    radius: 1.5
+                }
+            }]
+        });
 
-    series: [{
-        name: 'Bell curve',
-        type: 'bellcurve',
-        xAxis: 1,
-        yAxis: 1,
-        baseSeries: 1,
-        zIndex: -1
-    }, {
-        name: 'Data',
-        type: 'scatter',
-        data: FDataSet,
-        marker: {
-            radius: 1.5
-        }
-    }]
-  });
+        //F的分布图
+        //console.log(FDataSet);
+        chartId = createChart();
+        Highcharts.chart(chartId, {
+            title: {
+                text: 'Bell curve'
+            },
+
+            xAxis: [{
+                title: {
+                    text: 'Data'
+                },
+                alignTicks: false
+            }, {
+                title: {
+                    text: 'Bell curve'
+                },
+                alignTicks: false,
+                opposite: true
+            }],
+
+            yAxis: [{
+                title: { text: 'Data' }
+            }, {
+                title: { text: 'Bell curve' },
+                opposite: true
+            }],
+
+            series: [{
+                name: 'Bell curve',
+                type: 'bellcurve',
+                xAxis: 1,
+                yAxis: 1,
+                baseSeries: 1,
+                zIndex: -1
+            }, {
+                name: 'Data',
+                type: 'scatter',
+                data: FDataSet,
+                marker: {
+                    radius: 1.5
+                }
+            }]
+        });
     */
    addFeatureToTable();
    

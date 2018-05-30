@@ -47,7 +47,6 @@ gulp.task('scripts', () => {
 
 
 gulp.task('rollup', async () => {
-  // TODO:关于rollup需要再认真学习一下
 
     const bundle = await rollup({
       input:`./es6/addFeatureToTable.js`,
@@ -56,6 +55,7 @@ gulp.task('rollup', async () => {
           exclude:'node_modules/**'
         }),
         nodeResolve({
+          module: true,
           jsnext:true,
         })
       // rollupUglify({}, minifyEs6)//压缩es6代码
@@ -67,6 +67,7 @@ gulp.task('rollup', async () => {
         format: 'iife',
         name:'addFeatureToTable',
         sourcemap: true,
+        globals:'addFeaturesToTalbe'
         
     });
     browserSync.reload();

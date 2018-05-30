@@ -5,16 +5,20 @@
 @import "bower_components/o-grid/main.scss";
 @import "bower_components/o-normalise/main.scss";
 @import "bower_components/o-fonts/main.scss";
+@import "bower_components/o-assets/main.scss";
+@import "bower_components/o-icons/main.scss";
 @import "bower_components/o-typography/main.scss";
 @import "bower_components/o-forms/main.scss";
-@import "bower_components/o-table/main.scss";
 @import "bower_components/ftc-table/main.scss";
 // endbower
 
 @include oForms;
 //@include oTableBase;
 //@include oTableVerticalLines;
-@include oTableRowStripes;
+//@include oTableRowStripes;
+$ftc-table-is-silent:false;
+
+@import "../../node_modules/@ftchinese/ftc-table/main.scss";
 
 $defaultPink: #FFF1E0;
 $borderColor: #cec6b9;

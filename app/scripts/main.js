@@ -284,7 +284,7 @@ function extractObjData(gaResponseReports, propsArr, keys, orderBy) {
     const oneObj = {};
     oneObj[propsArr[0]] = onekey; //该obj的第一个属性键为propsArr[0],值为key本身的值
     //console.log(onekey);
-    for (const [index, elem] of gaResponseReports.entries()) {//该obj剩下的属性值分别从这几个reports中获取
+    for (let [index, elem] of gaResponseReports.entries()) {//该obj剩下的属性值分别从这几个reports中获取
     //for(var index = 0, len = gaResponseReports.length; index<len;index++) {
       //const elem = gaResponseReports[index];
       const oneReportDataArray = elem.data.rows;

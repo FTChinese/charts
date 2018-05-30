@@ -1,4 +1,4 @@
-import Table from '../bower_components/ftc-table/main.js';
+import Table from '@ftchinese/ftc-table';
 
 function addFeatureToTable() {
   Table.init();
