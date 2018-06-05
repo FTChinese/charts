@@ -2984,36 +2984,36 @@ async function drawCharts(responseDataArr) {
     });
 
   //MARK:5. label:premium的每篇文章数据表格
-  /*
-        var labelKeys =  responseDataArr[6].reports[0].data.rows.map(row => row.dimensions[0]);
-     
-        var objData = extractObjData(responseDataArr[6].reports, ["story","disp","tap","pop","buySucS","buySucP"], labelKeys,"buySucS");
 
-        var newObjData = addPropsToData(objData, [{
-            operateFunc:divide,
-            prop1:"tap",
-            prop2:"disp",
-            propNew:"tap/disp"
-          },{
-            operateFunc:divide,
-            prop1:"pop",
-            prop2:"tap",
-            propNew:"pop/tap"
-          },{
-            operateFunc:divide,
-            prop1:"buySucS",
-            prop2:"pop",
-            propNew:"buySucS/pop"
-          },{
-            operateFunc:divide,
-            prop1:"buySucS",
-            prop2:"disp",
-            propNew:"buySucS/disp"
-          }
-        ]);
-        
-        createNormalTable(newObjData, ["story","disp","tap","pop","buySucS","buySucP","tap/disp","pop/tap","buySucS/pop","buySucS/disp"],["disp","tap","pop","buySucS","buySucP"]);
-    */
+    var labelKeys =  responseDataArr[6].reports[0].data.rows.map(row => row.dimensions[0]);
+    
+    var objData = extractObjData(responseDataArr[6].reports, ["story","disp","tap","pop","buySucS","buySucP"], labelKeys,"buySucS");
+
+    var newObjData = addPropsToData(objData, [{
+        operateFunc:divide,
+        prop1:"tap",
+        prop2:"disp",
+        propNew:"tap/disp"
+        },{
+        operateFunc:divide,
+        prop1:"pop",
+        prop2:"tap",
+        propNew:"pop/tap"
+        },{
+        operateFunc:divide,
+        prop1:"buySucS",
+        prop2:"pop",
+        propNew:"buySucS/pop"
+        },{
+        operateFunc:divide,
+        prop1:"buySucS",
+        prop2:"disp",
+        propNew:"buySucS/disp"
+        }
+    ]);
+    
+    createNormalTable(newObjData, ["story","disp","tap","pop","buySucS","buySucP","tap/disp","pop/tap","buySucS/pop","buySucS/disp"],["disp","tap","pop","buySucS","buySucP"]);
+
 
   //MARK:6. 3个指标在label:EnglishAudio这条线的数据,即是从首页的付费文章点进去
  
