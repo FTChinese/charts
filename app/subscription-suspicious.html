@@ -59,7 +59,7 @@ var endDate = 'today';
 // }
 VIEW_ID = '10995661';
 startDate = '2018-06-05';
-pageTitle = 'Subscription';
+pageTitle = 'Subscription: Suspicious Transactions';
 
 
 document.title = pageTitle;
@@ -67,7 +67,8 @@ document.querySelector('.page-title').innerHTML = pageTitle;
 
 function constructQuerryData(startDate, endDate) {
   var queryData = [
-     // 0 daily for standard
+    // 0 daily for standard
+    {
       'viewId': VIEW_ID,
       'dateRanges': [
         {
@@ -93,19 +94,10 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'IAP: buy or restore error User Id'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'REGEXP',
-              'expressions': [
-                'com.ft.ftchinese.mobile.subscription.member'
+                'Restore: com.ft.ftchinese.mobile.subscription.member'
               ],
               'caseSensitive': true
             }
-            
           ]
         }
       ]
@@ -137,15 +129,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventCategory',
               'operator': 'EXACT',
               'expressions': [
-                'IAP: buy or restore error User Id'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'REGEXP',
-              'expressions': [
-                'com.ft.ftchinese.mobile.subscription.vip'
+                'Restore: com.ft.ftchinese.mobile.subscription.vip'
               ],
               'caseSensitive': true
             }
@@ -173,7 +157,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'dimensions': [
         {
-          'name': 'ga:eventLabel'
+          'name': 'ga:eventAction'
         }
       ],
       'dimensionFilterClauses': [
@@ -182,21 +166,12 @@ function constructQuerryData(startDate, endDate) {
           'filters': [
             {
               'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                'IAP: buy or restore error User Id'
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                'com.ft.ftchinese.mobile.subscription'
+                'Restore: com.ft.ftchinese.mobile.subscription'
               ],
               'caseSensitive': true
             }
-            
           ]
         }
       ]
@@ -214,7 +189,7 @@ function drawChartsAll() {
   });
 
   drawChartByKey({
-    title: 'Failed Subscription Payment Attempts',
+    title: 'Restore Subscription',
     type: 'column',
     percentage: false,
     keys: keys,
@@ -231,8 +206,8 @@ function drawChartsAll() {
   });
 
   drawTable({
-    title: 'Users Who Failed to Pay with iOS IAP',
-    description: 'These are the users that intended to pay but could not do so because of Apple\'s server problem. We should consider ways to get the revenue back. Possible channels: In App Texts, Push notifications, Emails, etc...',
+    title: 'Original Transaction Ids',
+    description: 'These are the transaction ids that are used for restoring iOS subscriptions. If the number is higher than 10, it\'s highly likely that the Apple Id is being shared. ',
     index: 2
   });
 
