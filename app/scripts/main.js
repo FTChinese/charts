@@ -230,6 +230,12 @@ function insertDiv(height) {
   document.getElementById('charts-container').appendChild(divContainer);
 }
 
+function insertDivWithHTML(htmlString) {
+  var divContainer = document.createElement('div');
+  divContainer.innerHTML = htmlString;
+  document.getElementById('charts-container').appendChild(divContainer);
+}
+
 
 // MARK: - Append an div for drawing table in it.
 function createTable() {
@@ -824,6 +830,35 @@ function drawBreakDownChart(obj) {
   });
 }
 
+
+function drawTable(obj) {
+  const title = obj.title;
+  const description = obj.description;
+  var tableData = gaDataReports[obj.index];
+  var tableRowsHTML = '';
+  var dataRows = tableData.data.rows;
+  for (dataRow of dataRows) {
+    const dimension = dataRow.dimensions[0];
+    const metrics = dataRow.metrics[0].values;
+    var metricsHTML = '';
+    for (metric of metrics) {
+      metricsHTML += '<td>'+ metric +'</td>'
+    }
+    const rowHTML = '<tr><td>'+dimension+'</td>'+metricsHTML+'</tr>';
+    tableRowsHTML += rowHTML;
+  }
+  tableRowsHTML = '<tbody>' + tableRowsHTML + '</tbody>';
+  const tableHeader = tableData.columnHeader.dimensions[0].replace(/^ga:/g,'');
+  var columnHeaderHTML = '<th  aria-sort="none">' + tableHeader + '</th>';
+  var columnHeaderData = tableData.columnHeader.metricHeader.metricHeaderEntries;
+  for (oneHeader of columnHeaderData) {
+    const name = oneHeader.name.replace(/^ga:/g,'');
+    columnHeaderHTML += '<th  aria-sort="none">' + name + '</th>';
+  }
+  columnHeaderHTML = '<thead><tr>' + columnHeaderHTML + '</tr></thead>';
+  var tableHTML = '<h1 class="page-title">' + title + '</h1><div class="page-description">'+ description +'</div><table class="ftc-table ftc-table--responsive-overflow ftc-table--row-stripes ftc-table--vertical-lines" data-ftc-component="ftc-table" data-ftc-table--no-js>' + columnHeaderHTML + tableRowsHTML + '</table>';
+  insertDivWithHTML(tableHTML);
+}
 
 
 // MARK: A quick way to draw pivot chart with just enought information
