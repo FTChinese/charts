@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>WeChat Traffic</title>
+  <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+
+<p align=right>
+  <!-- The Sign-in button. This will run `queryReports()` on success. -->
+  <div class="g-signin2" data-onsuccess="queryReportsAll"></div>
+</p>
+
+<div class="page-container" id="charts-container">
+  <h1 class="page-title">Weekly Report</h1>
+</div>
+
+
+
+<!-- build:remove -->
+<script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/highcharts-more.js"></script>
+<script src="../bower_components/highmaps-beta/modules/map.js"></script>
+<script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<script src="../bower_components/highcharts/modules/funnel.js"></script>
+<script type="text/javascript" src="scripts/highcharts.js"></script>
+<!-- endbuild -->
+<script type="text/javascript" src="scripts/main.js"></script>
+
+
+
+<script>
+// MARK: - These are different in every page. 
+
+// Replace with your view ID.
+var VIEW_ID = '10995661';
+// var startDate = '14daysago';
+//var startDate = '2017-08-02';
+ var startDate = '30daysago';
+var endDate = 'yesterday';
+
+function constructQuerryData(startDate, endDate) {
+  var queryData = [
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'OR',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'isappinstall'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:source',
+              'operator': 'EXACT',
+              'expressions': [
+                'WeChat'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:campaign',
+              'operator': 'EXACT',
+              'expressions': [
+                '2G178003'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
+  ];
+  return queryData;
+}
+
+function drawChartsAll() {
+
+  var chartId;
+  // MARK: - The base key which should have no gap in data
+  var keys = gaDataReports[0].data.rows.map(function(row){
+    return row.dimensions[0];
+  });
+
+  drawChartByKey({
+    title: 'WeChat Page Views',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 0,
+        name: 'All'
+      },
+      {
+        index: 1,
+        name: 'Public Account'
+      }
+    ]
+  });
+
+
+}
+</script>
+
+
+
+
+<!-- Load the JavaScript API client and Sign-in library. -->
+<script src="https://apis.google.com/js/client:platform.js"></script>
+
+</body>
+</html>
