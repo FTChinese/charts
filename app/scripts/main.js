@@ -658,6 +658,10 @@ function drawChartByKey(obj) {
   var multiplier = obj.multiplier || 1;
   var series;
   var subtitle = '';
+
+  // console.log (obj.data.length);
+  // console.log (obj.conversion);
+
   if (!keys) {
     var baseData; 
     var seriesData = obj.data.map(function(x, index) {
@@ -718,8 +722,12 @@ function drawChartByKey(obj) {
   } else {
     series = obj.data.map(function(x) {
       var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
+      var dataMultiplier = multiplier;
+      if (x.multiplier && x.multiplier > 0) {
+        dataMultiplier = x.multiplier;
+      }
       if (dataArray) {
-        dataArray = dataArray.map(x => x * multiplier);
+        dataArray = dataArray.map(x => x * dataMultiplier);
       }
       return {
         name: x.name + ' (Average: ' + averageOfArray(dataArray) + percentageSign + ')',
@@ -758,7 +766,7 @@ function drawChartByKey(obj) {
       },
       yAxis: {
           title: {
-              text: obj.yAxisTitle || ''
+              text: obj.yAxisTitle || obj.unitName || ''
           }
       },
       tooltip: {

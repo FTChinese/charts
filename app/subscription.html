@@ -62,6 +62,8 @@ VIEW_ID = '10995661';
 var tapAction;
 var buySuccessStandard;
 var buySuccessPremium;
+var stardardPrice = 198;
+var premiumPrice = 1998;
 var homePagePV;
 if (product == 'ios') {
   eventCategory = 'Privileges';
@@ -70,6 +72,8 @@ if (product == 'ios') {
   buySuccessPremium = 'buy success: com.ft.ftchinese.mobile.subscription.vip';
   startDate = '2018-04-04';
   pageTitle = 'iOS Subscription';
+  stardardPrice = stardardPrice * 0.7;
+  premiumPrice = premiumPrice * 0.7;
   homePagePV = {
     'viewId': VIEW_ID,
     'dateRanges': [
@@ -1567,6 +1571,7 @@ function drawChartsAll() {
   });
 
 
+
   // MARK: Filter out dates when data collection experienced problems
   // keys = keys.filter(function(item){
   //   if (['20170527','20170528','20170529','20170530','20170531'].indexOf(item) < 0) {
@@ -1588,6 +1593,26 @@ function drawChartsAll() {
       {
         index: 1,
         name: 'Premium'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    title: 'New Revenue',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    unitName: 'RMB',
+    data: [
+      {
+        index: 0,
+        name: 'Standard',
+        multiplier: stardardPrice
+      },
+      {
+        index: 1,
+        name: 'Premium',
+        multiplier: premiumPrice
       }
     ]
   });

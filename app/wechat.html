@@ -155,6 +155,25 @@ function drawChartsAll() {
   });
 
 
+  drawChartByKey({
+    conversion: true,
+    title: 'Public Account Traffic Contribution',
+    type: 'area',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 0,
+        name: 'All'
+      },
+      {
+        index: 1,
+        name: 'Public Account'
+      }
+    ]
+  });
+
+
 }
 </script>
 
