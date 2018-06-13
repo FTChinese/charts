@@ -46,10 +46,12 @@ var endDate = 'yesterday';
 var tapAction;
 var buySuccessStandard;
 var buySuccessPremium;
+var standardPrice = 198;
+var premiumPrice = 1998;
 var eventCategories = [
-  {name: 'iOS', eventCategory: 'Privileges', tapAction: 'Tap Subscription', buySuccessStandard: 'buy success: com.ft.ftchinese.mobile.subscription.member', buySuccessPremium: 'buy success: com.ft.ftchinese.mobile.subscription.vip'},
-  {'name': 'Android', eventCategory: 'Android Privileges', tapAction: 'Tap', buySuccessStandard: 'Buy success: ftc_standard', buySuccessPremium: 'Buy success: ftc_premium'},
-  {'name': 'Web Site', eventCategory: 'Web Privileges', tapAction: 'Tap', buySuccessStandard: 'Buy Success:Standard', buySuccessPremium: 'Buy Success:Premium'}
+  {name: 'iOS', eventCategory: 'Privileges', tapAction: 'Tap Subscription', buySuccessStandard: 'buy success: com.ft.ftchinese.mobile.subscription.member', buySuccessPremium: 'buy success: com.ft.ftchinese.mobile.subscription.vip', standardPrice: standardPrice * 0.7, premiumPrice: premiumPrice * 0.7},
+  {'name': 'Android', eventCategory: 'Android Privileges', tapAction: 'Tap', buySuccessStandard: 'Buy success: ftc_standard', buySuccessPremium: 'Buy success: ftc_premium', standardPrice: standardPrice, premiumPrice: premiumPrice},
+  {'name': 'Web Site', eventCategory: 'Web Privileges', tapAction: 'Tap', buySuccessStandard: 'Buy Success:Standard', buySuccessPremium: 'Buy Success:Premium', standardPrice: standardPrice, premiumPrice: premiumPrice}
 ];
 eventCategory = 'Privileges';
 tapAction = 'Tap Subscription';
@@ -57,6 +59,8 @@ buySuccessStandard = 'buy success: com.ft.ftchinese.mobile.subscription.member';
 buySuccessPremium = 'buy success: com.ft.ftchinese.mobile.subscription.vip';
 startDate = '2018-05-10';
 pageTitle = 'Subscription';
+
+
 document.title = pageTitle;
 document.querySelector('.page-title').innerHTML = pageTitle;
 
@@ -869,7 +873,93 @@ function constructQuerryData(startDate, endDate) {
             ]
           }
         ]
-      }
+      },
+          // 16 Standard Subscription Buying
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                eventCategory
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                buySuccessStandard
+              ],
+              'caseSensitive': true
+            }
+            
+          ]
+        }
+      ]
+    },// 17 Buy Premium Subscription
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                eventCategory
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                buySuccessPremium
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    }
     ];
     for (const k of queryData) {
       allQueryData.push(k);
@@ -886,6 +976,84 @@ function drawChartsAll() {
     return row.dimensions[0];
   });
 
+  var dataLength = gaDataReports.length;
+  var eventCategoryLength = eventCategories.length;
+  var step = dataLength / eventCategoryLength;
+
+
+  drawChartByKey({
+    title: 'New Subscriptions',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    eventCategories: eventCategories,
+    data: [
+      {
+        index: 16,
+        name: 'Standard'
+      },
+      {
+        index: 17,
+        name: 'Premium'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
+    title: 'New Revenue',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    unitName: 'RMB',
+    eventCategories: eventCategories,
+    dataCount: 'total',
+    data: [
+      {
+        index: 16,
+        name: 'Standard',
+        multiplierKey: 'standardPrice'
+      },
+      {
+        index: 17,
+        name: 'Premium',
+        multiplierKey: 'premiumPrice'
+      }
+    ],
+    plotOptions: {
+      column: {
+          stacking: 'normal'
+      }
+    }
+  });
+
+
+  drawChartByKey({
+    title: 'New Revenue Breakdown',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    unitName: 'RMB',
+    eventCategories: eventCategories,
+    dataCount: 'breakdown',
+    data: [
+      {
+        index: 16,
+        name: 'Standard',
+        multiplierKey: 'standardPrice'
+      },
+      {
+        index: 17,
+        name: 'Premium',
+        multiplierKey: 'premiumPrice'
+      }
+    ],
+    plotOptions: {
+      column: {
+          stacking: 'normal'
+      }
+    }
+  });
 
 
   // MARK: Buy Success Display

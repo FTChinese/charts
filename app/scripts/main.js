@@ -650,18 +650,57 @@ function getKeysByOder(keys,n) {
   const ads = [];
 }
 
+
+function convertObjToBreakdown(obj) {
+  var obj = obj;
+  if (obj.eventCategories && obj.eventCategories.length > 0 && obj.dataCount === 'breakdown') {
+    var newData = [];
+    var step = gaDataReports.length / obj.eventCategories.length;
+    for (var i=0; i<obj.eventCategories.length; i++) {
+      var data = obj.data;
+      var eventCategoryName = obj.eventCategories[i].name || '';
+      for (oneData of data) {
+        var newOneData = JSON.parse(JSON.stringify(oneData));
+        newOneData.index += i * step;
+        newOneData.name = eventCategoryName + ': ' + oneData.name;
+        newOneData.eventCategory = obj.eventCategories[i];
+        newData.push(newOneData);
+      }
+    }
+    obj.data = newData;
+    delete obj.dataCount;
+    delete obj.eventCategories;
+    return obj;
+  }
+  return obj;
+}
+
+function addingMultiplierByKey(sourceData, objData, eventCategory) {
+  var multiplierKey = objData.multiplierKey;
+  var oneDataArray = sourceData;
+  if (typeof multiplierKey === 'string') {
+    oneMultiplier = eventCategory[multiplierKey];
+    if (oneMultiplier >0) {
+      oneDataArray = oneDataArray.map(x => x * oneMultiplier);
+    }
+  }
+  return oneDataArray;
+}
+
 // MARK: A quick way to draw just one chart with just enought information
 function drawChartByKey(obj) {
+  if (obj.eventCategories && obj.eventCategories.length > 0 && obj.dataCount === 'breakdown') {
+    var newObj = convertObjToBreakdown(obj);
+    drawChartByKey(newObj);
+    return;
+  }
   var percentageSign = (obj.percentage === true) ? '%': '';
   var keys = obj.keys;
   var unitName = obj.unitName || '';
   var multiplier = obj.multiplier || 1;
   var series;
   var subtitle = '';
-
-  // console.log (obj.data.length);
-  // console.log (obj.conversion);
-
+  var plotOptions = obj.plotOptions || {};
   if (!keys) {
     var baseData; 
     var seriesData = obj.data.map(function(x, index) {
@@ -691,7 +730,6 @@ function drawChartByKey(obj) {
         name: unitName,
         data: seriesData
     }];
-    // console.log (series);
   } else if (obj.conversion === true && obj.data.length === 2) {
     // MARK: Draw conversion rates between two sets of data
     var series1 = extractDataFromGAAPI(gaDataReports[obj.data[0].index].data.rows, keys);
@@ -721,13 +759,36 @@ function drawChartByKey(obj) {
     });
   } else {
     series = obj.data.map(function(x) {
-      var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
+      var dataArray;
+      if (obj.eventCategories && obj.eventCategories.length > 0 && obj.dataCount && obj.dataCount === 'total') {
+        var dataArryInCategories;
+        var eventCategoryLength = obj.eventCategories.length;
+        var gaDataReportLength = gaDataReports.length / eventCategoryLength;
+        for (var n=0; n < eventCategoryLength; n++) {
+          var xIndex = x.index + n * gaDataReportLength;
+          var oneDataArray = extractDataFromGAAPI(gaDataReports[xIndex].data.rows, keys);
+          var oneMultiplier;
+          oneDataArray = addingMultiplierByKey(oneDataArray, x, obj.eventCategories[n])
+          if (n === 0) {
+            dataArryInCategories = oneDataArray
+          } else {
+            dataArryInCategories = dataArryInCategories.map((a, i) => a + oneDataArray[i]);
+          }
+        }
+        dataArray = dataArryInCategories;
+      } else {
+        dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
+      }
       var dataMultiplier = multiplier;
       if (x.multiplier && x.multiplier > 0) {
         dataMultiplier = x.multiplier;
       }
       if (dataArray) {
         dataArray = dataArray.map(x => x * dataMultiplier);
+        var currentEventCategory = x.eventCategory;
+        if (currentEventCategory) {
+          dataArray = addingMultiplierByKey(dataArray, x, currentEventCategory);
+        }
       }
       return {
         name: x.name + ' (Average: ' + averageOfArray(dataArray) + percentageSign + ')',
@@ -779,7 +840,8 @@ function drawChartByKey(obj) {
       },
       legend: {
         enabled: true
-      }
+      },
+      plotOptions: plotOptions
     });
 }
 
