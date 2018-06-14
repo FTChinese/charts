@@ -653,7 +653,7 @@ function getKeysByOder(keys,n) {
 
 function convertObjToBreakdown(obj) {
   var obj = obj;
-  if (obj.eventCategories && obj.eventCategories.length > 0 && obj.dataCount === 'breakdown') {
+  if (obj.eventCategories && obj.eventCategories.length > 0 && obj.breakdown === 'all') {
     var newData = [];
     var step = gaDataReports.length / obj.eventCategories.length;
     for (var i=0; i<obj.eventCategories.length; i++) {
@@ -668,7 +668,7 @@ function convertObjToBreakdown(obj) {
       }
     }
     obj.data = newData;
-    delete obj.dataCount;
+    delete obj.breakdown;
     delete obj.eventCategories;
     return obj;
   }
@@ -689,7 +689,7 @@ function addingMultiplierByKey(sourceData, objData, eventCategory) {
 
 // MARK: A quick way to draw just one chart with just enought information
 function drawChartByKey(obj) {
-  if (obj.eventCategories && obj.eventCategories.length > 0 && obj.dataCount === 'breakdown') {
+  if (obj.eventCategories && obj.eventCategories.length > 0 && obj.breakdown === 'all') {
     var newObj = convertObjToBreakdown(obj);
     drawChartByKey(newObj);
     return;
@@ -757,10 +757,29 @@ function drawChartByKey(obj) {
         data: conversionRate
       };
     });
+  } else if (obj.eventCategories && obj.eventCategories.length > 0 && obj.breakdown && obj.breakdown === 'eventCategory') {
+    series = obj.eventCategories.map(function(category, index) {
+      var categoryData;
+      var step = gaDataReports.length / obj.eventCategories.length;
+      for (var n=0; n<obj.data.length; n++) {
+        var gaReportIndex = obj.data[n].index + (index * step);
+        var oneCategoryData = extractDataFromGAAPI(gaDataReports[gaReportIndex].data.rows, keys);
+        oneCategoryData = addingMultiplierByKey(oneCategoryData, obj.data[n], obj.eventCategories[index]);
+        if (n == 0) {
+          categoryData = oneCategoryData;
+        } else {
+          categoryData = categoryData.map((a, i) => a + oneCategoryData[i]);
+        }
+      }
+      return {
+        name: category.name + ' (Average: ' + averageOfArray(categoryData) + percentageSign + ')',
+        data: categoryData
+      };
+    });
   } else {
     series = obj.data.map(function(x) {
       var dataArray;
-      if (obj.eventCategories && obj.eventCategories.length > 0 && obj.dataCount && obj.dataCount === 'total') {
+      if (obj.eventCategories && obj.eventCategories.length > 0 && obj.breakdown && obj.breakdown === 'data') {
         var dataArryInCategories;
         var eventCategoryLength = obj.eventCategories.length;
         var gaDataReportLength = gaDataReports.length / eventCategoryLength;
@@ -768,7 +787,7 @@ function drawChartByKey(obj) {
           var xIndex = x.index + n * gaDataReportLength;
           var oneDataArray = extractDataFromGAAPI(gaDataReports[xIndex].data.rows, keys);
           var oneMultiplier;
-          oneDataArray = addingMultiplierByKey(oneDataArray, x, obj.eventCategories[n])
+          oneDataArray = addingMultiplierByKey(oneDataArray, x, obj.eventCategories[n]);
           if (n === 0) {
             dataArryInCategories = oneDataArray
           } else {

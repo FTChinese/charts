@@ -1001,13 +1001,41 @@ function drawChartsAll() {
 
 
   drawChartByKey({
-    title: 'New Revenue',
+    title: 'New Revenue By Type',
     type: 'column',
     percentage: false,
     keys: keys,
     unitName: 'RMB',
     eventCategories: eventCategories,
-    dataCount: 'total',
+    breakdown: 'data',
+    data: [
+      {
+        index: 16,
+        name: 'Standard',
+        multiplierKey: 'standardPrice'
+      },
+      {
+        index: 17,
+        name: 'Premium',
+        multiplierKey: 'premiumPrice'
+      }
+    ],
+    plotOptions: {
+      column: {
+          stacking: 'normal'
+      }
+    }
+  });
+
+
+  drawChartByKey({
+    title: 'New Revenue By Platform',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    unitName: 'RMB',
+    eventCategories: eventCategories,
+    breakdown: 'eventCategory',
     data: [
       {
         index: 16,
@@ -1035,7 +1063,7 @@ function drawChartsAll() {
     keys: keys,
     unitName: 'RMB',
     eventCategories: eventCategories,
-    dataCount: 'breakdown',
+    breakdown: 'all',
     data: [
       {
         index: 16,
