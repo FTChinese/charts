@@ -1499,7 +1499,7 @@ function callAjax(url, callback){
           callback(xmlhttp.responseText);
       }
   }
-  xmlhttp.open("GET", url, true);
+  xmlhttp.open('GET', url, true);
   xmlhttp.send();
 }
 
@@ -1559,7 +1559,7 @@ function getAdInfoFromDolphineCSV(csv) {
 
 function getDataSerieFromAdid(keys, csvText) {
   var adInfo = getAdInfoFromDolphineCSV(csvText);
-  const adIdByUrl = window.location.search.replace(/.*adid=([0-9]+)/,"$1");
+  const adIdByUrl = window.location.search.replace(/.*adid=([0-9]+)/,'$1');
   const adIdByManual = document.getElementById('adid').value;
   const adId = adIdByUrl || adIdByManual;
   const adInfoItem = adInfo.ads[adId];
