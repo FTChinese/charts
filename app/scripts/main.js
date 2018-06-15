@@ -40,6 +40,11 @@ function pearsonCorrelation(prefs, p1, p2) {
   return final;
 }
 
+
+
+
+
+
 /**
 Exactly –1. A perfect downhill (negative) linear relationship
 
@@ -1481,4 +1486,96 @@ function number_format(number, decimals, dec_point, thousands_sep) {
       s[1] += new Array(prec - s[1].length + 1).join('0');
   }
   return s.join(dec);
+}
+
+
+// Get and Parse Dolphin Data
+function callAjax(url, callback){
+  var xmlhttp;
+  // compatible with IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function(){
+      if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+          callback(xmlhttp.responseText);
+      }
+  }
+  xmlhttp.open("GET", url, true);
+  xmlhttp.send();
+}
+
+function getAdInfoFromDolphineCSV(csv) {
+  var csvText = csv.replace(/[\r\n]+/g, '|');
+  var csvArray = csvText.split('|');
+  csvArray = csvArray.filter(function(text){
+    return /^[0-9]+\-[0-9]+\-[0-9]+,/.test(text);
+  });
+  csvArray = csvArray.map(function(text){
+    const textArray = text.split(',');
+    const textDate = textArray[0];
+    const name = textArray[1];
+    const adid = textArray[2];
+    const request = textArray[5];
+    const textObj = {
+      date: textDate,
+      name: name,
+      adid: adid,
+      request: request
+    };
+    return textObj;
+  });
+  var finalObj = {
+    ads: {}
+  };
+  for (item of csvArray) {
+    const key = item.adid;
+    if (finalObj.ads[key] === undefined) {
+      finalObj.ads[key] = {
+        requests: {}
+      };
+    }
+    finalObj.ads[key].name = item.name;
+    finalObj.ads[key].adid = item.adid;
+    finalObj.ads[key].requests[item.date] = item.request;
+  }
+  const dates = csvArray.map(function(obj){
+    const currentDate = new Date(obj.date)
+    return currentDate;
+  });
+  const ids = csvArray.map(function(obj){
+    const id = obj.adid;
+    return id;
+  });
+  uniqueIds = ids.filter((v, i, a) => a.indexOf(v) === i); 
+  finalObj.ids = uniqueIds;
+  const startDate = new Date(Math.min.apply(null,dates));
+  const endDate = new Date(Math.max.apply(null,dates));
+  finalObj.startDate = startDate;
+  finalObj.endDate = endDate;
+  //console.log (finalObj);
+
+  return finalObj;
+}
+
+
+function getDataSerieFromAdid(keys, csvText) {
+  var adInfo = getAdInfoFromDolphineCSV(csvText);
+  const adIdByUrl = window.location.search.replace(/.*adid=([0-9]+)/,"$1");
+  const adIdByManual = document.getElementById('adid').value;
+  const adId = adIdByUrl || adIdByManual;
+  const adInfoItem = adInfo.ads[adId];
+  if (adInfoItem === undefined) {
+    return
+  }
+  const name = adInfoItem.name;
+  const data = keys.map(function (key) {
+    const keyConverted = key.replace(/([0-9]{4})([0-9]{2})([0-9]{2})/g, '$1-$2-$3');
+    var request = adInfoItem.requests[keyConverted] || 0;
+    request = parseInt(request, 10) || 0;
+    return request;
+  });
+  const series = {
+    name: name,
+    data: data
+  };
+  return series;
 }
