@@ -1614,7 +1614,12 @@ function drawChartsAll() {
         name: 'Premium',
         multiplier: premiumPrice
       }
-    ]
+    ],
+    plotOptions: {
+      column: {
+          stacking: 'normal'
+      }
+    }
   });
 
   // drawChartByKey({
