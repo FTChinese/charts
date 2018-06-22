@@ -201,6 +201,92 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },
+    // 3 daily standard for buy success
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Web Pay Wall'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Buy Success:Standard'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    // 4 daily premium for buy success
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Web Pay Wall'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Buy Success:Premium'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -231,12 +317,80 @@ function drawChartsAll() {
     ]
   });
 
+  drawChartByKey({
+    title: 'Revenue Loss As a Result of Failed Payment',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    unitName: 'RMB',
+    data: [
+      {
+        index: 0,
+        name: 'Standard',
+        multiplier: 198*0.7
+      },
+      {
+        index: 1,
+        name: 'Premium',
+        multiplier: 1998*0.7
+      }
+    ],
+    plotOptions: {
+      column: {
+          stacking: 'normal'
+      }
+    }
+  });
+
+  drawChartByKey({
+    title: 'Regained Buyings From Web',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 3,
+        name: 'Standard'
+      },
+      {
+        index: 4,
+        name: 'Premium'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
+    title: 'Regained Revenue From Web',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    unitName: 'RMB',
+    data: [
+      {
+        index: 3,
+        name: 'Standard',
+        multiplier: 198
+      },
+      {
+        index: 4,
+        name: 'Premium',
+        multiplier: 1998
+      }
+    ],
+    plotOptions: {
+      column: {
+          stacking: 'normal'
+      }
+    }
+  });
+
+
   drawTable({
     title: 'Users Who Failed to Pay with iOS IAP',
     description: 'These are the users that intended to pay but could not do so because of Apple\'s server problem. We should consider ways to get the revenue back. Possible channels: In App Texts, Push notifications, Emails, etc...',
     index: 2
   });
-
 
   addFeatureToTable();
 
