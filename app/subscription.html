@@ -31,6 +31,7 @@
 <script src="../bower_components/highmaps-beta/modules/map.js"></script>
 <script src="../bower_components/highmaps-beta/modules/data.js"></script>
 <script src="../bower_components/highcharts/modules/funnel.js"></script>
+<script src="../bower_components/highcharts/modules/annotations.js"></script>
 <script type="text/javascript" src="scripts/highcharts.js"></script>
 <!-- endbuild -->
 <script type="text/javascript" src="scripts/main.js"></script>
@@ -1585,6 +1586,7 @@ function drawChartsAll() {
     type: 'column',
     percentage: false,
     keys: keys,
+    showPlotLines: true,
     data: [
       {
         index: 0,
@@ -1603,6 +1605,7 @@ function drawChartsAll() {
     percentage: false,
     keys: keys,
     unitName: 'RMB',
+    showPlotLines: true,
     data: [
       {
         index: 0,
@@ -1779,6 +1782,7 @@ function drawChartsAll() {
     type: 'area',
     percentage: false,
     keys: keys,
+    showPlotLines: true,
     data: [
       {
         index: 6,
@@ -1922,6 +1926,7 @@ function drawChartsAll() {
     type: 'column',
     percentage: false,
     keys: keys,
+    showPlotLines: true,
     data: [
       {
         index: 10,
@@ -1970,6 +1975,7 @@ function drawChartsAll() {
     percentage: true,
     keys: keys,
     dataSets: [product],
+    showPlotLines: true,
     subtitle: ' ',
     unitName: '%',
     decimalPoints: 4,

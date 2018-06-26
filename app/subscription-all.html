@@ -31,6 +31,7 @@
 <script src="../bower_components/highmaps-beta/modules/map.js"></script>
 <script src="../bower_components/highmaps-beta/modules/data.js"></script>
 <script src="../bower_components/highcharts/modules/funnel.js"></script>
+<script src="../bower_components/highcharts/modules/annotations.js"></script>
 <script type="text/javascript" src="scripts/highcharts.js"></script>
 <!-- endbuild -->
 <script type="text/javascript" src="scripts/main.js"></script>
@@ -988,6 +989,7 @@ function drawChartsAll() {
     keys: keys,
     eventCategories: eventCategories,
     breakdown: 'data',
+    showPlotLines: true,
     data: [
       {
         index: 16,
@@ -1009,6 +1011,7 @@ function drawChartsAll() {
     unitName: 'RMB',
     eventCategories: eventCategories,
     breakdown: 'data',
+    showPlotLines: true,
     data: [
       {
         index: 16,

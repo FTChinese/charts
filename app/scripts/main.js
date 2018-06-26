@@ -1,5 +1,19 @@
 // import { CLIENT_RENEG_LIMIT } from "tls";
 
+
+
+var changeLog = [
+  {
+    title: 'Audio on Home',
+    date: '20180621'
+  },
+  {
+    title: 'Exclusive Section on Home',
+    date: '20180624'
+  }
+];
+
+
 /**
  *  Calculate the pearson correlation score between two items in a dataset.
  *
@@ -39,11 +53,6 @@ function pearsonCorrelation(prefs, p1, p2) {
   var final = Math.round(100 * (num / den))/100;
   return final;
 }
-
-
-
-
-
 
 /**
 Exactly –1. A perfect downhill (negative) linear relationship
@@ -211,6 +220,7 @@ function displayResults(response) {
   drawCharts(response.result);
 }
 
+
 // MARK: - Append an div for drawing chart in it.
 function createChart() {
   var chartContainer = document.createElement('div');
@@ -288,7 +298,7 @@ function extractDataFromGAAPI(dataSource, baseKeys) {
  * @param {string} orderBy: 按照从多到少排序的字段，是propsArr中除key外的某一个
  */
 function extractObjData(gaResponseReports, propsArr, keys, orderBy) {
-  console.log('exect');
+  //console.log('exect');
   const resultData = [];
   //console.log(keys);
   keys.forEach(function(onekey) { //处理每个key,一个key对应一个最后数组数组的一项obj
@@ -826,6 +836,15 @@ function drawChartByKey(obj) {
   } else {
     pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.3f}' + percentageSign + '</b><br/>';
   }
+
+
+  var annotations = updateAnnotationWithChangeLog(changeLog, obj, series);
+
+  var tooltip = getToolTipWithChangeLog(changeLog, pointFormat, obj);
+
+  var plotLines = getPlotLinesWithChangeLog(changeLog, obj, series);
+
+
   var chartId = createChart();
   var chart = new Highcharts.Chart({
       chart: {
@@ -847,17 +866,15 @@ function drawChartByKey(obj) {
           tickmarkPlacement: 'on',
           title: {
               enabled: false
-          }
+          },
+          plotLines: plotLines
       },
       yAxis: {
           title: {
               text: obj.yAxisTitle || obj.unitName || ''
           }
       },
-      tooltip: {
-          pointFormat: pointFormat,
-          shared: true
-      },
+      tooltip: tooltip,
       series: series,
       credits: {
         enabled: false
@@ -865,9 +882,141 @@ function drawChartByKey(obj) {
       legend: {
         enabled: true
       },
+      annotations: annotations,
       plotOptions: plotOptions
     });
+
+
 }
+
+
+
+
+function getToolTipWithChangeLog(changeLog, pointFormat, obj) {
+  var tooltip;
+  if (obj.showAnnotations === true || obj.showPlotLines === true) {
+    tooltip = {
+        formatter: function () {
+            var title = '';
+            for (logItem of changeLog) {
+              if (logItem.date == this.x) {
+                title = logItem.title;
+                break;
+              }
+            }
+            var s = '<b>' + this.x + ': ' + title + '</b>';
+            for (point of this.points) {
+              var percentageSign = (obj.percentage === true) ? '%': '';
+                if (percentageSign === '') {
+                  s += '<br><span style="color:' + point.color + '">' + point.series.name + '</span>: <b>' + point.y + percentageSign + '</b><br/>';
+                } else {
+                  s += '<br><span style="color:' + point.color + '">' + point.series.name + '</span>: <b>' + point.y + percentageSign + '</b><br/>';
+                }
+            }
+            return s;
+        },
+        shared: true
+    }
+  } else {
+    tooltip = {
+      pointFormat: pointFormat,
+      shared: true
+    };
+  }
+  return tooltip;
+}
+
+function updateAnnotationWithChangeLog(changeLog, obj, series) {
+  if (obj.showAnnotations !== true) {
+    return [];
+  }
+  var keys = obj.keys;
+  if (keys === undefined) {
+    return [];
+  }
+  if (series.length == 0 || typeof series[0].data !== 'object') {
+    return [];
+  }
+  var labels = [];
+  for (logItem of changeLog) {
+    const index = keys.indexOf(logItem.date);
+    if (index >= 0) {
+      const x = index;
+      const y = getYForData(series, index, obj);
+      const text = logItem.title;
+      const label = {
+        point: {
+          xAxis: 0,
+          yAxis: 0,
+          x: index,
+          y: y
+        },
+        text: text
+      };
+      labels.push(label);
+    }
+  }
+  const annotations = [{
+        labelOptions: {
+            backgroundColor: '#0a5e66',
+            color: 'white',
+            verticalAlign: 'top',
+            y: -36,
+            zIndex: 999999,
+            allowOverlap: true
+        },
+        labels: labels
+    }];
+  return annotations;
+}
+
+function getPlotLinesWithChangeLog(changeLog, obj, series) {
+  //console.log (obj.showPlotLines);
+  if (obj.showPlotLines !== true) {
+    return [];
+  }
+  var keys = obj.keys;
+  if (keys === undefined) {
+    return [];
+  }
+  if (series.length == 0 || typeof series[0].data !== 'object') {
+    return [];
+  }
+  var plotLines = [];
+  for (logItem of changeLog) {
+    const index = keys.indexOf(logItem.date);
+    if (index >= 0) {
+      const x = index;
+      //const y = getYForData(series, index, obj);
+      const plotLine = {
+          color: '#777777', // Red
+          width: 1,
+          value: x
+      };
+      plotLines.push(plotLine);
+    }
+  }
+  //console.log (plotLines);
+  return plotLines;
+}
+
+
+
+function getYForData(series, index, obj) {
+  var y = 0;
+  var currentData = [];
+  for (item of series) {
+    currentData.push(item.data[index]);
+  }
+  // MARK: If the chart is a stacking one
+  if (obj.plotOptions) {
+    y = currentData.reduce((a, b) => a + b, 0)
+  } else {
+    y = Math.max( ...currentData );
+  }
+  return y;
+}
+
 
 function drawBreakDownChart(obj) {
   var seriesData;
@@ -875,8 +1024,6 @@ function drawBreakDownChart(obj) {
     seriesData = obj.data;
   } else {
     seriesData = obj.data.map(function(x, index) {
-      //console.log (gaDataReports[x.index].data);
-      //var dataArray = extractDataFromGAAPI(gaDataReports[x.index].data.rows, keys);
       var dataTotal = gaDataReports[x.index].data.totals[0].values[0];
       dataTotal = parseInt(dataTotal, 10) || 0;
       return  {
