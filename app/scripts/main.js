@@ -4,6 +4,10 @@
 
 var changeLog = [
   {
+    title: 'Apps Blocked in China',
+    date: '20180308'
+  },
+  {
     title: 'Audio on Home',
     date: '20180621'
   },
