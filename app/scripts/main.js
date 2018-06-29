@@ -4,12 +4,20 @@
 
 var changeLog = [
   {
+    title: 'Apple Subscription Online',
+    date: '20180115'
+  },
+  {
     title: 'Apps Blocked in China',
     date: '20180308'
   },
   {
+    title: 'Web and Android Subscription Online',
+    date: '20180401'
+  },
+  {
     title: 'Pop Up Service Agreement in Web Registration Form',
-    date: '20180529'
+    date: '20180616'
   },
   {
     title: 'Audio on Home',
@@ -24,7 +32,7 @@ var changeLog = [
     date: '20180626'
   },
   {
-    title: 'Fix Bug with Service Agreemnt Pop Out on Registration Form',
+    title: 'Fix Bugs in Service Agreement Pop and Billingual Story',
     date: '20180628'
   }
 ];
@@ -692,7 +700,15 @@ function convertObjToBreakdown(obj) {
       var eventCategoryName = obj.eventCategories[i].name || '';
       for (oneData of data) {
         var newOneData = JSON.parse(JSON.stringify(oneData));
-        newOneData.index += i * step;
+        if (typeof newOneData.index === 'number') {
+          newOneData.index += i * step;
+        }
+        if (typeof newOneData.total === 'number') {
+          newOneData.total += i * step;
+        }
+        if (typeof newOneData.part === 'number') {
+          newOneData.part += i * step;
+        }
         newOneData.name = eventCategoryName + ': ' + oneData.name;
         newOneData.eventCategory = obj.eventCategories[i];
         newData.push(newOneData);
@@ -732,6 +748,10 @@ function drawChartByKey(obj) {
   var series;
   var subtitle = '';
   var plotOptions = obj.plotOptions || {};
+  // MARK: Different Type of Charts
+  const isMultipleConversionChart = (obj.conversion === true && obj.data.length > 0 && typeof obj.data[0].part === 'number' && typeof obj.data[0].total === 'number');
+  const isPairConversionChart = (obj.conversion === true && obj.data.length === 2);
+  const isBreakdownByEventCategory = (obj.eventCategories && obj.eventCategories.length > 0 && obj.breakdown && obj.breakdown === 'eventCategory');
   if (!keys) {
     var baseData; 
     var seriesData = obj.data.map(function(x, index) {
@@ -761,7 +781,7 @@ function drawChartByKey(obj) {
         name: unitName,
         data: seriesData
     }];
-  } else if (obj.conversion === true && obj.data.length === 2) {
+  } else if (isPairConversionChart) {
     // MARK: Draw conversion rates between two sets of data
     var series1 = extractDataFromGAAPI(gaDataReports[obj.data[0].index].data.rows, keys);
     var series2 = extractDataFromGAAPI(gaDataReports[obj.data[1].index].data.rows, keys);
@@ -776,7 +796,7 @@ function drawChartByKey(obj) {
     }];
     percentageSign = '%';
     subtitle = 'Overall Conversion: ' + overallConversionRate + '%, Correlation: '+r + ' (' + rExplained + ')';
-  } else if (obj.conversion === true && obj.data.length > 0 && obj.data[0].part && obj.data[0].total) {
+  } else if (isMultipleConversionChart) {
       series = obj.data.map(function(x) {
       var total = extractDataFromGAAPI(gaDataReports[x.total].data.rows, keys);
       var part = extractDataFromGAAPI(gaDataReports[x.part].data.rows, keys);
@@ -788,7 +808,7 @@ function drawChartByKey(obj) {
         data: conversionRate
       };
     });
-  } else if (obj.eventCategories && obj.eventCategories.length > 0 && obj.breakdown && obj.breakdown === 'eventCategory') {
+  } else if (isBreakdownByEventCategory) {
     series = obj.eventCategories.map(function(category, index) {
       var categoryData;
       var step = gaDataReports.length / obj.eventCategories.length;
@@ -816,6 +836,9 @@ function drawChartByKey(obj) {
         var gaDataReportLength = gaDataReports.length / eventCategoryLength;
         for (var n=0; n < eventCategoryLength; n++) {
           var xIndex = x.index + n * gaDataReportLength;
+          if (!gaDataReports[xIndex]) {
+            console.log (obj);
+          }
           var oneDataArray = extractDataFromGAAPI(gaDataReports[xIndex].data.rows, keys);
           var oneMultiplier;
           oneDataArray = addingMultiplierByKey(oneDataArray, x, obj.eventCategories[n]);

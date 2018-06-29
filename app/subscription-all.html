@@ -374,7 +374,7 @@ function constructQuerryData(startDate, endDate) {
             ]
           }
         ]
-      },// 6 Display Subscription from Billigual Text
+      },// 6 Display Subscription from Billingual Text
       {
         'viewId': VIEW_ID,
         'dateRanges': [
@@ -774,7 +774,7 @@ function constructQuerryData(startDate, endDate) {
             ]
           }
         ]
-      },// 14 Buy Subscription from Billigual Text
+      },// 14 Buy Subscription from Billingual Text
       {
         'viewId': VIEW_ID,
         'dateRanges': [
@@ -1107,7 +1107,7 @@ function drawChartsAll() {
       },
       {
         index: 14,
-        name: 'Billigual Text'
+        name: 'Billingual Text'
       },
       {
         index: 9,
@@ -1156,7 +1156,7 @@ function drawChartsAll() {
       },
       {
         index: 6,
-        name: 'Billigual Text'
+        name: 'Billingual Text'
       },
       {
         index: 1,
@@ -1207,7 +1207,7 @@ function drawChartsAll() {
       {
         total: 6,
         part: 14,
-        name: 'Billigual Text'
+        name: 'Billingual Text'
       },
       {
         total: 1,
@@ -1238,6 +1238,117 @@ function drawChartsAll() {
         total: 7,
         part: 15,
         name: 'Ad Blocker'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Exclusive Story Conversion',
+    type: 'column',
+    percentage: true,
+    keys: keys,
+    eventCategories: eventCategories,
+    breakdown: 'all',
+    showPlotLines: true,
+    data: [
+      {
+        total: 0,
+        part: 8,
+        name: 'Exclusive Story'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Billingual Conversion',
+    type: 'column',
+    percentage: true,
+    keys: keys,
+    eventCategories: eventCategories,
+    breakdown: 'all',
+    showPlotLines: true,
+    data: [
+      {
+        total: 6,
+        part: 14,
+        name: 'Billingual Text'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    conversion: true,
+    title: 'English Text Conversion',
+    type: 'column',
+    percentage: true,
+    keys: keys,
+    eventCategories: eventCategories,
+    breakdown: 'all',
+    showPlotLines: true,
+    data: [
+      {
+        total: 1,
+        part: 9,
+        name: 'English Text'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Radio Conversion',
+    type: 'column',
+    percentage: true,
+    keys: keys,
+    eventCategories: eventCategories,
+    breakdown: 'all',
+    showPlotLines: true,
+    data: [
+      {
+        total: 2,
+        part: 10,
+        name: 'Radio'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Speedread Conversion',
+    type: 'column',
+    percentage: true,
+    keys: keys,
+    eventCategories: eventCategories,
+    breakdown: 'all',
+    showPlotLines: true,
+    data: [
+      {
+        total: 3,
+        part: 11,
+        name: 'Speedread'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Archive Conversion',
+    type: 'column',
+    percentage: true,
+    keys: keys,
+    eventCategories: eventCategories,
+    breakdown: 'all',
+    showPlotLines: true,
+    data: [
+      {
+        total: 4,
+        part: 12,
+        name: 'Archive'
       }
     ]
   });
