@@ -8,12 +8,24 @@ var changeLog = [
     date: '20180308'
   },
   {
+    title: 'Pop Up Service Agreement in Web Registration Form',
+    date: '20180529'
+  },
+  {
     title: 'Audio on Home',
     date: '20180621'
   },
   {
     title: 'Exclusive Section on Home',
     date: '20180624'
+  },
+  {
+    title: 'Prominent Language Switch on Story Page',
+    date: '20180626'
+  },
+  {
+    title: 'Fix Bug with Service Agreemnt Pop Out on Registration Form',
+    date: '20180628'
   }
 ];
 
@@ -975,7 +987,6 @@ function updateAnnotationWithChangeLog(changeLog, obj, series) {
 }
 
 function getPlotLinesWithChangeLog(changeLog, obj, series) {
-  //console.log (obj.showPlotLines);
   if (obj.showPlotLines !== true) {
     return [];
   }
