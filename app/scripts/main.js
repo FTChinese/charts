@@ -34,6 +34,14 @@ var changeLog = [
   {
     title: 'Fix Bugs in Service Agreement Pop and Billingual Story',
     date: '20180628'
+  },
+  {
+    title: 'Start to Track Language Switch Performance',
+    date: '20180702'
+  },
+  {
+    title: 'Start to track all required steps in registration form of web site',
+    date: '20180702'
   }
 ];
 
@@ -123,6 +131,68 @@ function correlationExplained(r) {
     return 'value meaningless';
   }
 }
+
+
+
+
+//utility functions
+const lineFit = function(xs, ys, rV){
+    rV.slope = 0.0;
+    rV.intercept = 0.0;
+    rV.rSquared = 1.0; // assume perfection
+    
+    if (xs.length < 2)
+    {
+        return false;
+    }
+    
+    if (xs.Count != ys.Count)
+    {
+        return false;
+    }
+    
+    var N = xs.length;
+    var sumX = sumFunc(xs,null);
+    var sumY = sumFunc(ys,null);
+    var funcSq = function(i){return (i*i);}
+    var funcSq2 = function(i,j){return (i*j);}
+    var sumXx = sumFunc(xs, funcSq);
+    var sumYy = sumFunc(ys, funcSq);
+    var sumXy = sumFunc(zip(xs,ys),funcSq2); 
+
+    rV.slope = ((N * sumXy) - (sumX * sumY)) / (N * sumXx - (sumX*sumX));
+    rV.intercept = (sumY - rV.slope * sumX) / N;
+    rV.rSquared = Math.abs((rV.slope * (sumXy - (sumX * sumY) / N)) / (sumYy - ((sumY * sumY) / N)));
+    return true;
+}   
+
+const sumFunc = function(arr, func){
+    var total = 0;
+    for (var [i, k] of arr.entries()) {
+        if (typeof k === 'object' && k.length > 0){
+            if (func == null){
+                k = k[0] + k[1];
+            }else{                
+                k = func(k[0],k[1]);
+            }
+        } else {
+            if (func != null){
+                k = func(k);
+            }
+        }
+        total += k;
+    }
+    return total;
+}
+
+const zip = function(arr1,arr2) {
+    var rV = [];
+    for(var i=0; i<arr1.length; i++){
+       rV.push([arr1[i],arr2[i]]);
+    }
+    return rV;
+}
+
 
 function queryDifferentReports() {
   // MARK: - 适用于ReportRequest对象的dateRange、viewId不同的情况
@@ -505,7 +575,7 @@ function medianOfAll(numArray) {
 /*** 一系列数据计算方法：End ***/
 
 // MARK: Calculate percentage between two sets of data
-function calculateRates(part, total) {
+function calculateRates(part, total, percentageSign) {
   var rates=[];
   if (part == null || total == null) {
     return rates;
@@ -518,7 +588,10 @@ function calculateRates(part, total) {
       } catch (ignore) {
         rate = 0; 
       }
-      rate = parseInt(rate * 100000, 10)/1000;//保留3位小数
+      const divNumber = (percentageSign === '%') ? '1000' : '100000';
+      // console.log (percentageSign);
+      // console.log (divNumber);
+      rate = parseInt(rate * 100000, 10)/divNumber;//保留3位小数
       rates.push(rate);
     }
   }
@@ -526,7 +599,7 @@ function calculateRates(part, total) {
 }
 
 // MARK: Calculate percentage between two sets of data
-function calculateOverallRates(part, total) {
+function calculateOverallRates(part, total, percentageSign) {
   if (part == null || total == null) {
     return 0;
   }
@@ -535,7 +608,8 @@ function calculateOverallRates(part, total) {
   var rate = 0;
   if (partSum >= 0 && totalSum > 0) {
     rate = partSum / totalSum;
-    rate = parseInt(rate * 1000000, 10)/10000;
+    const divNumber = (percentageSign === '%') ? '1000' : '100000';
+    rate = parseInt(rate * 1000000, 10)/divNumber;
   }
   return rate;
 }
@@ -709,7 +783,8 @@ function convertObjToBreakdown(obj) {
         if (typeof newOneData.part === 'number') {
           newOneData.part += i * step;
         }
-        newOneData.name = eventCategoryName + ': ' + oneData.name;
+        const oneDataName = (data.length>1) ? ': ' + oneData.name : ''; 
+        newOneData.name = eventCategoryName + oneDataName;
         newOneData.eventCategory = obj.eventCategories[i];
         newData.push(newOneData);
       }
@@ -746,7 +821,7 @@ function drawChartByKey(obj) {
   var unitName = obj.unitName || '';
   var multiplier = obj.multiplier || 1;
   var series;
-  var subtitle = '';
+  var subtitle = obj.subtitle || '';
   var plotOptions = obj.plotOptions || {};
   // MARK: Different Type of Charts
   const isMultipleConversionChart = (obj.conversion === true && obj.data.length > 0 && typeof obj.data[0].part === 'number' && typeof obj.data[0].total === 'number');
@@ -794,15 +869,13 @@ function drawChartByKey(obj) {
       name: obj.data[1].name + ' vs ' + obj.data[0].name,
       data: conversionRate
     }];
-    percentageSign = '%';
     subtitle = 'Overall Conversion: ' + overallConversionRate + '%, Correlation: '+r + ' (' + rExplained + ')';
   } else if (isMultipleConversionChart) {
       series = obj.data.map(function(x) {
       var total = extractDataFromGAAPI(gaDataReports[x.total].data.rows, keys);
       var part = extractDataFromGAAPI(gaDataReports[x.part].data.rows, keys);
-      var conversionRate = calculateRates(part, total);
-      var overallConversionRate = calculateOverallRates(part, total);
-      percentageSign = '%';
+      var conversionRate = calculateRates(part, total, percentageSign);
+      var overallConversionRate = calculateOverallRates(part, total, percentageSign);
       return {
         name: x.name + ' (Average: ' + overallConversionRate + percentageSign + ')',
         data: conversionRate
@@ -883,7 +956,10 @@ function drawChartByKey(obj) {
 
   var plotLines = getPlotLinesWithChangeLog(changeLog, obj, series);
 
-
+  if (obj.trendline !== undefined) {
+    const trendlineData = getTrendline(series, obj.trendline);
+    series.push(trendlineData);
+  }
   var chartId = createChart();
   var chart = new Highcharts.Chart({
       chart: {
@@ -928,6 +1004,41 @@ function drawChartByKey(obj) {
 
 }
 
+
+function getTrendline (series, option) {
+    var xs = []; 
+    var ys = [];
+    var minX = 1E100;
+    var maxX = -1E100;
+    var finalSeries;
+    // if (option === 'sum') {
+    //   var sumData = [];
+    //   for ()
+    // } else {
+    //   finalSeries = series;
+    // }
+    finalSeries = series;
+    for (const [i,j] of series.entries()) {
+        for (const [i,k] of j.data.entries()) {
+            if (i < minX) minX = i;
+            if (i > maxX) maxX = i;
+            xs.push(i);
+            ys.push(k);
+        }
+    };
+    var reg = {};
+    lineFit(xs,ys,reg);
+    const trendlineData = {
+      name: 'Trend',
+      data: [[minX, reg.slope * minX + reg.intercept], 
+             [maxX, reg.slope * maxX + reg.intercept]],
+      color: '#0D7680',
+      marker:{enabled:false},
+      lineWidth: 5,
+      type: 'spline'
+    };
+    return trendlineData;
+}
 
 
 

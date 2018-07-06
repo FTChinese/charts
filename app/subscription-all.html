@@ -49,10 +49,14 @@ var buySuccessStandard;
 var buySuccessPremium;
 var standardPrice = 198;
 var premiumPrice = 1998;
+var skuStandard;
+var skuPremium;
+var affiliation;
+var isAffiliationExcluded = false;
 var eventCategories = [
-  {name: 'iOS', eventCategory: 'Privileges', tapAction: 'Tap Subscription', buySuccessStandard: 'buy success: com.ft.ftchinese.mobile.subscription.member', buySuccessPremium: 'buy success: com.ft.ftchinese.mobile.subscription.vip', standardPrice: standardPrice * 0.7, premiumPrice: premiumPrice * 0.7},
-  {'name': 'Android', eventCategory: 'Android Privileges', tapAction: 'Tap', buySuccessStandard: 'Buy success: ftc_standard', buySuccessPremium: 'Buy success: ftc_premium', standardPrice: standardPrice, premiumPrice: premiumPrice},
-  {'name': 'Web Site', eventCategory: 'Web Privileges', tapAction: 'Tap', buySuccessStandard: 'Buy Success:Standard', buySuccessPremium: 'Buy Success:Premium', standardPrice: standardPrice, premiumPrice: premiumPrice}
+  {name: 'iOS', eventCategory: 'Privileges', tapAction: 'Tap Subscription', buySuccessStandard: 'buy success: com.ft.ftchinese.mobile.subscription.member', buySuccessPremium: 'buy success: com.ft.ftchinese.mobile.subscription.vip', standardPrice: standardPrice * 0.7, premiumPrice: premiumPrice * 0.7, skuStandard: 'com.ft.ftchinese.mobile.subscription.member', skuPremium: 'com.ft.ftchinese.mobile.subscription.vip', affiliation: '^iOS IAP:', isAffiliationExcluded: false},
+  {'name': 'Android', eventCategory: 'Android Privileges', tapAction: 'Tap', buySuccessStandard: 'Buy success: ftc_standard', buySuccessPremium: 'Buy success: ftc_premium', standardPrice: standardPrice, premiumPrice: premiumPrice, skuStandard: 'ftc_standard', skuPremium: 'ftc_premium', affiliation: '^Android', isAffiliationExcluded: false},
+  {'name': 'Web Site', eventCategory: 'Web Privileges', tapAction: 'Tap', buySuccessStandard: 'Buy Success:Standard', buySuccessPremium: 'Buy Success:Premium', standardPrice: standardPrice, premiumPrice: premiumPrice, skuStandard: 'Standard', skuPremium: 'Premium', affiliation: '^(iOS|Android)', isAffiliationExcluded: true}
 ];
 eventCategory = 'Privileges';
 tapAction = 'Tap Subscription';
@@ -72,6 +76,10 @@ function constructQuerryData(startDate, endDate) {
     tapAction = s.tapAction;
     buySuccessStandard = s.buySuccessStandard;
     buySuccessPremium = s.buySuccessPremium;
+    skuStandard = s.skuStandard;
+    skuPremium = s.skuPremium;
+    affiliation = s.affiliation;
+    isAffiliationExcluded = s.isAffiliationExcluded;
     var queryData = [
       
       // 0 Dispay Subscription from Exclusive Story
@@ -960,7 +968,143 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
-    }
+    },// 18 Revenue from Language Switch
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:transactionRevenue'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:affiliation',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'LanguageSwitch'
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:affiliation',
+                'operator': 'REGEXP',
+                'not': isAffiliationExcluded,
+                'expressions': [
+                  affiliation
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 19 Display Paywall from Language Switch
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'EXACT',
+                'expressions': [
+                  'Display'
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventLabel',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'LanguageSwitch'
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      },// 20 Revenue from Promo Box
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:transactionRevenue'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:affiliation',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'promobox'
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:affiliation',
+                'operator': 'REGEXP',
+                'not': isAffiliationExcluded,
+                'expressions': [
+                  affiliation
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
+      }
     ];
     for (const k of queryData) {
       allQueryData.push(k);
@@ -990,6 +1134,7 @@ function drawChartsAll() {
     eventCategories: eventCategories,
     breakdown: 'data',
     showPlotLines: true,
+    trendline: 'average',
     data: [
       {
         index: 16,
@@ -1014,6 +1159,7 @@ function drawChartsAll() {
     eventCategories: eventCategories,
     breakdown: 'data',
     showPlotLines: true,
+    trendline: 'sum',
     data: [
       {
         index: 16,
@@ -1043,6 +1189,7 @@ function drawChartsAll() {
     unitName: 'RMB',
     eventCategories: eventCategories,
     breakdown: 'eventCategory',
+    showPlotLines: true,
     data: [
       {
         index: 16,
@@ -1071,6 +1218,7 @@ function drawChartsAll() {
     unitName: 'RMB',
     eventCategories: eventCategories,
     breakdown: 'all',
+    showPlotLines: true,
     data: [
       {
         index: 16,
@@ -1355,6 +1503,52 @@ function drawChartsAll() {
       }
     ]
   });
+
+
+  drawChartByKey({
+    title: 'New Action Revenue',
+    type: 'column',
+    keys: keys,
+    eventCategories: eventCategories,
+    breakdown: 'all',
+    showPlotLines: true,
+    data: [
+      {
+        index: 18,
+        name: 'Language Switch'
+      },
+      {
+        index: 20,
+        name: 'Promo Box'
+      }
+    ],
+    plotOptions: {
+      column: {
+          stacking: 'normal'
+      }
+    }
+  });
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Language Switch ROI',
+    subtitle: 'Revenue per Paywall Display',
+    type: 'column',
+    keys: keys,
+    eventCategories: eventCategories,
+    breakdown: 'all',
+    showPlotLines: true,
+    unitName: 'CNY Per Display',
+    data: [
+      {
+        total: 19,
+        part: 18,
+        name: 'Language Switch'
+      }
+    ]
+  });
+
+
 
 }
 
