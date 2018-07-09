@@ -1013,7 +1013,9 @@ function getTrendline (series, option) {
     var finalSeries;
     // if (option === 'sum') {
     //   var sumData = [];
-    //   for ()
+    //   for (oneData of series) {
+        
+    //   }
     // } else {
     //   finalSeries = series;
     // }

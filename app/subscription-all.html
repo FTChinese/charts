@@ -1104,6 +1104,49 @@ function constructQuerryData(startDate, endDate) {
             ]
           }
         ]
+      },// 21 Billigual and English Text Revenue
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:transactionRevenue'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:affiliation',
+                'operator': 'REGEXP',
+                'expressions': [
+                  'EnglishText'
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:affiliation',
+                'operator': 'REGEXP',
+                'not': isAffiliationExcluded,
+                'expressions': [
+                  affiliation
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
       }
     ];
     for (const k of queryData) {
@@ -1506,6 +1549,23 @@ function drawChartsAll() {
 
 
   drawChartByKey({
+    title: 'Ecommerce: Billingual/English Revenue',
+    type: 'column',
+    keys: keys,
+    eventCategories: eventCategories,
+    breakdown: 'all',
+    showPlotLines: true,
+    //trendline: 'sum',
+    data: [
+      {
+        index: 21,
+        name: 'English/Billingual'
+      }
+    ]
+  });
+
+
+  drawChartByKey({
     title: 'New Action Revenue',
     type: 'column',
     keys: keys,
@@ -1513,6 +1573,10 @@ function drawChartsAll() {
     breakdown: 'all',
     showPlotLines: true,
     data: [
+      {
+        index: 21,
+        name: 'English/Billingual'
+      },
       {
         index: 18,
         name: 'Language Switch'
