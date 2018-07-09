@@ -948,14 +948,9 @@ function drawChartByKey(obj) {
   } else {
     pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.3f}' + percentageSign + '</b><br/>';
   }
-
-
   var annotations = updateAnnotationWithChangeLog(changeLog, obj, series);
-
   var tooltip = getToolTipWithChangeLog(changeLog, pointFormat, obj);
-
   var plotLines = getPlotLinesWithChangeLog(changeLog, obj, series);
-
   if (obj.trendline !== undefined) {
     const trendlineData = getTrendline(series, obj.trendline);
     series.push(trendlineData);
@@ -1011,15 +1006,22 @@ function getTrendline (series, option) {
     var minX = 1E100;
     var maxX = -1E100;
     var finalSeries;
-    // if (option === 'sum') {
-    //   var sumData = [];
-    //   for (oneData of series) {
-        
-    //   }
-    // } else {
-    //   finalSeries = series;
-    // }
-    finalSeries = series;
+    if (option === 'sum') {
+      var sumData = [];
+      for (oneSerie of series) {
+        for (const [i, value] of oneSerie.data.entries()) {
+          if (sumData[i] === undefined) {
+            sumData.push(value);
+          } else {
+            sumData[i] += value;
+          }
+        }
+      }
+      finalSeries = [{data: sumData}];
+    } else {
+      finalSeries = series;
+    }
+
     for (const [i,j] of series.entries()) {
         for (const [i,k] of j.data.entries()) {
             if (i < minX) minX = i;
