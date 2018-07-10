@@ -1022,7 +1022,7 @@ function getTrendline (series, option) {
       finalSeries = series;
     }
 
-    for (const [i,j] of series.entries()) {
+    for (const [i,j] of finalSeries.entries()) {
         for (const [i,k] of j.data.entries()) {
             if (i < minX) minX = i;
             if (i > maxX) maxX = i;
