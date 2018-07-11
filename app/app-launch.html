@@ -129,9 +129,9 @@
 
 // Replace with your view ID.
 var VIEW_ID = '10995661';
-// var startDate = '2017-04-27';
+var startDate = '2018-03-06';
 // var endDate = '2017-05-16';
-var startDate = '30daysago';
+//var startDate = '120daysago';
 var endDate = 'today';
 
 function constructQuerryData(startDate, endDate) {
@@ -146,7 +146,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:pageviews'
+          'expression': 'ga:totalEvents'
         }
       ],
       'dimensions': [
@@ -159,10 +159,18 @@ function constructQuerryData(startDate, endDate) {
           'operator': 'AND',
           'filters': [
             {
-              'dimensionName': 'ga:pagePath',
-              'operator': 'REGEXP',
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
               'expressions': [
-                'iphone-'
+                'iPhone App Launch'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Success'
               ],
               'caseSensitive': true
             }
@@ -214,7 +222,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:pageviews'
+          'expression': 'ga:totalEvents'
         }
       ],
       'dimensions': [
@@ -227,10 +235,18 @@ function constructQuerryData(startDate, endDate) {
           'operator': 'AND',
           'filters': [
             {
-              'dimensionName': 'ga:pagePath',
-              'operator': 'REGEXP',
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
               'expressions': [
-                'ipad-'
+                'iPad App Launch'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Success'
               ],
               'caseSensitive': true
             }
