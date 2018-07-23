@@ -1018,6 +1018,13 @@ function getTrendline (series, option) {
         }
       }
       finalSeries = [{data: sumData}];
+    } else if (option === 'first') {
+      var sumData = [];
+      const oneSerie = series[0];
+      for (const [i, value] of oneSerie.data.entries()) {
+          sumData.push(value);
+      }
+      finalSeries = [{data: sumData}];
     } else {
       finalSeries = series;
     }

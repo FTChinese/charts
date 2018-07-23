@@ -108,7 +108,7 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:pageviews'
+          'expression': 'ga:totalEvents'
         }
       ],
       'dimensions': [
@@ -121,10 +121,18 @@ function constructQuerryData(startDate, endDate) {
           'operator': 'AND',
           'filters': [
             {
-              'dimensionName': 'ga:pagePath',
-              'operator': 'REGEXP',
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
               'expressions': [
-                'iphone-'
+                'iPhone App Launch'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Success'
               ],
               'caseSensitive': true
             }
@@ -200,15 +208,15 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                '202[23]'
+                '^(2000|3000|4000|5000)'
               ],
               'caseSensitive': true
             },
             {
               'dimensionName': 'ga:eventLabel',
-              'operator': 'EXACT',
+              'operator': 'REGEXP',
               'expressions': [
-                '0101'
+                '0301$'
               ],
               'caseSensitive': true
             }
@@ -250,7 +258,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                '202[23]'
+                '^(2000|3000|4000|5000)'
               ],
               'caseSensitive': true
             },
@@ -258,7 +266,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                '000[34]'
+                '0401$'
               ],
               'caseSensitive': true
             }
@@ -300,7 +308,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                '202[23]'
+                '^(2000|3000|4000|5000)'
               ],
               'caseSensitive': true
             },
@@ -308,7 +316,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                '0121'
+                '0801$'
               ],
               'caseSensitive': true
             }
@@ -357,15 +365,15 @@ function constructQuerryData2(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                '2022'
+                '^(2000|3000)'
               ],
               'caseSensitive': true
             },
             {
               'dimensionName': 'ga:eventLabel',
-              'operator': 'EXACT',
+              'operator': 'REGEXP',
               'expressions': [
-                '0101'
+                '0301$'
               ],
               'caseSensitive': true
             }
@@ -407,7 +415,7 @@ function constructQuerryData2(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                '2022'
+                '^(20001000|30001000)'
               ],
               'caseSensitive': true
             },
@@ -415,7 +423,7 @@ function constructQuerryData2(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                '0003'
+                '0401$'
               ],
               'caseSensitive': true
             }
@@ -457,7 +465,16 @@ function constructQuerryData2(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                '2022'
+                '^(2000|3000)'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'not': true,
+              'expressions': [
+                '1000$'
               ],
               'caseSensitive': true
             },
@@ -465,7 +482,7 @@ function constructQuerryData2(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                '0004'
+                '0401$'
               ],
               'caseSensitive': true
             }
@@ -507,15 +524,15 @@ function constructQuerryData2(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                '2023'
+                '^(4000|5000)'
               ],
               'caseSensitive': true
             },
             {
               'dimensionName': 'ga:eventLabel',
-              'operator': 'EXACT',
+              'operator': 'REGEXP',
               'expressions': [
-                '0101'
+                '0301$'
               ],
               'caseSensitive': true
             }
@@ -557,7 +574,7 @@ function constructQuerryData2(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                '2023'
+                '^(40001000|50001000)'
               ],
               'caseSensitive': true
             },
@@ -565,7 +582,7 @@ function constructQuerryData2(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'REGEXP',
               'expressions': [
-                '0003'
+                '0401$'
               ],
               'caseSensitive': true
             }
@@ -613,15 +630,24 @@ function constructQuerryData3(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'REGEXP',
               'expressions': [
-                '2023'
+                '^(4000|5000)'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'not': true,
+              'expressions': [
+                '1000$'
               ],
               'caseSensitive': true
             },
             {
               'dimensionName': 'ga:eventLabel',
-              'operator': 'EXACT',
+              'operator': 'REGEXP',
               'expressions': [
-                '0004'
+                '0401$'
               ],
               'caseSensitive': true
             }

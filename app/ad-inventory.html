@@ -134,7 +134,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                '1000'
+                '10001000'
               ],
               'caseSensitive': true
             },
@@ -142,7 +142,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'EXACT',
               'expressions': [
-                '0001'
+                '0201'
               ],
               'caseSensitive': true
             }
@@ -184,7 +184,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                '1000'
+                '10001000'
               ],
               'caseSensitive': true
             },
@@ -192,7 +192,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'EXACT',
               'expressions': [
-                '0003'
+                '0411'
               ],
               'caseSensitive': true
             }
@@ -234,7 +234,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventAction',
               'operator': 'EXACT',
               'expressions': [
-                '1000'
+                '10001000'
               ],
               'caseSensitive': true
             },
@@ -242,7 +242,7 @@ function constructQuerryData(startDate, endDate) {
               'dimensionName': 'ga:eventLabel',
               'operator': 'EXACT',
               'expressions': [
-                '0014'
+                '0101'
               ],
               'caseSensitive': true
             }
@@ -280,9 +280,9 @@ function drawCharts(gaDataSource) {
   var ad10000003 = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
   var ad10000014 = extractDataFromGAAPI(gaData.reports[3].data.rows, keys);
 
-  var conversion10000001 = calculateRates(ad10000001, deskTopHomePageView);
-  var conversion10000003 = calculateRates(ad10000003, deskTopHomePageView);
-  var conversion10000014 = calculateRates(ad10000014, deskTopHomePageView);
+  var conversion10000001 = calculateRates(ad10000001, deskTopHomePageView, '%');
+  var conversion10000003 = calculateRates(ad10000003, deskTopHomePageView, '%');
+  var conversion10000014 = calculateRates(ad10000014, deskTopHomePageView, '%');
 
 
   chartId = createChart();
@@ -307,15 +307,15 @@ function drawCharts(gaDataSource) {
       },
       series: [
         {
-            name: 'PC Home Page Top Banner: 10000001',
+            name: 'PC Home Page Top Banner',
             data: ad10000001
         },
         {
-            name: 'PC Home Page Top MPU: 10000003',
+            name: 'PC Home Page Top MPU',
             data: ad10000003
         },
         {
-            name: 'PC Home Page Roadblock: 10000014',
+            name: 'PC Home Page Roadblock',
             data: ad10000014
         },
         {
@@ -335,7 +335,7 @@ function drawCharts(gaDataSource) {
   chartId = createChart();
   var conversionRateChart = new Highcharts.Chart({
       chart: {
-          type: 'area',
+          type: 'column',
           renderTo: chartId
       },
       title: {
@@ -359,15 +359,15 @@ function drawCharts(gaDataSource) {
       },
       series: [
       {
-          name: 'Top Banner 10000001',
+          name: 'Top Banner',
           data: conversion10000001
       },
       {
-          name: 'MPU 10000003',
+          name: 'MPU',
           data: conversion10000003
       },
       {
-          name: 'Roadblock 10000014',
+          name: 'Roadblock',
           data: conversion10000014
       }
       ],
