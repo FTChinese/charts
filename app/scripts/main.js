@@ -42,6 +42,10 @@ var changeLog = [
   {
     title: 'Start to track all required steps in registration form of web site',
     date: '20180702'
+  },
+  {
+    title: 'Send paid content in push notification',
+    date: '20180718'
   }
 ];
 
