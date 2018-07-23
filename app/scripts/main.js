@@ -44,8 +44,8 @@ var changeLog = [
     date: '20180702'
   },
   {
-    title: 'Send paid content in push notification',
-    date: '20180718'
+    title: 'Send paid content in push notification (中国金融风险比贸易紧张更值得关注)',
+    date: '20180719'
   }
 ];
 
