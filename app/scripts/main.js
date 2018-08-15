@@ -16,7 +16,7 @@ var changeLog = [
     date: '20180401'
   },
   {
-    title: 'Pop Up Service Agreement in Web Registration Form',
+    title: 'Pop Up Service Agreement in Web Registzration Form',
     date: '20180616'
   },
   {
@@ -50,6 +50,10 @@ var changeLog = [
   {
     title: 'Send paid content in push notification (中国金融风险比贸易紧张更值得关注)',
     date: '20180719'
+  },
+  {
+    title: 'A front end bug caused buy success to be missed on that day and part of next day',
+    date: '20180802'
   }
 ];
 
@@ -202,6 +206,7 @@ const zip = function(arr1,arr2) {
 }
 
 
+
 function queryDifferentReports() {
   // MARK: - 适用于ReportRequest对象的dateRange、viewId不同的情况
   /**
@@ -242,7 +247,7 @@ function queryDifferentReports() {
    oneRequest();
 }
 
-function gup( name, url ) {
+function gup(name, url ) {
     if (!url) url = location.href;
     name = name.replace(/[\[]/,'\\\[').replace(/[\]]/,'\\\]');
     var regexS = '[\\?&]'+name+'=([^&#]*)';
@@ -288,22 +293,69 @@ function queryReportsAll() {
         for (var i=0; i<reports.length; i++) {
           gaDataReports.push(reports[i]);
         }
-        if (endIndex === reportRequestLength -1) {
-          //displayResults(response);
+        if (reports.length === 1 && typeof reports[0].nextPageToken === 'string') {
+          // MARK: - For large amount of requests
+          var newReportRequests = reportRequests;
+          newReportRequests[0].pageToken = reports[0].nextPageToken;
+          requestBatch(index, newReportRequests);
+        } else if (endIndex === reportRequestLength -1) {
           drawChartsAll();
         } else {
-          requestBatch(index+1, reportRequests)
+          requestBatch(index+1, reportRequests);
         }
       }
     );
   }
+
+  function updateParameters() {
+    // MARK: Update parameters
+    window.startDate = gup('startDate', window.location.href) || window.startDate;
+    window.endDate = gup('endDate', window.location.href) || window.endDate;
+    window.ccode = gup('ccode', window.location.href);
+    if (typeof window.homePagePV === 'object' && window.homePagePV.dateRanges) {
+      homePagePV.dateRanges[0].startDate = startDate;
+      homePagePV.dateRanges[0].endDate = endDate;
+    }
+  }
+
+  updateParameters();
   const reportBatchLimit = 5;
-  var reportRequests = constructQuerryData(startDate, endDate);
+  var reportRequests = getQuerryData();
   var reportRequestLength = reportRequests.length;
   var reportRequestBatchLength = Math.ceil(reportRequestLength/reportBatchLimit);
   var currentBatchIndex = 0;
   gaDataReports = [];
   requestBatch(currentBatchIndex, reportRequests);
+}
+
+function getQuerryData() {
+  var reportRequests = constructQuerryData(startDate, endDate);
+  if (window.ccode !== null) {
+    for (request of reportRequests) {
+      var dimensionFilterClauses = request.dimensionFilterClauses;
+      var ccodeFilterClause = {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:campaign',
+            'operator': 'REGEXP',
+            'expressions': [
+              ccode
+            ],
+            'caseSensitive': true
+          }
+        ]
+      };
+      if (dimensionFilterClauses === undefined) {
+        request.dimensionFilterClauses = [ccodeFilterClause];
+      } else if (dimensionFilterClauses.length === 0) {
+        dimensionFilterClauses.push(ccodeFilterClause);
+      } else if (dimensionFilterClauses[0].operator === 'AND') {
+        dimensionFilterClauses[0].filters.push(ccodeFilterClause.filters[0]);
+      }
+    }
+  }
+  return reportRequests;
 }
 
 
@@ -313,7 +365,7 @@ function queryReports() {
     root: 'https://analyticsreporting.googleapis.com/',
     method: 'POST',
     body: {
-      reportRequests: constructQuerryData(startDate, endDate)
+      reportRequests: getQuerryData()
     }
   }).then(displayResults, console.error.bind(console));
 }

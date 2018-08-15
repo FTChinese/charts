@@ -254,92 +254,7 @@ document.querySelector('.page-title').innerHTML = pageTitle;
 
 function constructQuerryData(startDate, endDate) {
   var queryData = [
-    // 0 Standard Subscription Buying
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                buySuccessStandard
-              ],
-              'caseSensitive': true
-            }
-            
-          ]
-        }
-      ]
-    },// 1 Buy Premium Subscription
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                eventCategory
-              ],
-              'caseSensitive': true
-            },
-            {
-              'dimensionName': 'ga:eventAction',
-              'operator': 'EXACT',
-              'expressions': [
-                buySuccessPremium
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },// 2 Paywall Displayed
+    // 0 Paywall Displayed
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -386,6 +301,91 @@ function constructQuerryData(startDate, endDate) {
               ],
               'caseSensitive': true
             }
+          ]
+        }
+      ]
+    } ,// 1 Buy Premium Subscription
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                eventCategory
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                buySuccessPremium
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    { // 2 Standard Subscription Buying
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                eventCategory
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                buySuccessStandard
+              ],
+              'caseSensitive': true
+            }
+            
           ]
         }
       ]
@@ -1558,20 +1558,202 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 28 Subscription Page Seen
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                eventCategory
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                tapAction
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 29 Buy Button Clicked
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                eventCategory
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                '^Buy:'
+              ],
+              'caseSensitive': false
+            }
+          ]
+        }
+      ]
+    },// 30 Payment Method Selected
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                eventCategory
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                '^Buy way:'
+              ],
+              'caseSensitive': false
+            }
+          ]
+        }
+      ]
+    },// 31 Buy Success
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                eventCategory
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                '^Buy Success:'
+              ],
+              'caseSensitive': false
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
 }
 
+
+function getKeysFromDataReports(gaDataReports) {
+  var keys;
+  for (report of gaDataReports) {
+    if (report.data && report.data.rows) {
+      return report.data.rows.map(function(row){
+        return row.dimensions[0];
+    });
+    }
+  }
+  return null;
+}
+
+
 function drawChartsAll() {
 
   var chartId;
   // MARK: - The base key which should have no gap in data
-  var keys = gaDataReports[0].data.rows.map(function(row){
-    return row.dimensions[0];
-  });
-
-
+  var keys = getKeysFromDataReports(gaDataReports);
+  if (keys === null) {
+    alert ('Looks like there is no data that fits your criteria');
+    return;
+  }
 
   // MARK: Filter out dates when data collection experienced problems
   // keys = keys.filter(function(item){
@@ -1580,6 +1762,50 @@ function drawChartsAll() {
   //   }
   // });
 
+  drawChartByKey({
+    title: 'Checkout Funnel',
+    type: 'funnel',
+    unitName: 'Event',
+    percentage: false,
+    data: [
+      {
+        index: 28,
+        name: 'Subscription Page Shown'
+      },
+      {
+        index: 29,
+        name: 'Buy Button Clicked'
+      },
+      {
+        index: 30,
+        name: 'Payment Method Selected'
+      },
+      {
+        index: 31,
+        name: 'Buy Success'
+      }
+    ]
+  });
+
+  drawChartByKey({
+    conversion: true,
+    title: 'Daily: Checkout Process Conversion',
+    type: 'area',
+    percentage: true,
+    keys: keys,
+    showPlotLines: true,
+    trendline: 'first',
+    data: [
+      {
+        index: 28,
+        name: 'Subscription Page Shown'
+      },
+      {
+        index: 4,
+        name: 'Buy Success'
+      }
+    ]
+  });
 
   drawChartByKey({
     title: 'New Subscriptions',
@@ -1590,7 +1816,7 @@ function drawChartsAll() {
     trendline: 'first',
     data: [
       {
-        index: 0,
+        index: 2,
         name: 'Standard'
       },
       {
@@ -1610,7 +1836,7 @@ function drawChartsAll() {
     trendline: 'sum',
     data: [
       {
-        index: 0,
+        index: 2,
         name: 'Standard',
         multiplier: stardardPrice
       },
@@ -1671,7 +1897,7 @@ function drawChartsAll() {
     percentage: false,
     data: [
       {
-        index: 2,
+        index: 0,
         name: 'Paywall Displayed'
       },
       {
@@ -1689,6 +1915,10 @@ function drawChartsAll() {
     ]
   });
 
+
+
+
+
   drawChartByKey({
     title: 'Daily Performance',
     type: 'column',
@@ -1696,7 +1926,7 @@ function drawChartsAll() {
     keys: keys,
     data: [
       {
-        index: 2,
+        index: 0,
         name: 'Paywall Displayed in Story'
       },
       {
@@ -1721,11 +1951,13 @@ function drawChartsAll() {
     conversion: true,
     title: 'Daily: Bought VS Displayed',
     type: 'area',
-    percentage: false,
+    percentage: true,
     keys: keys,
+    showPlotLines: true,
+    trendline: 'first',
     data: [
       {
-        index: 2,
+        index: 0,
         name: 'Displayed'
       },
       {
@@ -1735,18 +1967,17 @@ function drawChartsAll() {
     ]
   });
 
-
-
-
   drawChartByKey({
     conversion: true,
     title: 'Daily: Checked VS Displayed',
     type: 'area',
-    percentage: false,
+    percentage: true,
     keys: keys,
+    showPlotLines: true,
+    trendline: 'first',
     data: [
       {
-        index: 2,
+        index: 0,
         name: 'Displayed'
       },
       {
@@ -1756,15 +1987,14 @@ function drawChartsAll() {
     ]
   });
 
-
-
-
   drawChartByKey({
     conversion: true,
     title: 'Daily: Bought VS Checked',
     type: 'area',
-    percentage: false,
+    percentage: true,
     keys: keys,
+    showPlotLines: true,
+    trendline: 'first',
     data: [
       {
         index: 3,
@@ -1791,7 +2021,7 @@ function drawChartsAll() {
         name: 'Home Page PV'
       },
       {
-        index: 2,
+        index: 0,
         name: 'Paywall Displayed'
       }
     ]

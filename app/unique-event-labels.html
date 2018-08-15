@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Unique Event Labels</title>
+  <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+
+<p align=right>
+  <!-- The Sign-in button. This will run `queryReports()` on success. -->
+  <div class="g-signin2" data-onsuccess="queryReportsAll"></div>
+</p>
+
+<div class="page-container" id="charts-container">
+  <h1 class="page-title">Unique Event Labels</h1>
+</div>
+
+
+
+<!-- build:remove -->
+<script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/highcharts-more.js"></script>
+<script src="../bower_components/highmaps-beta/modules/map.js"></script>
+<script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<script src="../bower_components/highcharts/modules/funnel.js"></script>
+<script type="text/javascript" src="scripts/highcharts.js"></script>
+<!-- endbuild -->
+<script type="text/javascript" src="scripts/main.js"></script>
+
+
+
+<script>
+// MARK: - These are different in every page. 
+
+// Replace with your view ID.
+var VIEW_ID = '10995661';
+// var startDate = '14daysago';
+var startDate = 'yesterday';
+//var startDate = '30daysago';
+var endDate = 'yesterday';
+
+function constructQuerryData(startDate, endDate) {
+  var queryData = [
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:eventLabel'
+        },
+        {
+          'name': 'ga:eventCategory'
+        }
+      ],
+      pageSize: 10000
+    }
+  ];
+  return queryData;
+}
+
+function drawChartsAll() {
+
+  var chartId;
+  // MARK: - The base key which should have no gap in data
+  var keys = gaDataReports[0].data.rows.map(function(row){
+    return row.dimensions[0];
+  });
+  var eventCategories = {};
+  var totalLabels = 0;
+  for (report of gaDataReports) {
+    for (row of report.data.rows) {
+      if (eventCategories[row.dimensions[1]] === undefined) {
+        eventCategories[row.dimensions[1]] = 1;
+      } else {
+        eventCategories[row.dimensions[1]] += 1;
+      }
+      totalLabels += 1;
+    }
+  }
+  var sortable = [];
+  for (var eventCategory in eventCategories) {
+      sortable.push([eventCategory, eventCategories[eventCategory]]);
+  }
+  sortable.sort(function(a, b) {
+      return b[1] - a[1];
+  });
+  var tableRowsHTML = '';
+  for (dataRow of sortable) {
+    var rowHTML = ''
+    for (oneData of dataRow) {
+      //console.log (oneData);
+      rowHTML += '<td>' + oneData + '</td>';
+    }
+    rowHTML = '<tr>' + rowHTML + '</tr>';
+    // const rowHTML = '<tr><td>'+dimension+'</td>'+metricsHTML+'</tr>';
+    // tableRowsHTML += rowHTML;
+    tableRowsHTML += rowHTML;
+  }
+  tableRowsHTML = '<tbody>' + tableRowsHTML + '</tbody>';
+  var tableHTML = '<h1>Total: ' + totalLabels + '</h1><table class="ftc-table ftc-table--responsive-overflow ftc-table--row-stripes ftc-table--vertical-lines" data-ftc-component="ftc-table" data-ftc-table--no-js><th aria-sort="none">Category</th><th aria-sort="none">Unique Event Labels</th>' + tableRowsHTML + '</table>';
+  insertDivWithHTML(tableHTML);
+  
+}
+</script>
+
+
+
+
+<!-- Load the JavaScript API client and Sign-in library. -->
+<script src="https://apis.google.com/js/client:platform.js"></script>
+
+</body>
+</html>
