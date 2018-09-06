@@ -54,6 +54,10 @@ var changeLog = [
   {
     title: 'A front end bug caused buy success to be missed on that day and part of next day',
     date: '20180802'
+  },
+  {
+    title: 'Enable WeChat Payment SDK When Apple IAP fails',
+    date: '20180824'
   }
 ];
 

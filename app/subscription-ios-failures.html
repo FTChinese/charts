@@ -287,6 +287,90 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 5 regained standard buy with WeChat sdk
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'buy success with wechat: com.ft.ftchinese.mobile.subscription.member'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 6 regained premium buy with WeChat sdk
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:uniqueEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Privileges'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'REGEXP',
+              'expressions': [
+                'buy success with wechat: com.ft.ftchinese.mobile.subscription.vip'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -355,6 +439,14 @@ function drawChartsAll() {
       {
         index: 4,
         name: 'Premium'
+      },
+      {
+        index: 5,
+        name: 'Standard Throught WeChat SDK'
+      },
+      {
+        index: 6,
+        name: 'Premium Throught WeChat SDK'
       }
     ]
   });
@@ -375,6 +467,16 @@ function drawChartsAll() {
       {
         index: 4,
         name: 'Premium',
+        multiplier: 1998
+      },
+      {
+        index: 5,
+        name: 'Standard Through WeChat SDK',
+        multiplier: 198
+      },
+      {
+        index: 6,
+        name: 'Premium Through WeChat SDK',
         multiplier: 1998
       }
     ],
