@@ -58,6 +58,10 @@ var changeLog = [
   {
     title: 'Enable WeChat Payment SDK When Apple IAP fails',
     date: '20180824'
+  },
+  {
+    title: 'Half Price Promotion',
+    date: '20180831'
   }
 ];
 
@@ -861,13 +865,22 @@ function convertObjToBreakdown(obj) {
   return obj;
 }
 
-function addingMultiplierByKey(sourceData, objData, eventCategory) {
+function addingMultiplierByKey(sourceData, objData, eventCategory, keys) {
   var multiplierKey = objData.multiplierKey;
+  var multiplierPromotionKey = multiplierKey + 'Promotion';
   var oneDataArray = sourceData;
+  var oneMultiplier;
+  var oneMultiplierPromotion;
   if (typeof multiplierKey === 'string') {
     oneMultiplier = eventCategory[multiplierKey];
+    oneMultiplierPromotion = eventCategory[multiplierPromotionKey];
     if (oneMultiplier >0) {
-      oneDataArray = oneDataArray.map(x => x * oneMultiplier);
+      oneDataArray = oneDataArray.map(function(x, index) {
+        if (oneMultiplierPromotion && oneMultiplierPromotion > 0 && eventCategory.promotionDates && eventCategory.promotionDates.indexOf(keys[index]) > -1) {
+          return x * oneMultiplierPromotion;
+        }
+        return x * oneMultiplier;
+      });
     }
   }
   return oneDataArray;
@@ -952,7 +965,7 @@ function drawChartByKey(obj) {
       for (var n=0; n<obj.data.length; n++) {
         var gaReportIndex = obj.data[n].index + (index * step);
         var oneCategoryData = extractDataFromGAAPI(gaDataReports[gaReportIndex].data.rows, keys);
-        oneCategoryData = addingMultiplierByKey(oneCategoryData, obj.data[n], obj.eventCategories[index]);
+        oneCategoryData = addingMultiplierByKey(oneCategoryData, obj.data[n], obj.eventCategories[index], obj.keys);
         if (n == 0) {
           categoryData = oneCategoryData;
         } else {
@@ -978,7 +991,7 @@ function drawChartByKey(obj) {
           }
           var oneDataArray = extractDataFromGAAPI(gaDataReports[xIndex].data.rows, keys);
           var oneMultiplier;
-          oneDataArray = addingMultiplierByKey(oneDataArray, x, obj.eventCategories[n]);
+          oneDataArray = addingMultiplierByKey(oneDataArray, x, obj.eventCategories[n], obj.keys);
           if (n === 0) {
             dataArryInCategories = oneDataArray
           } else {
@@ -997,7 +1010,7 @@ function drawChartByKey(obj) {
         dataArray = dataArray.map(x => x * dataMultiplier);
         var currentEventCategory = x.eventCategory;
         if (currentEventCategory) {
-          dataArray = addingMultiplierByKey(dataArray, x, currentEventCategory);
+          dataArray = addingMultiplierByKey(dataArray, x, currentEventCategory, obj.keys);
         }
       }
       return {
