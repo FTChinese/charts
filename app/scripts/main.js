@@ -338,7 +338,7 @@ function queryReportsAll() {
 
 function getQuerryData() {
   var reportRequests = constructQuerryData(startDate, endDate);
-  if (window.ccode !== null) {
+  if (window.ccode) {
     for (request of reportRequests) {
       var dimensionFilterClauses = request.dimensionFilterClauses;
       var ccodeFilterClause = {
