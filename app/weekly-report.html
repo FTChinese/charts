@@ -834,6 +834,98 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 23 MyFT Displayed on Web Page
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'API Block'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Display'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                '31005'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },// 24 MyFT Displayed on iOS
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'MyFT'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Show'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -1080,6 +1172,22 @@ function drawChartsAll() {
     ]
   });
 
+  drawChartByKey({
+    title: 'MyFT Display',
+    type: 'column',
+    percentage: false,
+    keys: keys,
+    data: [
+      {
+        index: 23,
+        name: 'Web'
+      },
+      {
+        index: 24,
+        name: 'iOS'
+      }
+    ]
+  });
 }
 </script>
 

@@ -56,12 +56,20 @@ var changeLog = [
     date: '20180802'
   },
   {
+    title: 'Show MyFT on iOS Home Page',
+    date: '20180823'
+  },
+  {
     title: 'Enable WeChat Payment SDK When Apple IAP fails',
     date: '20180824'
   },
   {
     title: 'Half Price Promotion',
     date: '20180831'
+  },
+  {
+    title: 'Show MyFT on Web Home Page',
+    date: '20180927'
   }
 ];
 
