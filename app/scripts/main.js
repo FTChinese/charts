@@ -327,6 +327,7 @@ function queryReportsAll() {
     // MARK: Update parameters
     window.startDate = gup('startDate', window.location.href) || window.startDate;
     window.endDate = gup('endDate', window.location.href) || window.endDate;
+    window.VIEW_ID = gup('viewId', window.location.href) || window.VIEW_ID;
     window.ccode = gup('ccode', window.location.href);
     if (typeof window.homePagePV === 'object' && window.homePagePV.dateRanges) {
       homePagePV.dateRanges[0].startDate = startDate;
