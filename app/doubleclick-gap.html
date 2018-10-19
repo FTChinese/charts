@@ -281,9 +281,10 @@ function drawCharts(gaDataSource) {
   var successOnRetryCounts = extractDataFromGAAPI(gaData.reports[3].data.rows, keys);
 
   // MARK: Calculate Percentages that are ueful for charts
-  var successRates = calculateRates(successCounts, requestCounts);
-  var failRates = calculateRates(failCounts, requestCounts);
-  var successOnRetryRates = calculateRates(successOnRetryCounts, requestCounts);
+  var successRates = calculateRates(successCounts, requestCounts, '%');
+  
+  var failRates = calculateRates(failCounts, requestCounts, '%');
+  var successOnRetryRates = calculateRates(successOnRetryCounts, requestCounts, '%');
 
 
   chartId = createChart();

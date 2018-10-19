@@ -439,8 +439,12 @@ function createTable() {
 // MARK: - Extract data from Google Analytics API
 function extractDataFromGAAPI(dataSource, baseKeys) {
   var resultData = {};
-  if (dataSource === undefined) {
-    return null;
+  if (!dataSource) {
+    const defaultKeys = baseKeys;
+    const emptyData = defaultKeys.map(function(key){
+      return 0;
+    });
+    return emptyData;
   }
   dataSource.forEach(
     function(row) {
@@ -998,11 +1002,14 @@ function drawChartByKey(obj) {
           if (!gaDataReports[xIndex]) {
             console.log (obj);
           }
+          //console.log(gaDataReports[xIndex].data.rows);
           var oneDataArray = extractDataFromGAAPI(gaDataReports[xIndex].data.rows, keys);
+          //console.log (oneDataArray);
           var oneMultiplier;
           oneDataArray = addingMultiplierByKey(oneDataArray, x, obj.eventCategories[n], obj.keys);
+          //console.log (oneDataArray);
           if (n === 0) {
-            dataArryInCategories = oneDataArray
+            dataArryInCategories = oneDataArray;
           } else {
             dataArryInCategories = dataArryInCategories.map((a, i) => a + oneDataArray[i]);
           }

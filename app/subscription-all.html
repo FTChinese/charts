@@ -65,7 +65,8 @@ eventCategory = 'Privileges';
 tapAction = 'Tap Subscription';
 buySuccessStandard = 'buy success: com.ft.ftchinese.mobile.subscription.member';
 buySuccessPremium = 'buy success: com.ft.ftchinese.mobile.subscription.vip';
-startDate = '2018-05-10';
+//startDate = '2018-05-10';
+startDate = '14daysago';
 pageTitle = 'Subscription';
 
 
@@ -1171,7 +1172,6 @@ function drawChartsAll() {
   var eventCategoryLength = eventCategories.length;
   var step = dataLength / eventCategoryLength;
 
-
   drawChartByKey({
     title: 'New Subscriptions',
     type: 'column',
@@ -1193,8 +1193,6 @@ function drawChartsAll() {
     ]
   });
 
-
-  
 
   drawChartByKey({
     title: 'New Revenue By Type',
