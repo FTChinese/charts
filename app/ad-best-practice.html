@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>广告投放最佳实践</title>
+  <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+
+
+<p align=right>
+  <!-- The Sign-in button. This will run `queryReports()` on success. -->
+  <div class="g-signin2" data-onsuccess="queryReports"></div>
+</p>
+
+<div class="page-container" id="charts-container">
+  <h1 class="page-title">谷歌广告投放最佳实践</h1>
+</div>
+
+
+<div class="page-container" id="ad-guidelines">
+  <b>永远不要超卖</b>
+  <div class="page-description">超卖是万恶之源。作为标准做法，应该始终在谷歌广告管理系统中投放预测，并且每次都只使用90％的可用展示次数。这是为了解决可能的流量下降和预测中的不准确性。首页赞助也可能会分走大量的流量。</div>
+  <b>利用轮播广告素材来优化投放结果</b>
+  <div class="page-description">使用“轮播广告素材”来优化点击次数或按百分比拆分为多个广告素材（例如，广告素材1 = 15％，广告素材2 = 25％，广告素材3 = 60％）。</div>
+  <b>理解客户的KPI</b>
+  <div class="page-description">例如，当广告订单设定的KPI是点击时，请将点击次数设置为订单项中的目标，而不是展示次数。</div>
+  <b>利用竞争订单项功能来协调多个投放</b>
+  <div class="page-description">竞争订单项确实非常有用。 如果我们发现可用展示次数大幅下降，我们通常会检查可能错误定位的订单项或可能缺少变量的赞助商的竞争订单项。</div>
+  <b>故障排除</b>
+  <div class="page-description">故障排除：使用故障排除功能找出问题所在。</div>
+  <b>预防而不是补救</b>
+  <div class="page-description">及时甚至提前发现潜在的问题，而不是事后补救。比如，对于一些KPI要求比较高，但是又必须Deliver的Campaign，可以预设一些优先级低的Line Item来打底，而不是等到没有达到KPI之后再来补救。</div>
+  <b>宁愿自己吃点亏，也不要让客户吃亏</b>
+  <div class="page-description">在流量还够的时候，可以利用优先级低的Line Item帮客户多跑一点，而不是等到最后再补。</div>
+</div>
+
+
+<!-- build:remove -->
+<script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/highcharts-more.js"></script>
+<script src="../bower_components/highmaps-beta/modules/map.js"></script>
+<script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<!-- endbuild -->
+<script type="text/javascript" src="scripts/highcharts.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+
+
+
+<script>
+// MARK: - These are different in every page. 
+
+// Replace with your view ID.
+var VIEW_ID = '10995661';
+//var startDate = '2018-03-06';
+// var endDate = '2017-05-16';
+var startDate = '30daysago';
+var endDate = 'today';
+
+function constructQuerryData(startDate, endDate) {
+  var queryData = [
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'iPhone App Launch'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Success'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:pageviews'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:pagePath',
+              'operator': 'REGEXP',
+              'expressions': [
+                'androidapp'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:totalEvents'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:eventCategory',
+              'operator': 'EXACT',
+              'expressions': [
+                'iPad App Launch'
+              ],
+              'caseSensitive': true
+            },
+            {
+              'dimensionName': 'ga:eventAction',
+              'operator': 'EXACT',
+              'expressions': [
+                'Success'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
+    },
+    {//Web Launches
+    'viewId': VIEW_ID,
+    'dateRanges': [
+      {
+        'startDate': startDate,
+        'endDate': endDate
+      }
+    ],
+    'metrics': [
+      {
+        'expression': 'ga:uniqueEvents'
+      }
+    ],
+    'dimensions': [
+      {
+        'name': 'ga:date'
+      }
+    ],
+    'dimensionFilterClauses': [
+      {
+        'operator': 'AND',
+        'filters': [
+          {
+            'dimensionName': 'ga:eventCategory',
+            'operator': 'EXACT',
+            'expressions': [
+              'Ad Impression'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:eventAction',
+            'operator': 'REGEXP',
+            'expressions': [
+              '3000|5000'
+            ],
+            'caseSensitive': true
+          },
+          {
+            'dimensionName': 'ga:eventLabel',
+            'operator': 'REGEXP',
+            'expressions': [
+              '0301$'
+            ],
+            'caseSensitive': true
+          }
+        ]
+      }
+    ]
+  }
+
+  ];
+  return queryData;
+}
+
+function drawCharts(gaData) {
+  return;
+  // MARK: - The base key which should have no gap in data
+  var keys = gaData.reports[0].data.rows.map(function(row){
+    return row.dimensions[0];
+  });
+  var chartId;
+
+  // MARK: Custom variables for charts: [Int]
+  var iPhoneLaunches = extractDataFromGAAPI(gaData.reports[0].data.rows, keys);
+  var androidLaunches = extractDataFromGAAPI(gaData.reports[1].data.rows, keys);
+  var iPadLaunches = extractDataFromGAAPI(gaData.reports[2].data.rows, keys);
+  var webPops = extractDataFromGAAPI(gaData.reports[3].data.rows, keys);
+
+
+  chartId = createChart();
+  var iPhoneLaunchesChart = new Highcharts.Chart({
+      chart: {
+          type: 'column',
+          renderTo: chartId
+      },
+      title: {
+          text: 'FTC应用每日开机次数'
+      },
+      xAxis: {
+          categories: keys,
+          title: {
+              enabled: false
+          }
+      },
+      yAxis: {
+          tickmarkPlacement: 'on'
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+          shared: true
+      },
+      plotOptions: {
+        area: {
+          stacking: 'normal'
+        }
+      },
+      series: [
+        {
+          name: 'iPhone (日均'+averageOfArray(iPhoneLaunches)+')',
+          data: iPhoneLaunches
+        },
+        {
+          name: 'android (日均'+averageOfArray(androidLaunches)+')',
+          data: androidLaunches
+        },
+        {
+          name: 'iPad (日均'+averageOfArray(iPadLaunches)+')',
+          data: iPadLaunches
+        }
+      ],
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: true
+      }
+    });
+
+
+  chartId = createChart();
+  var webPopsChart = new Highcharts.Chart({
+    chart: {
+        type: 'column',
+        renderTo: chartId
+    },
+    title: {
+        text: 'Web端弹出广告库存上限'
+    },
+    subtitle: {
+        text: '页面端弹出广告对用户体验伤害极大，请尽量不要使用'
+    },
+    xAxis: {
+        categories: keys,
+        title: {
+            enabled: false
+        }
+    },
+    yAxis: {
+        tickmarkPlacement: 'on'
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}</b><br/>',
+        shared: true
+    },
+    series: [
+      {
+        name: '日均'+averageOfArray(webPops),
+        data: webPops
+      }
+    ],
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: true
+    }
+  });
+
+
+  for (ele of document.querySelectorAll('.iphone-daily-average')) {
+    ele.innerHTML = parseInt(averageOfArray(iPhoneLaunches), 10);
+  }
+  for (ele of document.querySelectorAll('.android-daily-average')) {
+    ele.innerHTML = parseInt(averageOfArray(androidLaunches), 10);
+  }
+  for (ele of document.querySelectorAll('.web-daily-average')) {
+    ele.innerHTML = parseInt(averageOfArray(webPops), 10);
+  }
+}
+</script>
+
+
+
+
+<!-- Load the JavaScript API client and Sign-in library. -->
+<script src="https://apis.google.com/js/client:platform.js"></script>
+
+</body>
+</html>
