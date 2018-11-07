@@ -70,6 +70,10 @@ var changeLog = [
   {
     title: 'Show MyFT on Web Home Page',
     date: '20180927'
+  },
+  {
+    title: 'Launch Monthly Subscription',
+    date: '20181101'
   }
 ];
 

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Subscription</title>
+  <meta name="google-signin-client_id" content="911260228291-d2b7cjs7c0ajobjd6l89133tv4bmrcjb.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="http://static.ftchinese.com/img/ipad_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+
+<p align=right>
+  <!-- The Sign-in button. This will run `queryReports()` on success. -->
+  <div class="g-signin2" data-onsuccess="queryReportsAll"></div>
+</p>
+
+<div class="page-container" id="charts-container">
+  <h1 class="page-title">Subscription</h1>
+</div>
+
+
+
+<!-- build:remove -->
+<script src="../bower_components/highcharts/highcharts.js"></script>
+<script src="../bower_components/highcharts/highcharts-more.js"></script>
+<script src="../bower_components/highmaps-beta/modules/map.js"></script>
+<script src="../bower_components/highmaps-beta/modules/data.js"></script>
+<script src="../bower_components/highcharts/modules/funnel.js"></script>
+<script type="text/javascript" src="scripts/highcharts.js"></script>
+<script src="scripts/addFeatureToTable.js"></script>
+<!-- endbuild -->
+<script type="text/javascript" src="scripts/main.js"></script>
+
+
+<script>
+// MARK: - These are different in every page. 
+var product = gup('product', window.location.href);
+// Replace with your view ID.
+var VIEW_ID;// = '108134561'; 
+//var VIEW_ID_1 = '10995661';
+var pageTitle;
+
+// Replace with your view ID.
+// var VIEW_ID = '108134561'; 
+// var VIEW_ID_1 = '10995661';
+// var startDate = '14daysago';
+var startDate;
+// var startDate = '30daysago';
+var endDate = 'today';
+
+// if (product === 'ios') {
+//   VIEW_ID = '108134561';
+// } else {
+//   VIEW_ID = '10995661';
+// }
+//VIEW_ID = '10995661';
+VIEW_ID = '108134561';
+startDate = '7daysago';
+pageTitle = 'Subscription Engagement Analysis';
+
+
+document.title = pageTitle;
+document.querySelector('.page-title').innerHTML = pageTitle;
+
+function constructQuerryData(startDate, endDate) {
+  var queryData = [
+    // 0 User Ids
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:users'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:dimension2'
+        },
+        {
+          'name': 'ga:dimension1'
+        },
+        {
+          'name': 'ga:date'
+        },
+        {
+          'name': 'ga:dimension4'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:dimension1',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Subscriber|VIP'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ],
+      'pageSize': '10000'
+    }
+  ];
+  return queryData;
+}
+
+function drawChartsAll() {
+
+  function getEngagementScoreData(data) {
+    var userIds = {};
+    for (report of data) {
+      for (row of report.data.rows) {
+        var id = row.dimensions[0];
+        var type = row.dimensions[1];
+        var newDate = parseInt(row.dimensions[2], 10);
+        var score = parseInt(row.dimensions[3], 10);
+        var shouldUpdateScore = false;
+        if (userIds[id]) {
+          const oldDate = userIds[id].date;
+          if (newDate > oldDate) {
+            shouldUpdateScore = true;
+          } else if (newDate === oldDate) {
+            if (score > userIds[id].score) {
+              shouldUpdateScore = true;
+            }
+          }
+        } else {
+          shouldUpdateScore = true;
+        }
+        if (shouldUpdateScore) {
+          userIds[id] = {
+            date: newDate,
+            score: score,
+            type: type
+          };
+        }
+      }
+    }
+    var engagementScores = [];
+    for (var userId in userIds) {
+      if (userIds.hasOwnProperty(userId)) {
+          const row = {
+            id: userId,
+            type: userIds[userId].type,
+            date: userIds[userId].date,
+            score: userIds[userId].score
+          }
+          engagementScores.push(row);
+      }
+    }
+    //console.log (engagementScores);
+    return engagementScores;
+  }
+
+  function drawTable(obj) {
+    const title = obj.title;
+    const description = obj.description;
+    var tableRowsHTML = '';
+    var columnHeaderHTML = '';
+    //var dataRows = tableData.data.rows;
+    for (dataRow of obj.data) {
+      var metricsHTML = '';
+      columnHeaderHTML = '';
+      for (p in dataRow) {
+        if (dataRow.hasOwnProperty(p)) {
+          metricsHTML += '<td>'+ dataRow[p] +'</td>';
+          const numericProperties = (['date', 'score'].indexOf(p) >= 0) ? ' data-ftc-table--datatype="numeric" data-ftc-table--tostatistic="" class="ftc-table__cell--numeric"' : '';
+          columnHeaderHTML += '<th  aria-sort="none"' + numericProperties + '>' + p + '</th>';
+        }
+      }
+      const rowHTML = '<tr>'+metricsHTML+'</tr>';
+      tableRowsHTML += rowHTML;
+    }
+    tableRowsHTML = '<tbody>' + tableRowsHTML + '</tbody>';
+    columnHeaderHTML = '<thead><tr>' + columnHeaderHTML + '</tr></thead>';
+    var tableHTML = '<h1 class="page-title">' + title + '</h1><div class="page-description">'+ description +'</div><table class="ftc-table ftc-table--responsive-overflow ftc-table--row-stripes ftc-table--vertical-lines" data-ftc-component="ftc-table" data-ftc-table--no-js>' + columnHeaderHTML + tableRowsHTML + '</table>';
+    insertDivWithHTML(tableHTML);
+
+  }
+
+  
+  // MARK: - Handle Google Data
+  var engagementScores = getEngagementScoreData(gaDataReports);
+
+  
+
+  var scores = {};
+  const scorePrefix = 'Score';
+  for (score of engagementScores) {
+    if (scores[score.type] === undefined) {
+      scores[score.type] = {};
+    }
+    if (scores[score.type][scorePrefix + score.score]) {
+      scores[score.type][scorePrefix + score.score] += 1;
+    } else {
+      scores[score.type][scorePrefix + score.score] = 1;
+    }
+  }
+
+  var scoreCount = {};
+  for (var type in scores) {
+    if (scores.hasOwnProperty(type)) {
+      scoreCount[type] = [];
+      for (var score in scores[type]) {
+        if (scores[type].hasOwnProperty(score)) {
+          const s = {
+            name: score.replace(/\D/g, ''),
+            y: scores[type][score]
+          }
+          scoreCount[type].push(s);
+        }
+      }
+      scoreCount[type] = scoreCount[type].sort(function(a, b) {
+        var aNumber = parseInt(a.name, 10);
+        var bNumber = parseInt(b.name, 10);
+        return aNumber - bNumber;
+      });
+      //console.log (scoreCount[type]);
+      var chartId = createChart();
+      var chart = new Highcharts.Chart({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            renderTo: chartId,
+            type: 'pie'
+        },
+        title: {
+            text: type
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        series: [{
+            name: '',
+            colorByPoint: true,
+            data: scoreCount[type]
+        }]
+      });
+
+    }
+  }
+
+  //console.log (scoreCount);
+
+  // var dailyActiveSubscribers = {};
+
+  // for (score of engagementScores) {
+  //   if (dailyActiveSubscribers[score.date] === undefined) {
+  //     dailyActiveSubscribers[score.date] = 1;
+  //   } else {
+  //     dailyActiveSubscribers[score.date] += 1;
+  //   }
+  // }
+
+  // console.log (dailyActiveSubscribers);
+
+
+  // MARK: draw charts
+  drawTable(
+    {
+      title: 'Engagement Score Chart',
+      description: 'Track Engagement Score For Paid Subscribers',
+      data: engagementScores
+    }
+  );
+
+
+  addFeatureToTable();
+}
+
+
+
+
+
+</script>
+
+
+
+
+<!-- Load the JavaScript API client and Sign-in library. -->
+<script src="https://apis.google.com/js/client:platform.js"></script>
+
+</body>
+</html>

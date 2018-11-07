@@ -51,7 +51,7 @@ var pageTitle;
 // var startDate = '14daysago';
 var startDate;
 // var startDate = '30daysago';
-var endDate = 'today';
+var endDate = 'yesterday';
 
 // if (product === 'ios') {
 //   VIEW_ID = '108134561';
@@ -59,8 +59,11 @@ var endDate = 'today';
 //   VIEW_ID = '10995661';
 // }
 VIEW_ID = '10995661';
-startDate = '2018-06-05';
-pageTitle = 'Subscription: Suspicious Transactions';
+//VIEW_ID = '108134561';
+//startDate = '7daysago';
+startDate = '2018-11-01';
+endDate = '2018-11-05';
+pageTitle = 'Subscription Engagement Analysis';
 
 
 document.title = pageTitle;
@@ -68,7 +71,7 @@ document.querySelector('.page-title').innerHTML = pageTitle;
 
 function constructQuerryData(startDate, endDate) {
   var queryData = [
-    // 0 daily for standard
+    // 0 User Ids
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -79,86 +82,18 @@ function constructQuerryData(startDate, endDate) {
       ],
       'metrics': [
         {
-          'expression': 'ga:uniqueEvents'
+          'expression': 'ga:uniqueDimensionCombinations'
         }
       ],
       'dimensions': [
         {
           'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                'Restore: com.ft.ftchinese.mobile.subscription.member'
-              ],
-              'caseSensitive': true
-            }
-          ]
-        }
-      ]
-    },
-     // 1 daily for premium
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
-        }
-      ],
-      'dimensions': [
-        {
-          'name': 'ga:date'
-        }
-      ],
-      'dimensionFilterClauses': [
-        {
-          'operator': 'AND',
-          'filters': [
-            {
-              'dimensionName': 'ga:eventCategory',
-              'operator': 'EXACT',
-              'expressions': [
-                'Restore: com.ft.ftchinese.mobile.subscription.vip'
-              ],
-              'caseSensitive': true
-            }
-            
-          ]
-        }
-      ]
-    },
-    // 2 User Ids
-    {
-      'viewId': VIEW_ID,
-      'dateRanges': [
-        {
-          'startDate': startDate,
-          'endDate': endDate
-        }
-      ],
-      'metrics': [
-        {
-          'expression': 'ga:uniqueEvents'
         },
         {
-          'expression': 'ga:totalEvents'
-        }
-      ],
-      'dimensions': [
+          'name': 'ga:dimension14'
+        },
         {
-          'name': 'ga:eventAction'
+          'name': 'ga:dimension2'
         }
       ],
       'dimensionFilterClauses': [
@@ -166,16 +101,18 @@ function constructQuerryData(startDate, endDate) {
           'operator': 'AND',
           'filters': [
             {
-              'dimensionName': 'ga:eventCategory',
+              'dimensionName': 'ga:dimension2',
               'operator': 'REGEXP',
               'expressions': [
-                'Restore: com.ft.ftchinese.mobile.subscription'
+                'Subscriber|VIP'
               ],
               'caseSensitive': true
             }
           ]
         }
-      ]
+      ],
+      'pageSize': '10000',
+      "samplingLevel": 'LARGE'
     }
   ];
   return queryData;
@@ -183,39 +120,68 @@ function constructQuerryData(startDate, endDate) {
 
 function drawChartsAll() {
 
-  var chartId = createChart();
-  // MARK: - The base key which should have no gap in data
-  var keys = gaDataReports[0].data.rows.map(function(row){
-    return row.dimensions[0];
-  });
-
-  drawChartByKey({
-    title: 'Restore Subscription',
-    type: 'column',
-    percentage: false,
-    keys: keys,
-    data: [
-      {
-        index: 0,
-        name: 'Standard'
-      },
-      {
-        index: 1,
-        name: 'Premium'
+  function getActiveUserData(data) {
+    var dates = {};
+    var totalCount = 0; 
+    for (report of data) {
+      for (row of report.data.rows) {
+        totalCount += 1;
+        var newDate = row.dimensions[0];
+        var id = row.dimensions[1];
+        var type = row.dimensions[2];
+        if (dates[newDate] === undefined) {
+          dates[newDate] = 1;
+        } else {
+          dates[newDate] += 1;
+        }
       }
-    ]
-  });
+      // MARK: If the result is sampled, handle it
+      var samplesReadCounts = report.data.samplesReadCounts;
+      var samplingSpaceSizes = report.data.samplingSpaceSizes;
+      const isSampled = (samplesReadCounts && samplesReadCounts.length > 0 && samplingSpaceSizes && samplingSpaceSizes.length > 0);
+      var sampleMultiplier = 1;
+      var sampleReadCount = parseInt(samplesReadCounts[0], 10);
+      var samplingSpaceSize = parseInt(samplingSpaceSizes[0], 10);
+      if (sampleReadCount > 0 && sampleReadCount < samplingSpaceSize) {
+        sampleMultiplier = samplingSpaceSize / sampleReadCount;
+      }
+      console.log (sampleMultiplier);
+      if (sampleMultiplier > 1) {
+        for (var item in dates) {
+          if (dates.hasOwnProperty(item)) {
+            dates[item] = Math.round(dates[item] * sampleMultiplier);
+          }
+        }
+      }
+    }
+    console.log (totalCount);
+    console.log (dates);
 
-  drawTable({
-    title: 'Original Transaction Ids',
-    description: 'These are the transaction ids that are used for restoring iOS subscriptions. If the number is higher than 10, it\'s highly likely that the Apple Id is being shared. ',
-    index: 2
-  });
+    // var engagementScores = [];
+    // for (var userId in userIds) {
+    //   if (userIds.hasOwnProperty(userId)) {
+    //       const row = {
+    //         id: userId,
+    //         type: userIds[userId].type,
+    //         date: userIds[userId].date,
+    //         score: userIds[userId].score
+    //       }
+    //       engagementScores.push(row);
+    //   }
+    // }
+    // //console.log (engagementScores);
+    // return engagementScores;
+  }
 
-
-  addFeatureToTable();
-
+  var dailyActiveData = getActiveUserData(gaDataReports);
+  
+  console.log (gaDataReports);
 }
+
+
+
+
+
 </script>
 
 

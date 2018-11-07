@@ -45,24 +45,29 @@ var pageTitle;
 var startDate;
 var endDate = 'yesterday';
 var tapAction;
+var buySuccessStandardMonthly;
 var buySuccessStandard;
 var buySuccessPremium;
+const annualize = parseInt(gup('annualize', window.location.href), 10) || 1;
+var standardPriceMonthly = 28 * annualize;
 var standardPrice = 198;
 var premiumPrice = 1998;
-var standardPricePromotion = 98;
-var premiumPricePromotion = 998;
-var promotionDates = ['20180831'];
+var standardPriceMonthlyPromotion = 28;
+var standardPricePromotion = 168;
+var premiumPricePromotion = 1698;
+var promotionDates = ['20181111'];
 var skuStandard;
 var skuPremium;
 var affiliation;
 var isAffiliationExcluded = false;
 var eventCategories = [
-  {name: 'iOS', eventCategory: 'Privileges', tapAction: 'Tap Subscription', buySuccessStandard: 'buy success: com.ft.ftchinese.mobile.subscription.member', buySuccessPremium: 'buy success: com.ft.ftchinese.mobile.subscription.vip', standardPrice: standardPrice * 0.7, premiumPrice: premiumPrice * 0.7, standardPricePromotion: standardPricePromotion * 0.7, premiumPricePromotion: premiumPricePromotion * 0.7, promotionDates: promotionDates, skuStandard: 'com.ft.ftchinese.mobile.subscription.member', skuPremium: 'com.ft.ftchinese.mobile.subscription.vip', affiliation: '^iOS IAP:', isAffiliationExcluded: false},
-  {'name': 'Android', eventCategory: 'Android Privileges', tapAction: 'Tap', buySuccessStandard: 'Buy success: ftc_standard', buySuccessPremium: 'Buy success: ftc_premium', standardPrice: standardPrice, premiumPrice: premiumPrice, standardPricePromotion: standardPricePromotion * 0.7, premiumPricePromotion: premiumPricePromotion, promotionDates: promotionDates, skuStandard: 'ftc_standard', skuPremium: 'ftc_premium', affiliation: '^Android', isAffiliationExcluded: false},
-  {'name': 'Web Site', eventCategory: 'Web Privileges', tapAction: 'Tap', buySuccessStandard: 'Buy Success:Standard', buySuccessPremium: 'Buy Success:Premium', standardPrice: standardPrice, premiumPrice: premiumPrice, standardPricePromotion: standardPricePromotion, premiumPricePromotion: premiumPricePromotion * 0.7, promotionDates: promotionDates, skuStandard: 'Standard', skuPremium: 'Premium', affiliation: '^(iOS|Android)', isAffiliationExcluded: true}
+  {name: 'iOS', eventCategory: 'Privileges', tapAction: 'Tap Subscription', buySuccessStandardMonthly: 'buy success: com.ft.ftchinese.mobile.subscription.member.monthly', buySuccessStandard: 'buy success: com.ft.ftchinese.mobile.subscription.member', buySuccessPremium: 'buy success: com.ft.ftchinese.mobile.subscription.vip', standardPriceMonthly: standardPriceMonthly * 0.7, standardPrice: standardPrice * 0.7, premiumPrice: premiumPrice * 0.7, standardPriceMonthlyPromotion: standardPriceMonthlyPromotion * 0.7, standardPricePromotion: standardPricePromotion * 0.7, premiumPricePromotion: premiumPricePromotion * 0.7, promotionDates: promotionDates, skuStandardMonthly: 'com.ft.ftchinese.mobile.subscription.member.monthly', skuStandard: 'com.ft.ftchinese.mobile.subscription.member', skuPremium: 'com.ft.ftchinese.mobile.subscription.vip', affiliation: '^iOS IAP:', isAffiliationExcluded: false},
+  {'name': 'Android', eventCategory: 'Android Privileges', tapAction: 'Tap', buySuccessStandardMonthly: 'Buy success: ftc_standard_monthly', buySuccessStandard: 'Buy success: ftc_standard', buySuccessPremium: 'Buy success: ftc_premium', standardPriceMonthly: standardPriceMonthly, standardPrice: standardPrice, premiumPrice: premiumPrice, standardPriceMonthlyPromotion: standardPriceMonthlyPromotion, standardPricePromotion: standardPricePromotion, premiumPricePromotion: premiumPricePromotion, promotionDates: promotionDates, skuStandardMonthly: 'ftc_standard_monthly', skuStandard: 'ftc_standard', skuPremium: 'ftc_premium', affiliation: '^Android', isAffiliationExcluded: false},
+  {'name': 'Web Site', eventCategory: 'Web Privileges', tapAction: 'Tap', buySuccessStandardMonthly: 'Buy Success:Standard Monthly', buySuccessStandard: 'Buy Success:Standard', buySuccessPremium: 'Buy Success:Premium', standardPriceMonthly: standardPriceMonthly, standardPrice: standardPrice, premiumPrice: premiumPrice, standardPriceMonthlyPromotion: standardPriceMonthlyPromotion, standardPricePromotion: standardPricePromotion, premiumPricePromotion: premiumPricePromotion * 0.7, promotionDates: promotionDates, skuStandard: 'Standard Monthly', skuStandard: 'Standard', skuPremium: 'Premium', affiliation: '^(iOS|Android)', isAffiliationExcluded: true}
 ];
 eventCategory = 'Privileges';
 tapAction = 'Tap Subscription';
+buySuccessStandardMonthly = 'buy success: com.ft.ftchinese.mobile.subscription.member.monthly';
 buySuccessStandard = 'buy success: com.ft.ftchinese.mobile.subscription.member';
 buySuccessPremium = 'buy success: com.ft.ftchinese.mobile.subscription.vip';
 //startDate = '2018-05-10';
@@ -78,8 +83,10 @@ function constructQuerryData(startDate, endDate) {
   for (const s of eventCategories) {
     eventCategory = s.eventCategory;
     tapAction = s.tapAction;
+    buySuccessStandardMonthly = s.buySuccessStandardMonthly;
     buySuccessStandard = s.buySuccessStandard;
     buySuccessPremium = s.buySuccessPremium;
+    skuStandardMonthly = s.skuStandardMonthly;
     skuStandard = s.skuStandard;
     skuPremium = s.skuPremium;
     affiliation = s.affiliation;
@@ -886,8 +893,7 @@ function constructQuerryData(startDate, endDate) {
             ]
           }
         ]
-      },
-          // 16 Standard Subscription Buying
+    },// 16 Standard Subscription Buying
     {
       'viewId': VIEW_ID,
       'dateRanges': [
@@ -1151,6 +1157,48 @@ function constructQuerryData(startDate, endDate) {
             ]
           }
         ]
+      },// 22 Standard Monthly Subscription Buying
+      {
+        'viewId': VIEW_ID,
+        'dateRanges': [
+          {
+            'startDate': startDate,
+            'endDate': endDate
+          }
+        ],
+        'metrics': [
+          {
+            'expression': 'ga:uniqueEvents'
+          }
+        ],
+        'dimensions': [
+          {
+            'name': 'ga:date'
+          }
+        ],
+        'dimensionFilterClauses': [
+          {
+            'operator': 'AND',
+            'filters': [
+              {
+                'dimensionName': 'ga:eventCategory',
+                'operator': 'EXACT',
+                'expressions': [
+                  eventCategory
+                ],
+                'caseSensitive': true
+              },
+              {
+                'dimensionName': 'ga:eventAction',
+                'operator': 'EXACT',
+                'expressions': [
+                  buySuccessStandardMonthly
+                ],
+                'caseSensitive': true
+              }
+            ]
+          }
+        ]
       }
     ];
     for (const k of queryData) {
@@ -1184,11 +1232,15 @@ function drawChartsAll() {
     data: [
       {
         index: 16,
-        name: 'Standard'
+        name: 'Standard Annually'
+      },
+      {
+        index: 22,
+        name: 'Standard Monthly'
       },
       {
         index: 17,
-        name: 'Premium'
+        name: 'Premium Annually'
       }
     ]
   });
@@ -1207,8 +1259,13 @@ function drawChartsAll() {
     data: [
       {
         index: 16,
-        name: 'Standard',
+        name: 'Standard Annually',
         multiplierKey: 'standardPrice'
+      },
+      {
+        index: 22,
+        name: 'Standard Monthly',
+        multiplierKey: 'standardPriceMonthly'
       },
       {
         index: 17,
@@ -1241,6 +1298,11 @@ function drawChartsAll() {
         multiplierKey: 'standardPrice'
       },
       {
+        index: 22,
+        name: 'Standard Monthly',
+        multiplierKey: 'standardPriceMonthly'
+      },
+      {
         index: 17,
         name: 'Premium',
         multiplierKey: 'premiumPrice'
@@ -1268,6 +1330,11 @@ function drawChartsAll() {
         index: 16,
         name: 'Standard',
         multiplierKey: 'standardPrice'
+      },
+      {
+        index: 22,
+        name: 'Standard Monthly',
+        multiplierKey: 'standardPriceMonthly'
       },
       {
         index: 17,

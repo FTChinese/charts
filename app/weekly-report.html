@@ -926,6 +926,40 @@ function constructQuerryData(startDate, endDate) {
           ]
         }
       ]
+    },// 25 Daily Active Subscribers
+    {
+      'viewId': VIEW_ID,
+      'dateRanges': [
+        {
+          'startDate': startDate,
+          'endDate': endDate
+        }
+      ],
+      'metrics': [
+        {
+          'expression': 'ga:users'
+        }
+      ],
+      'dimensions': [
+        {
+          'name': 'ga:date'
+        }
+      ],
+      'dimensionFilterClauses': [
+        {
+          'operator': 'AND',
+          'filters': [
+            {
+              'dimensionName': 'ga:dimension2',
+              'operator': 'REGEXP',
+              'expressions': [
+                'Subscriber|VIP'
+              ],
+              'caseSensitive': true
+            }
+          ]
+        }
+      ]
     }
   ];
   return queryData;
@@ -961,6 +995,23 @@ function drawChartsAll() {
     data: [
       {
         index: 0,
+        name: 'Unique Users'
+      }
+    ]
+  });
+
+
+
+  drawChartByKey({
+    title: 'Daily Active Subscribers',
+    type: 'area',
+    percentage: false,
+    keys: keys,
+    showPlotLines: true,
+    trendline: 'first',
+    data: [
+      {
+        index: 25,
         name: 'Unique Users'
       }
     ]
