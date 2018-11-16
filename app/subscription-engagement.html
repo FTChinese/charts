@@ -51,7 +51,7 @@ var pageTitle;
 // var startDate = '14daysago';
 var startDate;
 // var startDate = '30daysago';
-var endDate = 'today';
+var endDate = 'yesterday';
 
 // if (product === 'ios') {
 //   VIEW_ID = '108134561';
@@ -162,8 +162,41 @@ function drawChartsAll() {
           engagementScores.push(row);
       }
     }
-    //console.log (engagementScores);
     return engagementScores;
+  }
+  
+  function groupData(source, by) {
+    const breakPoints = by.sort(function(a, b) {
+      var aNumber = parseInt(a.min, 10);
+      var bNumber = parseInt(b.min, 10);
+      return bNumber - aNumber;
+    });
+    var groups = {};
+    for (item of source) {
+      for (breakPoint of breakPoints) {
+        const itemNameInNumber = parseInt(item.name, 10);
+        if (itemNameInNumber >= breakPoint.min) {
+          if (groups[breakPoint.name]) {
+            groups[breakPoint.name] += item.y;
+          } else {
+            groups[breakPoint.name] = item.y;
+          }
+          break;
+        }
+      }
+    }
+    var groupsData = [];
+    for (var key in groups) {
+      if (groups.hasOwnProperty(key)) {
+        const s = {
+          name: key,
+          y: groups[key]
+        }
+        groupsData.push(s);
+      }
+    }
+    //console.log (groupsData);
+    return groupsData;
   }
 
   function drawTable(obj) {
@@ -224,12 +257,45 @@ function drawChartsAll() {
           scoreCount[type].push(s);
         }
       }
+
+      // var loyalCountData = [];
+      // for (oneItem in loyalCount[type]) {
+      //   if (loyalCount[type].hasOwnProperty(oneItem)) {
+      //     const s = {
+      //       name: oneItem + ' and above',
+      //       y: loyalCount[type][oneItem]
+      //     }
+      //     loyalCountData.push(s);
+      //   }
+      // }
+      // console.log (loyalCount[type]);
+      // console.log (loyalCountData);
+
       scoreCount[type] = scoreCount[type].sort(function(a, b) {
         var aNumber = parseInt(a.name, 10);
         var bNumber = parseInt(b.name, 10);
         return aNumber - bNumber;
       });
-      //console.log (scoreCount[type]);
+
+      const groupBy = [
+        {name: 'Churn', min: 0},
+        {name: 'Loyal', min: 18}
+      ]
+      const loyalCount = groupData(scoreCount[type], groupBy);
+
+      // const totalCount = scoreCount[type].reduce((a, b) => a + b.y, 0);
+      // var currentTotal = 0;
+      // const newScoreCount = scoreCount[type].map(function(a){
+      //   currentTotal += a.y;
+      //   const currentAccumulativeShare = 100*currentTotal/totalCount;
+      //   return {
+      //     name: a.name,
+      //     y: currentAccumulativeShare
+      //   }
+      // });
+      // console.log (totalCount);
+      // console.log (newScoreCount);
+
       var chartId = createChart();
       var chart = new Highcharts.Chart({
         chart: {
@@ -246,25 +312,29 @@ function drawChartsAll() {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
         },
         plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: true,
-                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                    style: {
-                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                    }
-                }
-            }
+          pie: {
+              dataLabels: {
+                  enabled: true,
+                  distance: -50,
+                  style: {
+                      fontWeight: 'bold',
+                      color: 'white'
+                  }
+              },
+              startAngle: -90,
+              endAngle: 90,
+              center: ['50%', '75%'],
+              size: '110%'
+          }
         },
         credits: {
             enabled: false
         },
         series: [{
-            name: '',
+            name: type,
             colorByPoint: true,
-            data: scoreCount[type]
+            innerSize: '50%',
+            data: loyalCount
         }]
       });
 

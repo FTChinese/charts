@@ -74,6 +74,10 @@ var changeLog = [
   {
     title: 'Launch Monthly Subscription',
     date: '20181101'
+  },
+  {
+    title: 'Double 11 Promotion',
+    date: '20181111'
   }
 ];
 
@@ -884,17 +888,19 @@ function convertObjToBreakdown(obj) {
 
 function addingMultiplierByKey(sourceData, objData, eventCategory, keys) {
   var multiplierKey = objData.multiplierKey;
-  var multiplierPromotionKey = multiplierKey + 'Promotion';
+  var multiplierPromotionKey = multiplierKey;
   var oneDataArray = sourceData;
   var oneMultiplier;
   var oneMultiplierPromotion;
+  var promotionPlan;
   if (typeof multiplierKey === 'string') {
     oneMultiplier = eventCategory[multiplierKey];
-    oneMultiplierPromotion = eventCategory[multiplierPromotionKey];
     if (oneMultiplier >0) {
       oneDataArray = oneDataArray.map(function(x, index) {
-        if (oneMultiplierPromotion && oneMultiplierPromotion > 0 && eventCategory.promotionDates && eventCategory.promotionDates.indexOf(keys[index]) > -1) {
-          return x * oneMultiplierPromotion;
+        const currentDate = keys[index];
+        const promotionDates = eventCategory.promotionDates;
+        if (promotionDates && promotionDates[currentDate] && promotionDates[currentDate][multiplierKey]) {
+          return x * promotionDates[currentDate][multiplierKey];
         }
         return x * oneMultiplier;
       });
