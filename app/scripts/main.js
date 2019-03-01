@@ -1335,10 +1335,9 @@ function drawBreakDownChart(obj) {
 }
 
 
-function drawTable(obj) {
+function drawTableWithData(tableData, obj) {
   const title = obj.title;
   const description = obj.description;
-  var tableData = gaDataReports[obj.index];
   var tableRowsHTML = '';
   var dataRows = tableData.data.rows;
   for (dataRow of dataRows) {
@@ -1346,9 +1345,9 @@ function drawTable(obj) {
     const metrics = dataRow.metrics[0].values;
     var metricsHTML = '';
     for (metric of metrics) {
-      metricsHTML += '<td>'+ metric +'</td>'
+      metricsHTML += '<td class="ftc-table__cell--numeric">'+ metric +'</td>'
     }
-    const rowHTML = '<tr><td>'+dimension+'</td>'+metricsHTML+'</tr>';
+    const rowHTML = '<tr><td data-type="table-dimension">'+dimension+'</td>'+metricsHTML+'</tr>';
     tableRowsHTML += rowHTML;
   }
   tableRowsHTML = '<tbody>' + tableRowsHTML + '</tbody>';
@@ -1357,13 +1356,123 @@ function drawTable(obj) {
   var columnHeaderData = tableData.columnHeader.metricHeader.metricHeaderEntries;
   for (oneHeader of columnHeaderData) {
     const name = oneHeader.name.replace(/^ga:/g,'');
-    columnHeaderHTML += '<th  aria-sort="none">' + name + '</th>';
+    columnHeaderHTML += '<th aria-sort="none"  data-ftc-table--datatype="numeric" data-ftc-table--tostatistic="" class="ftc-table__cell--numeric">' + name + '</th>';
   }
   columnHeaderHTML = '<thead><tr>' + columnHeaderHTML + '</tr></thead>';
   var tableHTML = '<h1 class="page-title">' + title + '</h1><div class="page-description">'+ description +'</div><table class="ftc-table ftc-table--responsive-overflow ftc-table--row-stripes ftc-table--vertical-lines" data-ftc-component="ftc-table" data-ftc-table--no-js>' + columnHeaderHTML + tableRowsHTML + '</table>';
   insertDivWithHTML(tableHTML);
 }
 
+function drawTable(obj) {
+  var tableData = gaDataReports[obj.index];
+  drawTableWithData (tableData, obj);
+}
+
+function drawCombinedTable(obj) {
+  var tableData = gaDataReports[obj.index[0].number];
+  if (obj.dimensionName) {
+    tableData.columnHeader.dimensions[0] = obj.dimensionName;
+  }
+  if (obj.index[0].name) {
+    tableData.columnHeader.metricHeader.metricHeaderEntries[0].name = obj.index[0].name;
+  }
+  for (index of obj.index) {
+    if (index.number !== obj.index[0].number) {
+      const currentData = gaDataReports[index.number];
+      if (obj.index[index.number].name) {
+        const newMetric = {name: obj.index[index.number].name};
+        tableData.columnHeader.metricHeader.metricHeaderEntries.push(newMetric);
+      }
+      if (index.ratioIndex > 0) {
+        const newMetric = {name: obj.index[index.number].ratioName + '%'};
+        tableData.columnHeader.metricHeader.metricHeaderEntries.push(newMetric);
+      }
+      for (dataRow of tableData.data.rows) {
+        const dimension = dataRow.dimensions[0];
+        for (newDataRow of currentData.data.rows) {
+          const newDimenision = newDataRow.dimensions[0];
+          if (dimension === newDimenision) {
+            const newValue = newDataRow.metrics[0].values[0];
+            dataRow.metrics[0].values.push(newValue);
+            if (index.ratioIndex > 0) {
+              const oldValue = dataRow.metrics[0].values[0];
+              const conversionRate = Math.round(10000*((oldValue > 0) ? newValue/oldValue : 0), 10)/100;
+              dataRow.metrics[0].values.push(conversionRate);
+            }
+          }
+        }
+      }
+      var maxRowLength = 0;
+      for (dataRow of tableData.data.rows) {
+        const metricValueLength = dataRow.metrics[0].values.length;
+        if (metricValueLength > maxRowLength) {
+          maxRowLength = metricValueLength;
+        } 
+      }
+      for (dataRow of tableData.data.rows) {
+        const metricValueLength = dataRow.metrics[0].values.length;
+        const zerosNeeded = maxRowLength - metricValueLength;
+        if (zerosNeeded > 0) {
+          for (var i=0; i<zerosNeeded; i++) {
+            dataRow.metrics[0].values.push(0);
+          }
+        }
+      }
+    }
+  }
+  // if (obj.ratios && obj.ratios.length > 0) {
+  //   for (ratio of obj.ratios) {
+  //     const newMetric = {name: ratio.dimensionName};
+  //     tableData.columnHeader.metricHeader.metricHeaderEntries.push(newMetric);
+
+  //   }
+  // }
+  //console.log (tableData);
+  //for (metrics)
+  drawTableWithData (tableData, obj);
+}
+
+function explainDimension() {
+    var apiUrl = '';
+    if (window.location.hostname === 'localhost') {
+      apiUrl = 'api/interactives.json';
+    } else {
+      apiUrl = '/falcon.php/homepage/getPaidInteractive/';
+    }
+    var xhr1 = new XMLHttpRequest();
+    xhr1.open('GET', apiUrl);
+    xhr1.setRequestHeader('Content-Type', 'application/json');
+    xhr1.onload = function() {
+      if (xhr1.status === 200) {
+        var data = JSON.parse(xhr1.responseText);
+        //console.log (data);
+        for (var td of document.querySelectorAll('[data-type="table-dimension"]')) {
+          //console.log (td.innerHTML);
+          for (var item of data) {
+            if (td.innerHTML.indexOf(item.id) >= 0) {
+              var itemTag = '';
+              if (item.tag.indexOf('麦可林学英语') >= 0) {
+                itemTag = '麦可林学英语：';
+              } else if (item.tag.indexOf('速读') >= 0) {
+                itemTag = '金融英语速读：';
+              } else if (item.tag.indexOf('电台') >= 0) {
+                itemTag = '英语电台：';
+              } else if (item.tag.indexOf('研究院') >= 0) {
+                itemTag = 'FT研究院：';
+              } else if (item.tag.indexOf('会员专享') >= 0) {
+                itemTag = '会员专享：';
+              } else if (item.tag.indexOf('高端专享') >= 0) {
+                itemTag = '高端专享：';
+              }
+              var timeStamp = new Date(item.pubdate*1000).toLocaleDateString('en-US')
+              td.innerHTML = '<a href="http://www.ftchinese.com/interactive/' + item.id + '" target="_blank">' + itemTag + item.cheadline + '(' + timeStamp + ')' + '</a>';
+            }
+          }
+        }
+      }
+    };
+    xhr1.send();
+}
 
 // MARK: A quick way to draw pivot chart with just enought information
 function drawPivotChartFromKey(obj) {
