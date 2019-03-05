@@ -1334,6 +1334,14 @@ function drawBreakDownChart(obj) {
   });
 }
 
+        // for (tr of document.querySelectorAll('.ftc-table thead tr')) {
+        //   tr.innerHTML = '' + tr.innerHTML;
+        // }
+        // for (tr of document.querySelectorAll('.ftc-table tbody tr')) {
+        //   tr.innerHTML = '<td class="ftc-table__cell--numeric" data-type="date"></td>' + tr.innerHTML;
+        // }
+
+        //
 
 function drawTableWithData(tableData, obj) {
   const title = obj.title;
@@ -1347,16 +1355,27 @@ function drawTableWithData(tableData, obj) {
     for (metric of metrics) {
       metricsHTML += '<td class="ftc-table__cell--numeric">'+ metric +'</td>'
     }
-    const rowHTML = '<tr><td data-type="table-dimension">'+dimension+'</td>'+metricsHTML+'</tr>';
+    var extraMericsHTML = '';
+    if (obj.extraMetrics) {
+      for (metric of obj.extraMetrics) {
+        extraMericsHTML += '<td class="ftc-table__cell--numeric" data-type="' + metric + '"></td>';
+      }
+    }
+    const rowHTML = '<tr><td data-type="table-dimension">'+dimension+'</td>' + extraMericsHTML + metricsHTML + '</tr>';
     tableRowsHTML += rowHTML;
   }
   tableRowsHTML = '<tbody>' + tableRowsHTML + '</tbody>';
   const tableHeader = tableData.columnHeader.dimensions[0].replace(/^ga:/g,'');
   var columnHeaderHTML = '<th  aria-sort="none">' + tableHeader + '</th>';
+  if (obj.extraMetrics) {
+    for (name of obj.extraMetrics) {
+      columnHeaderHTML += '<th aria-sort="none" data-ftc-table--datatype="numeric" data-ftc-table--tostatistic="" class="ftc-table__cell--numeric" tabindex="0">' + name + '</th>';
+    }
+  }
   var columnHeaderData = tableData.columnHeader.metricHeader.metricHeaderEntries;
   for (oneHeader of columnHeaderData) {
     const name = oneHeader.name.replace(/^ga:/g,'');
-    columnHeaderHTML += '<th aria-sort="none"  data-ftc-table--datatype="numeric" data-ftc-table--tostatistic="" class="ftc-table__cell--numeric">' + name + '</th>';
+    columnHeaderHTML += '<th aria-sort="none" data-ftc-table--datatype="numeric" data-ftc-table--tostatistic="" class="ftc-table__cell--numeric" tabindex="0">' + name + '</th>';
   }
   columnHeaderHTML = '<thead><tr>' + columnHeaderHTML + '</tr></thead>';
   var tableHTML = '<h1 class="page-title">' + title + '</h1><div class="page-description">'+ description +'</div><table class="ftc-table ftc-table--responsive-overflow ftc-table--row-stripes ftc-table--vertical-lines" data-ftc-component="ftc-table" data-ftc-table--no-js>' + columnHeaderHTML + tableRowsHTML + '</table>';
@@ -1379,8 +1398,8 @@ function drawCombinedTable(obj) {
   for (index of obj.index) {
     if (index.number !== obj.index[0].number) {
       const currentData = gaDataReports[index.number];
-      if (obj.index[index.number].name) {
-        const newMetric = {name: obj.index[index.number].name};
+      if (index.name) {
+        const newMetric = {name: index.name};
         tableData.columnHeader.metricHeader.metricHeaderEntries.push(newMetric);
       }
       if (index.ratioIndex > 0) {
@@ -1445,10 +1464,9 @@ function explainDimension() {
     xhr1.onload = function() {
       if (xhr1.status === 200) {
         var data = JSON.parse(xhr1.responseText);
-        //console.log (data);
-        for (var td of document.querySelectorAll('[data-type="table-dimension"]')) {
+        for (td of document.querySelectorAll('[data-type="table-dimension"]')) {
           //console.log (td.innerHTML);
-          for (var item of data) {
+          for (item of data) {
             if (td.innerHTML.indexOf(item.id) >= 0) {
               var itemTag = '';
               if (item.tag.indexOf('麦可林学英语') >= 0) {
@@ -1464,8 +1482,16 @@ function explainDimension() {
               } else if (item.tag.indexOf('高端专享') >= 0) {
                 itemTag = '高端专享：';
               }
-              var timeStamp = new Date(item.pubdate*1000).toLocaleDateString('en-US')
-              td.innerHTML = '<a href="http://www.ftchinese.com/interactive/' + item.id + '" target="_blank">' + itemTag + item.cheadline + '(' + timeStamp + ')' + '</a>';
+              const date = new Date(item.pubdate*1000);
+              const year = date.getFullYear();
+              const month = date.getMonth() + 1;
+              const day = date.getDate();
+              const timeStamp = year * 10000 + month * 100 + day;
+              td.innerHTML = '<a href="http://www.ftchinese.com/interactive/' + item.id + '" target="_blank">' + itemTag + item.cheadline + '</a>';
+              var dateTd = td.parentElement.querySelector('[data-type="Date"]');
+              if (dateTd) {
+                dateTd.innerHTML = timeStamp;
+              }
             }
           }
         }

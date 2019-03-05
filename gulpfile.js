@@ -12,8 +12,16 @@ const reload = browserSync.reload;
 const rollup = require('rollup').rollup;
 const babel = require('rollup-plugin-babel');
 const nodeResolve = require('rollup-plugin-node-resolve');
+const merge = require('merge-stream');
 
 var dev = true;
+
+gulp.task('default', () => {
+  return new Promise(resolve => {
+    dev = false;
+    runSequence(['clean', 'wiredep'], 'build', resolve);
+  });
+});
 
 gulp.task('styles', () => {
   return gulp.src('app/styles/*.scss')
@@ -94,7 +102,7 @@ gulp.task('lint:test', () => {
 
 
 
-gulp.task('html', ['styles', 'scripts'], () => {
+gulp.task('html', gulp.series('styles', 'scripts', () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     // MARK: uglify doesn't understand ES6
@@ -113,7 +121,7 @@ gulp.task('html', ['styles', 'scripts'], () => {
       removeStyleLinkTypeAttributes: true
     })))
     .pipe(gulp.dest('dist'));
-});
+}));
 
 gulp.task('images', () => {
   return gulp.src('app/images/**/*')
@@ -138,34 +146,71 @@ gulp.task('extras', () => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('serve', () => {
-  runSequence(['clean', 'wiredep'], ['styles', 'rollup','scripts', 'fonts','copydata'], () => {
-    browserSync.init({
-      notify: false,
-      port: 8080,
-      server: {
-        baseDir: ['.tmp', 'app'],
-        routes: {
-          '/bower_components': 'bower_components'
-        }
-      }
-    });
 
-    gulp.watch([
-      'app/*.html',
-      'app/images/**/*',
-      '.tmp/fonts/**/*'
-    ]).on('change', reload);
+// inject bower components
+gulp.task('wiredep', () => {
 
-    gulp.watch('app/styles/**/*.scss', ['styles']);
-    gulp.watch('app/scripts/**/*.js', ['scripts']);
-    gulp.watch('app/es6/*.js',['rollup']);
-    gulp.watch('app/fonts/**/*', ['fonts']);
-    gulp.watch('bower.json', ['wiredep', 'fonts']);
-  });
+
+
+
+  // const scss = gulp.src('app/styles/*.scss')
+  //   .pipe(wiredep())
+  //   .pipe(gulp.dest('app/styles'));
+
+  // const html = gulp.src('app/*.html')
+  //   .pipe(wiredep())
+  //   .pipe(gulp.dest('app'));
+
+  // return scss;
+  // return merge(scss, html);
+
+
+
+  gulp.src('app/styles/*.scss')
+    .pipe($.filter(file => file.stat && file.stat.size))
+    .pipe(wiredep({
+      ignorePath: /^(\.\.\/)+/
+    }))
+    .pipe(gulp.dest('app/styles'));
+
+  gulp.src('app/*.html')
+    .pipe(wiredep({
+      ignorePath: /^(\.\.\/)*\.\./
+    }))
+    .pipe(gulp.dest('app'));
 });
 
-gulp.task('serve:dist', ['default'], () => {
+gulp.task('copydata',() => {
+  return gulp.src('data/*.json')
+    .pipe(gulp.dest('.tmp/data'));
+})
+
+gulp.task('serve', gulp.series('clean', 'wiredep', 'styles', 'rollup','scripts', 'fonts', 'copydata', () => {
+  browserSync.init({
+    notify: false,
+    port: 8080,
+    server: {
+      baseDir: ['.tmp', 'app'],
+      routes: {
+        '/bower_components': 'bower_components'
+      }
+    }
+  });
+
+  gulp.watch([
+    'app/*.html',
+    'app/images/**/*',
+    '.tmp/fonts/**/*'
+  ]).on('change', reload);
+
+  gulp.watch('app/styles/**/*.scss', ['styles']);
+  gulp.watch('app/scripts/**/*.js', ['scripts']);
+  gulp.watch('app/es6/*.js',['rollup']);
+  gulp.watch('app/fonts/**/*', ['fonts']);
+  gulp.watch('bower.json', ['wiredep', 'fonts']);
+}));
+
+gulp.task('serve:dist', gulp.series('default', () => {
   browserSync.init({
     notify: false,
     port: 8080,
@@ -173,9 +218,9 @@ gulp.task('serve:dist', ['default'], () => {
       baseDir: ['dist']
     }
   });
-});
+}));
 
-gulp.task('serve:test', ['scripts'], () => {
+gulp.task('serve:test', gulp.series('scripts', () => {
   browserSync.init({
     notify: false,
     port: 8080,
@@ -192,43 +237,24 @@ gulp.task('serve:test', ['scripts'], () => {
   gulp.watch('app/scripts/**/*.js', ['scripts']);
   gulp.watch(['test/spec/**/*.js', 'test/index.html']).on('change', reload);
   gulp.watch('test/spec/**/*.js', ['lint:test']);
-});
+}));
 
-// inject bower components
-gulp.task('wiredep', () => {
-  gulp.src('app/styles/*.scss')
-    .pipe($.filter(file => file.stat && file.stat.size))
-    .pipe(wiredep({
-      ignorePath: /^(\.\.\/)+/
-    }))
-    .pipe(gulp.dest('app/styles'));
 
-  gulp.src('app/*.html')
-    .pipe(wiredep({
-      ignorePath: /^(\.\.\/)*\.\./
-    }))
-    .pipe(gulp.dest('app'));
-});
 
-gulp.task('build', ['lint', 'html','images', 'fonts', 'extras'], () => {
+gulp.task('build', gulp.series('lint', 'html','images', 'fonts', 'extras', () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
-});
+}));
 
-gulp.task('default', () => {
-  return new Promise(resolve => {
-    dev = false;
-    runSequence(['clean', 'wiredep'], 'build', resolve);
-  });
-});
+
 
 //MARK: Customized gulp functions
-gulp.task('copy', ['build'], function () {
+gulp.task('copy', gulp.series('build', function () {
   const dest = 'dev_cms/chartist';
   // `api*` use make a `api*` directory under dest.
   return gulp.src(['dist/**/*'])
   .pipe(gulp.dest(`../${dest}`))
   .pipe(gulp.dest(`../testing/${dest}`));
-});
+}));
 
 function getRandomInt(min, max) {
   /**
@@ -292,7 +318,3 @@ gulp.task('produceSimulatedData',()=>{
   fs.writeAsync(destFile, dataArr);
 });
 
-gulp.task('copydata',() => {
-  return gulp.src('data/*.json')
-    .pipe(gulp.dest('.tmp/data'));
-})
